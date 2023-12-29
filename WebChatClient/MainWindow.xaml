@@ -5,8 +5,95 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WebChatClient"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        WindowStartupLocation="CenterScreen"
+        x:Name="AppWindow"
+        Title="Web Chat"
+        MinWidth="{Binding WindowMinimumWidth}"
+        MinHeight="{Binding WindowMinimumHeight}"
+        Height="600" 
+        Width="900">
 
-    </Grid>
+    <Border CornerRadius="10"
+            Background="{StaticResource LightBlueBrush}">
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <!--заголовок-->
+                <RowDefinition Height="{Binding TitleHeight}"/>
+                <!--основное поле-->
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <!--заголовок-->
+            <Border CornerRadius="10,10,0,0"
+                    Background="{StaticResource DarkBlueBrush}"
+                    Grid.Row="0">
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <!--иконка и системное меню-->
+                        <ColumnDefinition Width="Auto"/>
+                        <!--название приложения-->
+                        <ColumnDefinition/>
+                        <!--оконные кнопки-->
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!--иконка и системное меню-->
+                    <Button Grid.Row="0"
+                            Width="25"
+                            Height="25"
+                            Margin="10,2,0,2"
+                            Command="{Binding MenuCommand}">
+                        <Image Source="Images/Logo/logo-icon.png"/>
+                    </Button>
+
+                    <!--название приложения-->
+                    <TextBlock Grid.Column="0"
+                               Grid.ColumnSpan="3"
+                               Style="{StaticResource StringTitle}"
+                               Text="{Binding Title, ElementName=AppWindow}"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
+
+                    <!--оконные кнопки-->
+                    <StackPanel HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                Orientation="Horizontal"
+                                Grid.Column="2">
+                        <Button x:Name="btnMinimize"
+                                Content="{StaticResource minimize}"
+                                Style="{StaticResource WindowControlButtonStyle}"
+                                Command="{Binding MinimizeCommand}"/>
+                        <Button x:Name="btnMaximize"
+                                Content="{StaticResource maximize}"
+                                Style="{StaticResource WindowControlButtonStyle}"
+                                Command="{Binding MaximizeCommand}"/>
+                        <Button x:Name="btnClose"
+                                Template="{StaticResource ButtonCloseWindow}"/>
+
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!--основное поле-->
+            <Grid Grid.Row="1">
+                <Grid.Background>
+                    <ImageBrush TileMode="Tile" 
+                                ViewportUnits="Absolute" 
+                                Viewport="0 0 500 500" 
+                                ImageSource="Images/Background/emoji-background.png"/>
+                </Grid.Background>
+            </Grid>
+        </Grid>
+    </Border>
+
+
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="{Binding TitleHeight}"/>
+    </WindowChrome.WindowChrome>
+
 </Window>

@@ -4,6 +4,24 @@
              xmlns:local="clr-namespace:WebChatClient"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!-- Важен порядок растановки стилей -->
+                <ResourceDictionary Source="Styles/Colors.xaml" />
+                <ResourceDictionary Source="Styles/Fonts.xaml" />
+                <ResourceDictionary Source="Styles/Buttons.xaml" />
+                <ResourceDictionary Source="Styles/Texts.xaml" />
+                <ResourceDictionary Source="Styles/icons.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style x:Key="StringTitle"
+                   TargetType="{x:Type TextBlock}"
+                   BasedOn="{StaticResource {x:Type TextBlock}}">
+                <Setter Property="FontFamily" Value="{StaticResource LatoRegular}"/>
+                <Setter Property="Foreground" Value="{StaticResource LightBlueBrush}"/>
+                <Setter Property="FontSize" Value="18pt"/>
+            </Style>
+
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

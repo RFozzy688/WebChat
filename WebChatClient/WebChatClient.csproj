@@ -5,6 +5,33 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>Images\Logo\logo-icon.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Fonts\Lato\Lato-Regular.ttf" />
+    <None Remove="Fonts\Lato\Lato-Thin.ttf" />
+    <None Remove="Images\Background\emoji-background.png" />
+    <None Remove="Images\Logo\logo-icon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Images\Logo\logo-icon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Fonts\Lato\Lato-Regular.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Fonts\Lato\Lato-Thin.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Background\emoji-background.png" />
+    <Resource Include="Images\Logo\logo-icon.png" />
+  </ItemGroup>
 
 </Project>

@@ -23,6 +23,8 @@ namespace WebChatClient
         public MainWindow()
         {
             InitializeComponent();
+
+            this.DataContext = new MainWindowVM(this);
         }
     }
 }
