@@ -88,7 +88,7 @@
                                 ImageSource="Images/Background/emoji-background.png"/>
                 </Grid.Background>
 
-                <Frame  x:Name="LoginPageFrame" Source="Pages/LoginPage.xaml"/>
+                <Frame  x:Name="LoginPageFrame" Content="{Binding CurrentPage, Converter={local:AppPageValueConverter}}"/>
 
             </Grid>
         </Grid>
