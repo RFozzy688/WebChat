@@ -87,6 +87,9 @@
                                 Viewport="0 0 500 500" 
                                 ImageSource="Images/Background/emoji-background.png"/>
                 </Grid.Background>
+
+                <Frame  x:Name="LoginPageFrame" Source="Pages/LoginPage.xaml"/>
+
             </Grid>
         </Grid>
     </Border>

@@ -39,8 +39,7 @@ namespace WebChatClient
 
         // Высота строки заголовка окна
         public int TitleHeight { get; set; } = 50;
-        // Высота строки заголовка окна
-        
+        // Высота строки заголовка окна        
         public GridLength TitleHeightGridLength => new GridLength(TitleHeight);
         //Наименьшая ширина окна.
         public double WindowMinimumWidth { get; set; } = 800;
@@ -54,6 +53,10 @@ namespace WebChatClient
         public ICommand CloseCommand { get; set; }
         // Команда показа системного меню окна
         public ICommand MenuCommand { get; set; }
+        /// <summary>
+        /// Текущая страница приложения
+        /// </summary>
+        public AppPage CurrentPage { get; set; } = AppPage.Login;
         //Получает текущую позицию мыши на экране
         private Point GetMousePosition()
         {
