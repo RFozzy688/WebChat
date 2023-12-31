@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WebChatClient.Pages;
 
 namespace WebChatClient
 {
@@ -20,6 +21,8 @@ namespace WebChatClient
                 // поиск соответствующей стрвницы
                 case AppPage.Register:
                     return new RegisterPage();
+                case AppPage.Login:
+                    return new LoginPage();
                 default:
                     Debugger.Break();
                     return null;
