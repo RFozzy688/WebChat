@@ -16,19 +16,19 @@
                 <StackPanel HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             TextBlock.TextAlignment="Center">
-                    <!--Вход-->
+                    <!--регистрация-->
                     <Border Background="{StaticResource VeryLightBrush}" 
                             CornerRadius="10"
                             Padding="15 50 15 15"
                             Width="330"
                             Margin="50 50 50 0">
                         <StackPanel>
-                            <!-- Заголовок входа -->
+                            <!-- Заголовок регистрации -->
                             <TextBlock Text="Регистрация" 
                                        FontSize="{StaticResource FontSizeXXLarge}"
                                        Foreground="{StaticResource LightBlueBrush}" />
 
-                            <!-- Вход, подтекст-->
+                            <!-- подтекст-->
                             <TextBlock Text="Заходи, будет весело" 
                                        FontSize="{StaticResource FontSizeLarge}"
                                        Foreground="{StaticResource MiddleDarkBrush}"
@@ -48,8 +48,8 @@
                             <!-- Password -->
                             <PasswordBox x:Name="PasswordText" Tag="Пароль"/>
 
-                            <!-- Кнопка входа -->
-                            <Button Content="Вход"
+                            <!-- Кнопка регистрации -->
+                            <Button Content="Отправить"
                                     HorizontalAlignment="Center"
                                     Style="{StaticResource OrangeButton}"
                                     Margin="0 30 0 10"/>
