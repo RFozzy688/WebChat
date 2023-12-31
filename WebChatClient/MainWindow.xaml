@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WebChatClient"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         mc:Ignorable="d"
         WindowStyle="None"
         AllowsTransparency="True"
@@ -15,6 +16,14 @@
         MinHeight="{Binding WindowMinimumHeight}"
         Height="600" 
         Width="900">
+
+    <!--при изменении размера окна команда WorkingAreaCommand определяет актуальные 
+    размеры активного дисплея-->
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="SizeChanged">
+            <i:InvokeCommandAction Command="{Binding WorkingAreaCommand}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
 
     <Border CornerRadius="10"
             Background="{StaticResource LightBlueBrush}">
@@ -41,6 +50,7 @@
                         <!--оконные кнопки-->
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
+                    
 
                     <!--иконка и системное меню-->
                     <Button Grid.Row="0"
@@ -88,14 +98,14 @@
                                 ImageSource="Images/Background/emoji-background.png"/>
                 </Grid.Background>
 
-                <Frame  x:Name="LoginPageFrame" Content="{Binding CurrentPage, Converter={local:AppPageValueConverter}}"/>
+                <Frame  x:Name="RegisterPageFrame" Content="{Binding CurrentPage, Converter={local:AppPageValueConverter}}"/>
 
             </Grid>
         </Grid>
     </Border>
 
 
-    <WindowChrome.WindowChrome>
+    <WindowChrome.WindowChrome >
         <WindowChrome CaptionHeight="{Binding TitleHeight}"/>
     </WindowChrome.WindowChrome>
 

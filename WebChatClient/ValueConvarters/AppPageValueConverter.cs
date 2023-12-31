@@ -18,8 +18,8 @@ namespace WebChatClient
             switch ((AppPage)value) 
             {
                 // поиск соответствующей стрвницы
-                case AppPage.Login:
-                    return new LoginPage();
+                case AppPage.Register:
+                    return new RegisterPage();
                 default:
                     Debugger.Break();
                     return null;

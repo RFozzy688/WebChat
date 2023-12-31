@@ -16,10 +16,10 @@
 
             <Style x:Key="StringTitle"
                    TargetType="{x:Type TextBlock}"
-                   BasedOn="{StaticResource {x:Type TextBlock}}">
-                <Setter Property="FontFamily" Value="{StaticResource LatoRegular}"/>
+                   BasedOn="{StaticResource BaseTextBlockStyle}">
+                <Setter Property="FontFamily" Value="{StaticResource RoundedBold}"/>
                 <Setter Property="Foreground" Value="{StaticResource LightBlueBrush}"/>
-                <Setter Property="FontSize" Value="18pt"/>
+                <Setter Property="FontSize" Value="{StaticResource FontSizeXXLarge}"/>
             </Style>
 
         </ResourceDictionary>

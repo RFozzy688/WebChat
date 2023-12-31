@@ -31,5 +31,8 @@
     <SolidColorBrush x:Key="LightBlueOpacityBrush" Color="{StaticResource LightBlueOpacity}"
                      Opacity="0.5"/>
 
+    <Color x:Key="Orange">#ffa800</Color>
+    <SolidColorBrush x:Key="OrangeBrush" Color="{StaticResource Orange}" />
+
 
 </ResourceDictionary>

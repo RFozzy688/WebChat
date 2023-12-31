@@ -1,4 +1,4 @@
-﻿using Fasetto.Word;
+﻿using WindowHelper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,19 +23,27 @@ namespace WebChatClient
         {
             _view = view;
 
+            var activeScreen = System.Windows.Forms.Screen.FromPoint(System.Windows.Forms.Cursor.Position);
+            _view.MaxHeight = activeScreen.WorkingArea.Height;
+            _view.MaxWidth = activeScreen.WorkingArea.Width;
+
             // Создание команд
             MinimizeCommand = new Command((o) => _view.WindowState = WindowState.Minimized);
-            MaximizeCommand = new Command((o) => {
-                _view.WindowState ^= WindowState.Maximized;
-                _view.MaxHeight = SystemParameters.WorkArea.Height;
-                _view.MaxWidth = SystemParameters.WorkArea.Width;
-            });
+            MaximizeCommand = new Command((o) => _view.WindowState ^= WindowState.Maximized);
             CloseCommand = new Command((o) => _view.Close());
             MenuCommand = new Command((o) => SystemCommands.ShowSystemMenu(_view, GetMousePosition()));
+            WorkingAreaCommand = new Command((o) => 
+            {
+                // размеры активного экрана, то есть там где находится окно приложения
+                var activeScreen = System.Windows.Forms.Screen.FromPoint(System.Windows.Forms.Cursor.Position);
+                _view.MaxHeight = activeScreen.WorkingArea.Height;
+                _view.MaxWidth = activeScreen.WorkingArea.Width;
+            });
 
             // Fix window resize issue
             _windowResizer = new WindowResizer(_view);
         }
+        public ICommand WorkingAreaCommand { get; set; }
 
         // Высота строки заголовка окна
         public int TitleHeight { get; set; } = 50;
@@ -56,7 +64,7 @@ namespace WebChatClient
         /// <summary>
         /// Текущая страница приложения
         /// </summary>
-        public AppPage CurrentPage { get; set; } = AppPage.Login;
+        public AppPage CurrentPage { get; set; } = AppPage.Register;
         //Получает текущую позицию мыши на экране
         private Point GetMousePosition()
         {
