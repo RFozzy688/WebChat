@@ -73,8 +73,8 @@
         <!--todo: add animations later...-->
     </Style>
 
-    <!--переопределенный шаблон кнопки-->
-    <Style x:Key="TextButton" TargetType="{x:Type Button}" 
+    <!--переопределенный шаблон оранжевой кнопки-->
+    <Style x:Key="OrangeButton" TargetType="{x:Type Button}" 
            BasedOn="{StaticResource BaseStyle}">
 
         <Setter Property="Background" Value="{StaticResource OrangeBrush}"/>
@@ -113,7 +113,39 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+    </Style>
 
+    <!--переопределенный шаблон текстовой кнопки-->
+    <Style x:Key="TextButton"
+           TargetType="{x:Type Button}"
+           BasedOn="{StaticResource OrangeButton}">
+
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{StaticResource VeryLightBrush}"/>
+        <Setter Property="FontFamily" Value="{StaticResource RoundedRegular}"/>
+        <Setter Property="FontSize" Value="{StaticResource FontSizeLarge}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ButtonBase}">
+                    <TextBlock Text="{TemplateBinding Content}"
+                               Focusable="False"
+                               FontFamily="{TemplateBinding FontFamily}"
+                               FontSize="{TemplateBinding FontSize}"
+                               HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                               VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                               SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                               Margin="{TemplateBinding Padding}"/>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="Foreground" Value="{StaticResource OrangeBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Foreground" Value="{StaticResource MiddleDarkBrush}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
 </ResourceDictionary>

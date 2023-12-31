@@ -29,35 +29,38 @@
                                        Foreground="{StaticResource LightBlueBrush}" />
 
                             <!-- Вход, подтекст-->
-                            <TextBlock Text="Заходи, бедет весело" 
+                            <TextBlock Text="Заходи, будет весело" 
                                        FontSize="{StaticResource FontSizeLarge}"
                                        Foreground="{StaticResource MiddleDarkBrush}"
                                        Margin="0 0 0 20"/>
 
                             <!-- Username -->
                             <TextBox Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" 
-                                     Tag="Username" />
+                                     Tag="Имя" />
 
                             <!--Phone-->
-                            <TextBox/>
+                            <TextBox Tag="Телефон"/>
 
                             <!-- Email -->
-                            <TextBox Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBox Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"
+                                     Tag="Email"/>
 
                             <!-- Password -->
-                            <PasswordBox/>
+                            <PasswordBox x:Name="PasswordText" Tag="Пароль"/>
 
                             <!-- Кнопка входа -->
                             <Button Content="Вход"
                                     HorizontalAlignment="Center"
-                                    Style="{StaticResource TextButton}"/>
+                                    Style="{StaticResource OrangeButton}"
+                                    Margin="0 30 0 10"/>
 
                         </StackPanel>
                     </Border>
 
                     <Button Command="{Binding RegisterCommand}"
                             Content="У меня уже есть аккаунт..." 
-                            HorizontalAlignment="Center"/>
+                            HorizontalAlignment="Center"
+                            Style="{StaticResource TextButton}"/>
 
                 </StackPanel>
 

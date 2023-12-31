@@ -7,8 +7,7 @@
     <Color x:Key="ForegroundMain">#686868</Color>
     <SolidColorBrush x:Key="ForegroundMainBrush" Color="{StaticResource ForegroundMain}" />
 
-    <Color x:Key="ForegroundVeryDark">#000000</Color>
-    <SolidColorBrush x:Key="ForegroundVeryDarkBrush" Color="{StaticResource ForegroundVeryDark}" />
+    
 
     <Color x:Key="White">#ffffff</Color>
     <SolidColorBrush x:Key="WhiteBrush" Color="{StaticResource White}" />
@@ -33,6 +32,9 @@
 
     <Color x:Key="Orange">#ffa800</Color>
     <SolidColorBrush x:Key="OrangeBrush" Color="{StaticResource Orange}" />
+
+    <Color x:Key="VeryDark">#2b2b2b</Color>
+    <SolidColorBrush x:Key="VeryDarkBrush" Color="{StaticResource VeryDark}" />
 
 
 </ResourceDictionary>
