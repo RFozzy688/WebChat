@@ -5,6 +5,66 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>Images\Logo\logo-icon.ico</ApplicationIcon>
+    <UseWindowsForms>True</UseWindowsForms>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Fonts\M_PLUS_Rounded_1c\**" />
+    <EmbeddedResource Remove="Fonts\M_PLUS_Rounded_1c\**" />
+    <None Remove="Fonts\M_PLUS_Rounded_1c\**" />
+    <Page Remove="Fonts\M_PLUS_Rounded_1c\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Fonts\Balsamiq\BalsamiqSans-Regular.ttf" />
+    <None Remove="Fonts\Lato\Lato-Black.ttf" />
+    <None Remove="Fonts\Lato\Lato-Regular.ttf" />
+    <None Remove="Fonts\Lato\Lato-Thin.ttf" />
+    <None Remove="Fonts\Rounded\MPLUSRounded1c-Black.ttf" />
+    <None Remove="Fonts\Rounded\MPLUSRounded1c-Bold.ttf" />
+    <None Remove="Fonts\Rounded\MPLUSRounded1c-ExtraBold.ttf" />
+    <None Remove="Fonts\Rounded\MPLUSRounded1c-Light.ttf" />
+    <None Remove="Fonts\Rounded\MPLUSRounded1c-Medium.ttf" />
+    <None Remove="Fonts\Rounded\MPLUSRounded1c-Regular.ttf" />
+    <None Remove="Fonts\Rounded\MPLUSRounded1c-Thin.ttf" />
+    <None Remove="Images\Background\emoji-background.png" />
+    <None Remove="Images\Logo\logo-icon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Images\Logo\logo-icon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" />
+    <PackageReference Include="The.Microsoft.Expression.Interactions" Version="4.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Fonts\Balsamiq\BalsamiqSans-Regular.ttf" />
+    <Resource Include="Fonts\Lato\Lato-Black.ttf" />
+    <Resource Include="Fonts\Lato\Lato-Regular.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Fonts\Lato\Lato-Thin.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Fonts\Rounded\MPLUSRounded1c-Black.ttf" />
+    <Resource Include="Fonts\Rounded\MPLUSRounded1c-Bold.ttf" />
+    <Resource Include="Fonts\Rounded\MPLUSRounded1c-ExtraBold.ttf" />
+    <Resource Include="Fonts\Rounded\MPLUSRounded1c-Light.ttf" />
+    <Resource Include="Fonts\Rounded\MPLUSRounded1c-Medium.ttf" />
+    <Resource Include="Fonts\Rounded\MPLUSRounded1c-Regular.ttf" />
+    <Resource Include="Fonts\Rounded\MPLUSRounded1c-Thin.ttf" />
+    <Resource Include="Images\Background\emoji-background.png" />
+    <Resource Include="Images\Logo\logo-icon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Styles\Fonts.xaml">
+      <CustomToolNamespace></CustomToolNamespace>
+    </Page>
+  </ItemGroup>
 
 </Project>

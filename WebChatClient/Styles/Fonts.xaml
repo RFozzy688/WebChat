@@ -1,0 +1,42 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+
+    <!--<FontFamily x:Key="LatoThin">pack://application:,,,/Fonts/Lato/#Lato Thin</FontFamily>
+    <FontFamily x:Key="LatoRegular">pack://application:,,,/Fonts/Lato/#Lato Regular</FontFamily>
+    <FontFamily x:Key="LatoBold">pack://application:,,,/Fonts/Lato/#Lato Black</FontFamily>-->
+    <FontFamily x:Key="BalsamiqRegular">pack://application:,,,/Fonts/Balsamiq/#Balsamiq Sans Regular</FontFamily>
+
+    <FontFamily x:Key="RoundedRegular">pack://application:,,,/Fonts/Rounded/#Rounded Mplus 1c</FontFamily>
+    <FontFamily x:Key="RoundedBold">pack://application:,,,/Fonts/Rounded/#Rounded Mplus 1c Bold</FontFamily>
+    <FontFamily x:Key="RoundedThin">pack://application:,,,/Fonts/Rounded/#Rounded Mplus 1c Thin</FontFamily>
+
+    <system:Double x:Key="FontSizeSmaller">10</system:Double>
+    <system:Double x:Key="FontSizeSmall">12</system:Double>
+    <system:Double x:Key="FontSizeRegular">14</system:Double>
+    <system:Double x:Key="FontSizeLarge">20</system:Double>
+    <system:Double x:Key="FontSizeXLarge">24</system:Double>
+    <system:Double x:Key="FontSizeXXLarge">30</system:Double>
+
+    <!--шрифт по умолчанию для всего приложения-->
+    <Style TargetType="{x:Type Control}" x:Key="BaseStyle">
+        <Setter Property="FontFamily" Value="{StaticResource RoundedRegular}" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeRegular}" />
+    </Style>
+
+    <!--базовый стиль TextBlock-->
+    <Style TargetType="{x:Type TextBlock}" x:Key="BaseTextBlockStyle">
+        <Setter Property="FontFamily" Value="{StaticResource RoundedRegular}" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeRegular}" />
+    </Style>
+
+    <!--базовые стили для элементов управления-->
+    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource BaseStyle}" />
+    <Style TargetType="{x:Type Label}" BasedOn="{StaticResource BaseStyle}" />
+    <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource BaseStyle}" />
+    <Style TargetType="{x:Type ListView}" BasedOn="{StaticResource BaseStyle}" />
+    <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource BaseTextBlockStyle}" />
+
+    
+
+</ResourceDictionary>
