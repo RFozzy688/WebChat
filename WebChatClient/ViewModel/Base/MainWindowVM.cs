@@ -43,6 +43,7 @@ namespace WebChatClient
             // Fix window resize issue
             _windowResizer = new WindowResizer(_view);
         }
+        // Определение рабочей области активного экрана
         public ICommand WorkingAreaCommand { get; set; }
 
         // Высота строки заголовка окна
@@ -64,7 +65,7 @@ namespace WebChatClient
         /// <summary>
         /// Текущая страница приложения
         /// </summary>
-        public AppPage CurrentPage { get; set; } = AppPage.Register;
+        public AppPage CurrentPage { get; set; } = AppPage.Login;
         //Получает текущую позицию мыши на экране
         private Point GetMousePosition()
         {
