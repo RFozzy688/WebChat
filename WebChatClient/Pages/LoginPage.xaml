@@ -43,7 +43,7 @@
                             <PasswordBox x:Name="PasswordText" Tag="Пароль"/>
 
                             <!-- Кнопка входа -->
-                            <Button Content="Вход"
+                            <Button Content="Вход" Click="Button_Click"
                                     HorizontalAlignment="Center"
                                     Style="{StaticResource OrangeButton}"
                                     Margin="0 30 0 10"/>

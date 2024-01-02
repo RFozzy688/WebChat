@@ -58,26 +58,22 @@ namespace WebChatClient
             if (PageLoadAnimation == PageAnimationStyles.None)
                 return;
 
-            switch (PageLoadAnimation)
-            {
-                case PageAnimationStyles.MovesFromRightToCenter:
-                    var sb = new Storyboard();
-                    var slideAnimation = new ThicknessAnimation
-                    {
-                        Duration = new Duration(TimeSpan.FromSeconds(SlideSeconds)),
-                        From = new Thickness(WindowWidth, 0, -WindowWidth, 0),
-                        To = new Thickness(0),
-                        DecelerationRatio = 0.9f
-                    };
+            // Старт анимации
+            await PageAnimations.SlideAndFadeInFromRightAsync(this, SlideSeconds);
+        }
 
-                    Storyboard.SetTargetProperty(slideAnimation, new PropertyPath("Margin"));
-                    sb.Children.Add(slideAnimation);
+        /// <summary>
+        /// Анимирует страницу
+        /// </summary>
+        /// <returns></returns>
+        public async Task AnimateOutAsync()
+        {
+            // Убедитесь, что анимация не закончена
+            if (PageUnloadAnimation == PageAnimationStyles.None)
+                return;
 
-                    sb.Begin(this);
-                    Visibility = Visibility.Visible;
-                    await Task.Delay((int)SlideSeconds * 1000);
-                    break;
-            }
+            // Старт анимации
+            await PageAnimations.SlideAndFadeOutToLeftAsync(this, SlideSeconds);
         }
     }
 }

@@ -24,5 +24,10 @@ namespace WebChatClient
         {
             InitializeComponent();
         }
+
+        private async void Button_Click(object sender, RoutedEventArgs e)
+        {
+            await AnimateOutAsync();
+        }
     }
 }
