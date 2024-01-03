@@ -36,8 +36,9 @@
     <Color x:Key="VeryDark">#2b2b2b</Color>
     <SolidColorBrush x:Key="VeryDarkBrush" Color="{StaticResource VeryDark}" />
 
-    <Color x:Key="MiddleBlue">#008ff3</Color>
-    <SolidColorBrush x:Key="MiddleBlueBrush" Color="{StaticResource MiddleBlue}" />
+    <Color x:Key="VeryLightBlue">#dbf5ff</Color>
+    <SolidColorBrush x:Key="VeryLightBlueBrush" Color="{StaticResource VeryLightBlue}"
+                     Opacity="0.5"/>
 
 
 </ResourceDictionary>
