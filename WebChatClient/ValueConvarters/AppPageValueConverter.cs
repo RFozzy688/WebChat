@@ -22,6 +22,8 @@ namespace WebChatClient
                     return new RegisterPage();
                 case AppPage.Login:
                     return new LoginPage();
+                case AppPage.Chat:
+                    return new ChatPage();
                 default:
                     Debugger.Break();
                     return null;
