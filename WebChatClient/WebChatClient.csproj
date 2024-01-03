@@ -64,6 +64,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Pages\ChatPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
     <Page Update="Styles\Fonts.xaml">
       <CustomToolNamespace></CustomToolNamespace>
     </Page>

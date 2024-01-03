@@ -98,7 +98,19 @@
                                 ImageSource="Images/Background/emoji-background.png"/>
                 </Grid.Background>
 
-                <Frame  x:Name="RegisterPageFrame" Content="{Binding CurrentPage, Converter={local:AppPageValueConverter}}"/>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="300"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Frame x:Name="PageFrame" 
+                       Grid.Column="1" 
+                       Content="{Binding CurrentPage, Converter={local:AppPageValueConverter}}"/>
+
+                <!--боковое контент-->
+                <local:SideMenuControl>
+                    <Button Content="test"/>
+                </local:SideMenuControl>
 
             </Grid>
         </Grid>

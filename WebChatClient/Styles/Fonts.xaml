@@ -33,6 +33,17 @@
     <Style TargetType="{x:Type ListView}" BasedOn="{StaticResource BaseStyle}" />
     <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource BaseTextBlockStyle}" />
 
-    
+    <system:String x:Key="FA_ChatIcon">&#xf086;</system:String>
+    <system:String x:Key="FA_UserIcon">&#xf007;</system:String>
+    <system:String x:Key="FA_PictureIcon">&#xf1c5;</system:String>
+    <system:String x:Key="FA_CogIcon">&#xf013;</system:String>
+    <system:String x:Key="FA_SearchIcon">&#xf002;</system:String>
+    <system:String x:Key="FA_EllipsisIcon">&#xf141;</system:String>
+    <system:String x:Key="FA_EllipsisVerticalIcon">&#xf142;</system:String>
+    <system:String x:Key="FA_PaperclipIcon">&#xf0c6;</system:String>
+    <system:String x:Key="FA_EmojiIcon">&#xf118;</system:String>
+    <system:String x:Key="FA_ArrowLeftIcon">&#xf060;</system:String>
+    <system:String x:Key="FA_TickIcon">&#xf00c;</system:String>
+    <system:String x:Key="FA_CloseIcon">&#xf00d;</system:String>
 
 </ResourceDictionary>
