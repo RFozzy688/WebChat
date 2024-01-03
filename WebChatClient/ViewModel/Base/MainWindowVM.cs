@@ -9,7 +9,7 @@ using System.Windows.Input;
 
 namespace WebChatClient
 {
-    public class MainWindowVM
+    public class MainWindowVM : BaseViewModel
     {
         // Окно, которым управляет эта модель представления
         private Window _view;

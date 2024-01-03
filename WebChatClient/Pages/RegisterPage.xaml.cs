@@ -18,7 +18,7 @@ namespace WebChatClient
     /// <summary>
     /// Логика взаимодействия для RegisterPage.xaml
     /// </summary>
-    public partial class RegisterPage : BasePage
+    public partial class RegisterPage : BasePage<LoginPageVM>
     {
         public RegisterPage()
         {

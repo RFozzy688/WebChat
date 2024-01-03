@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Security;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,10 +12,13 @@ namespace WebChatClient
     /// <summary>
     /// Модель представления для экрана входа в систему
     /// </summary>
-    class LoginPageVM
+    public class LoginPageVM : BaseViewModel
     {
         // email пользователя
         public string Email { get; set; }
+
+        /// Флаг, указывающий, выполняется ли команда входа в систему.
+        public bool LoginIsRunning { get; set; } = false;
 
         // команда входа
         public ICommand LoginCommand { get; set; }
@@ -33,8 +37,15 @@ namespace WebChatClient
         /// <returns></returns>
         public async Task LoginAsync(object parameter)
         {
-            await Task.Delay(1000);
+            if (LoginIsRunning)
+                return;
+
+            LoginIsRunning = true;
+
+            await Task.Delay(5000);
             var pass = (parameter as IHavePassword).SecurePassword.Unsecure();
+
+            LoginIsRunning = false;
         }
     }
 }
