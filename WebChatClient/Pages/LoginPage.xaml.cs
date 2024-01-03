@@ -19,11 +19,13 @@ namespace WebChatClient
     /// <summary>
     /// Логика взаимодействия для LoginPage.xaml
     /// </summary>
-    public partial class LoginPage : BasePage<LoginPageVM>, IHavePassword
+    public partial class LoginPage : BasePage, IHavePassword
     {
         public LoginPage()
         {
             InitializeComponent();
+
+            DataContext = new LoginPageVM();
         }
 
         // Надежный пароль для этой страницы входа.

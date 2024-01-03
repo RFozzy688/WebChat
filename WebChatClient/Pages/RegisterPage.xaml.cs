@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -18,11 +19,16 @@ namespace WebChatClient
     /// <summary>
     /// Логика взаимодействия для RegisterPage.xaml
     /// </summary>
-    public partial class RegisterPage : BasePage<LoginPageVM>
+    public partial class RegisterPage : BasePage, IHavePassword
     {
         public RegisterPage()
         {
             InitializeComponent();
+
+            DataContext = new RegisterPageVM(this);
         }
+
+        // Надежный пароль для этой страницы входа.
+        public SecureString SecurePassword => PasswordText.SecurePassword;
     }
 }

@@ -1,4 +1,4 @@
-﻿<local:BasePage x:TypeArguments="local:LoginPageVM"
+﻿<local:BasePage 
     x:Class="WebChatClient.LoginPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -49,6 +49,7 @@
                                     local:IsBusyProperty.Value="{Binding LoginIsRunning}"
                                     Command="{Binding LoginCommand}"
                                     CommandParameter="{Binding ElementName=Page}"
+                                    IsEnabled="{Binding LoginIsRunning, Converter={local:InvertBooleanConverter}}"
                                     HorizontalAlignment="Center"
                                     Style="{StaticResource OrangeButton}"
                                     Margin="0 30 0 10"/>

@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <None Remove="Fonts\Balsamiq\BalsamiqSans-Regular.ttf" />
+    <None Remove="Fonts\fontawesome-webfont.ttf" />
     <None Remove="Fonts\Lato\Lato-Black.ttf" />
     <None Remove="Fonts\Lato\Lato-Regular.ttf" />
     <None Remove="Fonts\Lato\Lato-Thin.ttf" />
@@ -43,6 +44,7 @@
 
   <ItemGroup>
     <Resource Include="Fonts\Balsamiq\BalsamiqSans-Regular.ttf" />
+    <Resource Include="Fonts\fontawesome-webfont.ttf" />
     <Resource Include="Fonts\Lato\Lato-Black.ttf" />
     <Resource Include="Fonts\Lato\Lato-Regular.ttf">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>

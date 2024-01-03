@@ -13,8 +13,7 @@ namespace WebChatClient
     /// <summary>
     /// Базовая страница для получения базовой функциональности.
     /// </summary>
-    public class BasePage<VM> : Page
-        where VM : BaseViewModel, new()
+    public class BasePage : Page
     {
         // Анимация, которая воспроизводится при первой загрузке страницы.
         public PageAnimationStyles PageLoadAnimation { get; set; } 
@@ -36,8 +35,6 @@ namespace WebChatClient
 
             // Обработчик события загрузки страницы
             Loaded += BasePage_LoadedAsync;
-
-            ViewModel = new VM();
         }
 
         /// <summary>
@@ -77,21 +74,6 @@ namespace WebChatClient
 
             // Старт анимации
             await PageAnimations.SlideAndFadeOutToLeftAsync(this, SlideSeconds);
-        }
-
-        private VM _viewModel;
-        public VM ViewModel
-        {
-            get { return _viewModel; }
-            set
-            {
-                if (_viewModel == value) 
-                    return;
-
-                _viewModel = value;
-
-                this.DataContext = _viewModel;
-            }
         }
     }
 }

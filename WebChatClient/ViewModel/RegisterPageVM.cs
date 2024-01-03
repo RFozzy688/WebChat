@@ -5,7 +5,6 @@ using System.Linq.Expressions;
 using System.Security;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace WebChatClient
@@ -13,21 +12,29 @@ namespace WebChatClient
     /// <summary>
     /// Модель представления для экрана входа в систему
     /// </summary>
-    public class LoginPageVM : BaseViewModel
+    public class RegisterPageVM : BaseViewModel
     {
+        RegisterPage _view;
         // email пользователя
         public string Email { get; set; }
 
+        // Имя пользователя
+        public string Username { get; set; }
+
+        // Телефон пользователя
+        public string Phone { get; set; }
+
         /// Флаг, указывающий, выполняется ли команда входа в систему.
-        public bool LoginIsRunning { get; set; } = false;
+        public bool RegisterIsRunning { get; set; } = false;
 
         // команда входа
-        public ICommand LoginCommand { get; set; }
+        public ICommand RegisterCommand { get; set; }
 
-        public LoginPageVM()
+        public RegisterPageVM(RegisterPage view)
         {
+            _view = view;
             // Создать команду
-            LoginCommand = new Command(async (parameter) => await LoginAsync(parameter));
+            RegisterCommand = new Command(async (parameter) => await RegisterAsync(parameter));
         }
 
         /// <summary>
@@ -36,18 +43,20 @@ namespace WebChatClient
         /// <param name="parameter"><see cref="SecureString"/>, переданный из представления пароля 
         /// пользователя.</param>
         /// <returns></returns>
-        public async Task LoginAsync(object parameter)
+        public async Task RegisterAsync(object parameter)
         {
-            if (LoginIsRunning)
+            if (RegisterIsRunning)
                 return;
 
-            LoginIsRunning = true;
+            RegisterIsRunning = true;
 
             await Task.Delay(5000);
             var pass = (parameter as IHavePassword).SecurePassword.Unsecure();
+            var name = Username;
+            var phone = Phone;
             var email = Email;
 
-            LoginIsRunning = false;
+            RegisterIsRunning = false;
         }
     }
 }

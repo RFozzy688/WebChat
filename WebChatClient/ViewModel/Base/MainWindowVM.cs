@@ -65,7 +65,7 @@ namespace WebChatClient
         /// <summary>
         /// Текущая страница приложения
         /// </summary>
-        public AppPage CurrentPage { get; set; } = AppPage.Login;
+        public AppPage CurrentPage { get; set; } = AppPage.Register;
         //Получает текущую позицию мыши на экране
         private Point GetMousePosition()
         {
