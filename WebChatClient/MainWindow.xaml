@@ -109,10 +109,7 @@
 
                 <!--боковое контент-->
                 <local:SideMenuControl>
-                    <!--<Border CornerRadius="0,0,0,10">-->
-                        <local:ChatListControl/>
-                    <!--</Border>-->
-                    
+                    <local:ChatListControl/>
                 </local:SideMenuControl>
 
             </Grid>
