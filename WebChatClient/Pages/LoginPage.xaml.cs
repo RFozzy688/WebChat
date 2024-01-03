@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -13,16 +14,21 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace WebChatClient.Pages
+namespace WebChatClient
 {
     /// <summary>
     /// Логика взаимодействия для LoginPage.xaml
     /// </summary>
-    public partial class LoginPage : Page
+    public partial class LoginPage : BasePage, IHavePassword
     {
         public LoginPage()
         {
             InitializeComponent();
+
+            DataContext = new LoginPageVM();
         }
+
+        // Надежный пароль для этой страницы входа.
+        public SecureString SecurePassword => PasswordText.SecurePassword;
     }
 }

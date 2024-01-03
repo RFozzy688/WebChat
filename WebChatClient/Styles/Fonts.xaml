@@ -2,15 +2,11 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:system="clr-namespace:System;assembly=mscorlib">
 
-    <!--<FontFamily x:Key="LatoThin">pack://application:,,,/Fonts/Lato/#Lato Thin</FontFamily>
-    <FontFamily x:Key="LatoRegular">pack://application:,,,/Fonts/Lato/#Lato Regular</FontFamily>
-    <FontFamily x:Key="LatoBold">pack://application:,,,/Fonts/Lato/#Lato Black</FontFamily>-->
-    <FontFamily x:Key="BalsamiqRegular">pack://application:,,,/Fonts/Balsamiq/#Balsamiq Sans Regular</FontFamily>
-
     <FontFamily x:Key="RoundedRegular">pack://application:,,,/Fonts/Rounded/#Rounded Mplus 1c</FontFamily>
     <FontFamily x:Key="RoundedBold">pack://application:,,,/Fonts/Rounded/#Rounded Mplus 1c Bold</FontFamily>
     <FontFamily x:Key="RoundedThin">pack://application:,,,/Fonts/Rounded/#Rounded Mplus 1c Thin</FontFamily>
-
+    <FontFamily x:Key="FontAwesome">pack://application:,,,/Fonts/#FontAwesome</FontFamily>
+    
     <system:Double x:Key="FontSizeSmaller">10</system:Double>
     <system:Double x:Key="FontSizeSmall">12</system:Double>
     <system:Double x:Key="FontSizeRegular">14</system:Double>
