@@ -99,7 +99,7 @@
                 </Grid.Background>
 
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="300"/>
+                    <ColumnDefinition Width="320"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
@@ -109,7 +109,10 @@
 
                 <!--боковое контент-->
                 <local:SideMenuControl>
-                    <Button Content="test"/>
+                    <!--<Border CornerRadius="0,0,0,10">-->
+                        <local:ChatListControl/>
+                    <!--</Border>-->
+                    
                 </local:SideMenuControl>
 
             </Grid>
