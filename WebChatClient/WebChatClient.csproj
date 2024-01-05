@@ -43,6 +43,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\WebChatCore\WebChatCore.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="Fonts\Balsamiq\BalsamiqSans-Regular.ttf" />
     <Resource Include="Fonts\fontawesome-webfont.ttf" />
     <Resource Include="Fonts\Lato\Lato-Black.ttf" />
