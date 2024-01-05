@@ -64,7 +64,7 @@
                         </StackPanel>
                     </Border>
 
-                    <Button Command="{Binding RegisterCommand}"
+                    <Button Command="{Binding LoginCommand}"
                             Content="У меня уже есть аккаунт..." 
                             HorizontalAlignment="Center"
                             Style="{StaticResource TextButton}"/>
