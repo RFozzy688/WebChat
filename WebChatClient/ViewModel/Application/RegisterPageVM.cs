@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Security;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace WebChatClient
@@ -27,14 +28,24 @@ namespace WebChatClient
         /// Флаг, указывающий, выполняется ли команда входа в систему.
         public bool RegisterIsRunning { get; set; } = false;
 
-        // команда входа
+        // команда регистрации
         public ICommand RegisterCommand { get; set; }
+        // команда входа
+        public ICommand LoginCommand { get; set; }
 
         public RegisterPageVM(RegisterPage view)
         {
             _view = view;
             // Создать команду
             RegisterCommand = new Command(async (parameter) => await RegisterAsync(parameter));
+            LoginCommand = new Command(async (parameter) => await LoginAsync(parameter));
+        }
+
+        private async Task LoginAsync(object parameter)
+        {
+            ((MainWindowVM)((MainWindow)Application.Current.MainWindow).DataContext).CurrentPage = AppPage.Login;
+
+            await Task.Delay(1);
         }
 
         /// <summary>

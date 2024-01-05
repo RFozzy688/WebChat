@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Security;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -23,11 +24,21 @@ namespace WebChatClient
 
         // команда входа
         public ICommand LoginCommand { get; set; }
+        // команда регистрации
+        public ICommand RegisterCommand { get; set; }
 
         public LoginPageVM()
         {
             // Создать команду
             LoginCommand = new Command(async (parameter) => await LoginAsync(parameter));
+            RegisterCommand = new Command(async (parameter) => await RegisterAsync(parameter));
+        }
+
+        private async Task RegisterAsync(object parameter)
+        {
+            ((MainWindowVM)((MainWindow)Application.Current.MainWindow).DataContext).CurrentPage = AppPage.Register;
+
+            await Task.Delay(1);
         }
 
         /// <summary>
