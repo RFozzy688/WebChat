@@ -105,7 +105,10 @@
 
                 <Frame x:Name="PageFrame" 
                        Grid.Column="1" 
-                       Content="{Binding CurrentPage, Converter={local:AppPageValueConverter}}"/>
+                       Content="{Binding AppVM.CurrentPage, 
+                    Source={x:Static local:ViewModelLocator.Instance}, 
+                    Converter={local:AppPageValueConverter}}"
+                       Background="Transparent"/>
 
                 <!--боковое контент-->
                 <local:SideMenuControl>

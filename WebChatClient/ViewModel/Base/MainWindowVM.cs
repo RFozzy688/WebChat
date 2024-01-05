@@ -63,10 +63,7 @@ namespace WebChatClient
         public ICommand CloseCommand { get; set; }
         // Команда показа системного меню окна
         public ICommand MenuCommand { get; set; }
-        /// <summary>
-        /// Текущая страница приложения
-        /// </summary>
-        public AppPage CurrentPage { get; set; } = AppPage.Login;
+        
         //Получает текущую позицию мыши на экране
         private Point GetMousePosition()
         {

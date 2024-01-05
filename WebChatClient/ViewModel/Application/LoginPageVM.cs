@@ -31,7 +31,8 @@ namespace WebChatClient
 
         private async Task RegisterAsync(object parameter)
         {
-            ((MainWindowVM)((MainWindow)Application.Current.MainWindow).DataContext).CurrentPage = AppPage.Register;
+            //((MainWindowVM)((MainWindow)Application.Current.MainWindow).DataContext).CurrentPage = AppPage.Register;
+            IoC.Get<AppVM>().CurrentPage = AppPage.Register;
 
             await Task.Delay(1);
         }

@@ -39,7 +39,8 @@ namespace WebChatClient
 
         private async Task LoginAsync(object parameter)
         {
-            ((MainWindowVM)((MainWindow)Application.Current.MainWindow).DataContext).CurrentPage = AppPage.Login;
+            //((MainWindowVM)((MainWindow)Application.Current.MainWindow).DataContext).CurrentPage = AppPage.Login;
+            IoC.Get<AppVM>().CurrentPage = AppPage.Login;
 
             await Task.Delay(1);
         }
