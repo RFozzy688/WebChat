@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Security;
-using System.Text;
+﻿using System.Security;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using WebChatCore;
 
 namespace WebChatClient
 {
@@ -43,7 +39,8 @@ namespace WebChatClient
 
         private async Task LoginAsync(object parameter)
         {
-            ((MainWindowVM)((MainWindow)Application.Current.MainWindow).DataContext).CurrentPage = AppPage.Login;
+            //((MainWindowVM)((MainWindow)Application.Current.MainWindow).DataContext).CurrentPage = AppPage.Login;
+            IoC.Get<AppVM>().GoToPage(AppPage.Login);
 
             await Task.Delay(1);
         }

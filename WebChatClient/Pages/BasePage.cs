@@ -26,6 +26,10 @@ namespace WebChatClient
         // Время, анимации слайда
         public float SlideSeconds { get; set; } = 0.4f;
 
+        // Флаг, указывающий, должна ли эта страница анимироваться при загрузке.
+        // Полезно, когда мы перемещаем страницу в другой фрейм.
+        public bool ShouldAnimateOut { get; set; }
+
         // Конструктор по умолчанию
         public BasePage()
         {
@@ -44,8 +48,13 @@ namespace WebChatClient
         /// <param name="e"></param>
         private async void BasePage_LoadedAsync(object sender, RoutedEventArgs e)
         {
-            // Анимировать справа к центру
-            await AnimateInAsync();
+            // Если мы настроены на анимацию при загрузке
+            if (ShouldAnimateOut)
+                // Анимировать страницу из
+                await AnimateOutAsync();
+            else
+                // Анимировать страницу в
+                await AnimateInAsync();
         }
 
         /// <summary>

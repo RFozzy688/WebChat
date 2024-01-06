@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Security;
+﻿using System.Security;
 using System.Runtime.InteropServices;
 
-namespace WebChatClient
+namespace WebChatCore
 {
     /// <summary>
     /// Помощники для класса <see cref="SecureString"/>

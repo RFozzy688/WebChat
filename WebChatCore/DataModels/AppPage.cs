@@ -1,5 +1,5 @@
 ﻿
-namespace WebChatClient
+namespace WebChatCore
 {
     /// <summary>
     /// Страница приложения

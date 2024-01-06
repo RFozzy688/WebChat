@@ -13,9 +13,11 @@
     Height="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=Window}}">
 
     <Border>
-        <Button Width="200"
-                Height="200"
-                Content="button"/>
+        <TextBlock Text="Вход выполнен"
+                   Foreground="White"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   FontSize="{StaticResource FontSizeXXLarge}"/>
     </Border>
 
 </local:BasePage>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Globalization;
+
 using WebChatCore;
 
 namespace WebChatClient
@@ -8,19 +9,15 @@ namespace WebChatClient
     /// <summary>
     /// Преобразует ApplPage в фактическое представление/страницу.
     /// </summary>
-    public class AppPageValueConverter : BaseValueConverter<AppPageValueConverter>
+    public class IoCConverter : BaseValueConverter<IoCConverter>
     {
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            switch ((AppPage)value) 
+            switch ((string)parameter) 
             {
                 // поиск соответствующей стрвницы
-                case AppPage.Register:
-                    return new RegisterPage();
-                case AppPage.Login:
-                    return new LoginPage();
-                case AppPage.Chat:
-                    return new ChatPage();
+                case nameof(AppVM):
+                    return IoC.Get<AppVM>();
                 default:
                     Debugger.Break();
                     return null;
