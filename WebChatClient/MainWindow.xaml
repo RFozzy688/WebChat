@@ -103,14 +103,14 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <Frame Grid.ColumnSpan="2"
+                <local:PageHost Grid.ColumnSpan="2"
                        d:DataContext=""
                        DataContext="{Binding AppVM.CurrentPage, 
                                      Source={x:Static local:ViewModelLocator.Instance}, 
                                      Converter={local:AppPageValueConverter}}"
-                       Content="{Binding}"
+                       CurrentPage="{Binding}"
                        Background="Transparent"
-                       local:NoFrameHistory.Value="True"/>
+                       /><!--local:NoFrameHistory.Value="True"-->
 
                 <!--боковое контент-->
                 <local:SideMenuControl 

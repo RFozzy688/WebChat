@@ -16,12 +16,12 @@ using System.Windows.Shapes;
 namespace WebChatClient
 {
     /// <summary>
-    /// Interaction logic for PageHost.xaml
+    /// Логика взаимодействия для PageHost.xaml
     /// </summary>
     public partial class PageHost : UserControl
     {
         /// <summary>
-        /// The current page to show in the page host
+        /// Текущая страница, которая будет отображаться в PageHost
         /// </summary>
         public BasePage CurrentPage
         {
@@ -30,15 +30,11 @@ namespace WebChatClient
         }
 
         /// <summary>
-        /// Регистрирует <see cref="Current Page"/> как свойство зависимости.
+        /// Регистрирует <see cref="CurrentPage"/> как свойство зависимости.
         /// </summary>
         public static readonly DependencyProperty CurrentPageProperty =
             DependencyProperty.Register(nameof(CurrentPage), typeof(BasePage), typeof(PageHost), new UIPropertyMetadata(CurrentPagePropertyChanged));
 
-
-        /// <summary>
-        /// Default constructor
-        /// </summary>
         public PageHost()
         {
             InitializeComponent();
@@ -46,31 +42,33 @@ namespace WebChatClient
 
 
         /// <summary>
-        /// Called when the <see cref="CurrentPage"/> value has changed
+        /// Вызывается, когда значение <see cref="CurrentPage"/> изменилось.
         /// </summary>
         /// <param name="d"></param>
         /// <param name="e"></param>
         private static void CurrentPagePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            // Get the frames
+            // Получите кадры
             var newPageFrame = (d as PageHost).NewPage;
             var oldPageFrame = (d as PageHost).OldPage;
 
-            // Store the current page content as the old page
+            // Сохраните содержимое текущей страницы как старую страницу.
             var oldPageContent = newPageFrame.Content;
 
-            // Remove current page from new page frame
+            // Удалить текущую страницу из нового фрейма страницы
             newPageFrame.Content = null;
 
-            // Move the previous page into the old page frame
+            // Переместить предыдущую страницу в рамку старой страницы
             oldPageFrame.Content = oldPageContent;
 
-            // Animate out previous page when the Loaded event fires
-            // right after this call due to moving frames
-            //if (oldPageContent is BasePage oldPage)
-            //    oldPage.ShouldAnimateOut = true;
+            // Анимировать предыдущую страницу, событие Loaded срабатывает
+            // сразу после этого вызова из-за перемещения кадров
+            if (oldPageContent is BasePage oldPage)
+            {
+                oldPage.ShouldAnimateOut = true;
+            }
 
-            // Set the new page content
+            // Установите новое содержимое страницы
             newPageFrame.Content = e.NewValue;
         }
     }
