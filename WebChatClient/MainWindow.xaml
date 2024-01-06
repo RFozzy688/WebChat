@@ -103,12 +103,19 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <Frame x:Name="PageFrame" 
-                       Grid.Column="1" 
-                       Content="{Binding CurrentPage, Converter={local:AppPageValueConverter}}"/>
+                <Frame Grid.ColumnSpan="2"
+                       d:DataContext=""
+                       DataContext="{Binding AppVM.CurrentPage, 
+                                     Source={x:Static local:ViewModelLocator.Instance}, 
+                                     Converter={local:AppPageValueConverter}}"
+                       Content="{Binding}"
+                       Background="Transparent"
+                       local:NoFrameHistory.Value="True"/>
 
                 <!--боковое контент-->
-                <local:SideMenuControl>
+                <local:SideMenuControl 
+                    local:AnimateSlideInFromLeftProperty.Value="{Binding AppVM.SideMenuVisible, 
+                                     Source={x:Static local:ViewModelLocator.Instance}}">
                     <local:ChatListControl/>
                 </local:SideMenuControl>
 

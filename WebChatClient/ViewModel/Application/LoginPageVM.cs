@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Security;
-using System.Text;
+﻿using System.Security;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
+using WebChatCore;
 
 namespace WebChatClient
 {
@@ -36,7 +31,10 @@ namespace WebChatClient
 
         private async Task RegisterAsync(object parameter)
         {
-            ((MainWindowVM)((MainWindow)Application.Current.MainWindow).DataContext).CurrentPage = AppPage.Register;
+            //IoC.Get<AppVM>().SideMenuVisible ^= true;
+            //return;
+            //((MainWindowVM)((MainWindow)Application.Current.MainWindow).DataContext).CurrentPage = AppPage.Register;
+            IoC.Get<AppVM>().CurrentPage = AppPage.Register;
 
             await Task.Delay(1);
         }
