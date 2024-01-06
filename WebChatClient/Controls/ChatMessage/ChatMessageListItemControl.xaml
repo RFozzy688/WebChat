@@ -5,21 +5,24 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WebChatClient"
              mc:Ignorable="d" 
-             d:DesignWidth="800">
+             d:DesignWidth="400">
 
-    <UserControl.Resources>
+    <!--<UserControl.Resources>
         <Style x:Key="CornerLeft" TargetType="{x:Type Border}">
             <Setter Property="CornerRadius" Value="10,10,10,0"/>
         </Style>
-    </UserControl.Resources>
+    </UserControl.Resources>-->
     
-    <Border Padding="5" Background="Transparent">
+    <Border Padding="5" 
+            Background="Transparent"
+            d:DataContext="{x:Static local:ChatMessageListItemDesignModel.Instance}">
         <Grid>
 
             <!-- Изображение профиля -->
             <Border VerticalAlignment="Top"
                     HorizontalAlignment="Left"
                     Margin="0 7.5 0 7.5"
+                    Visibility="{Binding SentByMe, Converter={local:BooleanToVisiblityConverter}}"
                     CornerRadius="{Binding ActualWidth, RelativeSource={RelativeSource Self}}"
                     Height="{Binding ActualWidth, RelativeSource={RelativeSource Self}}"
                     Width="35"
@@ -27,7 +30,7 @@
                     BorderBrush="{StaticResource VeryLightBrush}"
                     BorderThickness="1"
                     >
-                <TextBlock Text="LM"
+                <TextBlock Text="{Binding Initials}"
                            VerticalAlignment="Center"
                            HorizontalAlignment="Center"
                            Foreground="{StaticResource VeryLightBrush}"
@@ -36,7 +39,32 @@
             </Border>
 
             <!-- Контейнер сообщений чата -->
-            <Grid Margin="25 0 0 0" HorizontalAlignment="Left">
+            <Grid Margin="25 0 25 0" 
+                  HorizontalAlignment="{Binding SentByMe, Converter={local:SentByMeToAlignmentConverter}}">
+
+                <Grid.Triggers>
+
+                    <!-- Наведение курсора мыши показывает время -->
+                    <EventTrigger RoutedEvent="MouseEnter">
+                        <BeginStoryboard>
+                            <Storyboard Storyboard.TargetName="ExtraDetails" 
+                                        Storyboard.TargetProperty="Opacity">
+                                <DoubleAnimation To="1" Duration="00:00:00.5" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+
+                    <!-- Уход мыши скрывает время -->
+                    <EventTrigger RoutedEvent="MouseLeave">
+                        <BeginStoryboard>
+                            <Storyboard Storyboard.TargetName="ExtraDetails" 
+                                        Storyboard.TargetProperty="Opacity">
+                                <DoubleAnimation To="0" Duration="00:00:00.5" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+
+                </Grid.Triggers>
 
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
@@ -44,10 +72,10 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-                <!-- Прямоугольный пузырь с текстом --><!---->
-                <Border CornerRadius="10"
+                <!-- Прямоугольный пузырь с текстом -->
+                <Border CornerRadius="{Binding SentByMe, Converter={local:SentByMeCornerMarkConverter}}"
                     Padding="15"
-                    Background="{StaticResource VeryLightBrush}"
+                    Background="{Binding SentByMe, Converter={local:SentByMeToBackgroundConverter}}"
                     >
 
                     <!-- Текст сообщения -->
@@ -55,26 +83,42 @@
                            TextWrapping="Wrap"
                            FontFamily="{StaticResource RoundedRegular}"
                            Foreground="{StaticResource DarkBlueBrush}"
-                           Text="This chat app is awesome! When is it coming out? I want it NOW!"
+                           Text="{Binding Message}"
                            />
 
                 </Border>
 
                 <!-- Якорь чата -->
-                <Path Grid.Row="1" 
+                <!--<Path Grid.Row="1" 
                       Stroke="Black"
                       Panel.ZIndex="1"
                       Margin="15 -1 15 0"
                       Data="M 0,0 L 10,10 L 20,0 L 0,0" 
                       StrokeThickness="0"
-                      Fill="{StaticResource VeryLightBrush}" />
+                      HorizontalAlignment="{Binding SentByMe, Converter={local:SentByMeToAlignmentConverter}}"
+                      Fill="{StaticResource VeryLightBrush}" />-->
 
-                <TextBlock Grid.Row="2"
-                           Text="11:54am"
-                           Foreground="{StaticResource VeryLightBrush}"
-                           HorizontalAlignment="Right"
-                           FontSize="{StaticResource FontSizeSmall}"
-                           />
+                <!-- Контейнер времени -->
+                <StackPanel Name="ExtraDetails" 
+                            Grid.Row="2"
+                            Opacity="0"
+                            Orientation="Horizontal"
+                            HorizontalAlignment="{Binding SentByMe, Converter={local:SentByMeToAlignmentConverter}}">
+
+                    <!--время отправки сообщения-->
+                    <TextBlock Text="{Binding MessageSentTime, Converter={local:TimeToDisplayTimeConverter}}"
+                               Foreground="{StaticResource VeryLightBrush}"
+                               
+                               FontSize="{StaticResource FontSizeSmall}"
+                               Margin="0 0 15 0"/>
+
+                    <!-- Время прочтения сообщения -->
+                    <TextBlock Text="{Binding MessageReadTime, Converter={local:TimeToReadTimeConverter}}"
+                               Foreground="{StaticResource DarkBlueBrush}"
+                               
+                               FontSize="{StaticResource FontSizeSmall}"/>
+
+                </StackPanel>
 
             </Grid>
 
