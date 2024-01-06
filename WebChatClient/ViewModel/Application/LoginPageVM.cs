@@ -34,7 +34,7 @@ namespace WebChatClient
             //IoC.Get<AppVM>().SideMenuVisible ^= true;
             //return;
             //((MainWindowVM)((MainWindow)Application.Current.MainWindow).DataContext).CurrentPage = AppPage.Register;
-            IoC.Get<AppVM>().CurrentPage = AppPage.Register;
+            IoC.Get<AppVM>().GoToPage(AppPage.Register);
 
             await Task.Delay(1);
         }
@@ -52,9 +52,11 @@ namespace WebChatClient
 
             LoginIsRunning = true;
 
-            await Task.Delay(5000);
+            await Task.Delay(1000);
             var pass = (parameter as IHavePassword).SecurePassword.Unsecure();
             var email = Email;
+
+            IoC.Get<AppVM>().GoToPage(AppPage.Chat);
 
             LoginIsRunning = false;
         }
