@@ -31,6 +31,8 @@ namespace WebChatClient
 
         private async Task RegisterAsync(object parameter)
         {
+            //IoC.Get<AppVM>().SideMenuVisible ^= true;
+            //return;
             //((MainWindowVM)((MainWindow)Application.Current.MainWindow).DataContext).CurrentPage = AppPage.Register;
             IoC.Get<AppVM>().CurrentPage = AppPage.Register;
 

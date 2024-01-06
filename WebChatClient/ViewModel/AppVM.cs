@@ -14,5 +14,10 @@ namespace WebChatClient
     {
         // Текущая страница приложения
         public AppPage CurrentPage { get; set; } = AppPage.Login;
+
+        /// <summary>
+        /// True if the side menu should be shown
+        /// </summary>
+        public bool SideMenuVisible { get; set; } = false;
     }
 }
