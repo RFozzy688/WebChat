@@ -99,11 +99,11 @@
                 </Grid.Background>
 
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="320"/>
+                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <local:PageHost Grid.ColumnSpan="2"
+                <local:PageHost Grid.Column="1"
                        d:DataContext=""
                        DataContext="{Binding AppVM.CurrentPage, 
                                      Source={x:Static local:ViewModelLocator.Instance}, 
@@ -114,6 +114,7 @@
 
                 <!--боковое контент-->
                 <local:SideMenuControl 
+                    Width="320"
                     local:AnimateSlideInFromLeftProperty.Value="{Binding AppVM.SideMenuVisible, 
                                      Source={x:Static local:ViewModelLocator.Instance}}">
                     <local:ChatListControl/>
