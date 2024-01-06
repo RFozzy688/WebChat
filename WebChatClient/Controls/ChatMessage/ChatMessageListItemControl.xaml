@@ -1,0 +1,84 @@
+﻿<UserControl Style="{DynamicResource UserControlStyle1}" x:Class="WebChatClient.ChatMessageListItemControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WebChatClient"
+             mc:Ignorable="d" 
+             d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <Style x:Key="CornerLeft" TargetType="{x:Type Border}">
+            <Setter Property="CornerRadius" Value="10,10,10,0"/>
+        </Style>
+    </UserControl.Resources>
+    
+    <Border Padding="5" Background="Transparent">
+        <Grid>
+
+            <!-- Изображение профиля -->
+            <Border VerticalAlignment="Top"
+                    HorizontalAlignment="Left"
+                    Margin="0 7.5 0 7.5"
+                    CornerRadius="{Binding ActualWidth, RelativeSource={RelativeSource Self}}"
+                    Height="{Binding ActualWidth, RelativeSource={RelativeSource Self}}"
+                    Width="35"
+                    Background="Green"
+                    BorderBrush="{StaticResource VeryLightBrush}"
+                    BorderThickness="1"
+                    >
+                <TextBlock Text="LM"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           Foreground="{StaticResource VeryLightBrush}"
+                           FontFamily="{StaticResource RoundedRegular}"
+                           />
+            </Border>
+
+            <!-- Контейнер сообщений чата -->
+            <Grid Margin="25 0 0 0" HorizontalAlignment="Left">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <!-- Прямоугольный пузырь с текстом --><!---->
+                <Border CornerRadius="10"
+                    Padding="15"
+                    Background="{StaticResource VeryLightBrush}"
+                    >
+
+                    <!-- Текст сообщения -->
+                    <TextBlock VerticalAlignment="Center"
+                           TextWrapping="Wrap"
+                           FontFamily="{StaticResource RoundedRegular}"
+                           Foreground="{StaticResource DarkBlueBrush}"
+                           Text="This chat app is awesome! When is it coming out? I want it NOW!"
+                           />
+
+                </Border>
+
+                <!-- Якорь чата -->
+                <Path Grid.Row="1" 
+                      Stroke="Black"
+                      Panel.ZIndex="1"
+                      Margin="15 -1 15 0"
+                      Data="M 0,0 L 10,10 L 20,0 L 0,0" 
+                      StrokeThickness="0"
+                      Fill="{StaticResource VeryLightBrush}" />
+
+                <TextBlock Grid.Row="2"
+                           Text="11:54am"
+                           Foreground="{StaticResource VeryLightBrush}"
+                           HorizontalAlignment="Right"
+                           FontSize="{StaticResource FontSizeSmall}"
+                           />
+
+            </Grid>
+
+        </Grid>
+    </Border>
+
+</UserControl>

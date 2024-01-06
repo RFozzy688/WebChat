@@ -13,11 +13,7 @@
     Height="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=Window}}">
 
     <Border>
-        <TextBlock Text="Вход выполнен"
-                   Foreground="White"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center"
-                   FontSize="{StaticResource FontSizeXXLarge}"/>
+        <local:ChatMessageListControl/>
     </Border>
 
 </local:BasePage>
