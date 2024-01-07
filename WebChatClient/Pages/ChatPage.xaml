@@ -12,8 +12,66 @@
     Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=Window}}"
     Height="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=Window}}">
 
-    <Border>
-        <local:ChatMessageListControl/>
-    </Border>
+    <Grid>
+
+        <Grid.RowDefinitions>
+
+            <!-- Заголовок -->
+            <RowDefinition Height="Auto" />
+
+            <!-- Тень -->
+            <RowDefinition Height="Auto" />
+
+            <!-- Лист сообщений -->
+            <RowDefinition Height="*" />
+
+            <!-- Текстовое поле отправки сообщения -->
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Заголовок -->
+        <Grid Height="50" Background="{StaticResource LightBlueBrush}"
+              Margin="0,0,2,0">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+
+            </Grid.ColumnDefinitions>
+
+            <!-- Текст заголовка -->
+            <TextBlock Text="Parnell" 
+                       Grid.ColumnSpan="2"
+                       Foreground="{StaticResource VeryLightBrush}"
+                       FontSize="{StaticResource FontSizeXLarge}"
+                       FontFamily="{StaticResource RoundedRegular}"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       />
+
+            <!-- Кнопки в заголовке -->
+            <StackPanel Orientation="Horizontal" Grid.Column="1">
+                <Button Style="{StaticResource IconButton}" Content="{StaticResource FA_SearchIcon}" />
+                <Button Style="{StaticResource IconButton}" Content="{StaticResource FA_EllipsisVerticalIcon}" />
+            </StackPanel>
+
+        </Grid>
+
+        <!-- Тень -->
+        <Border Grid.Row="1" BorderThickness="0 0.2 0 0">
+            <!-- Линия тени -->
+            <Border.BorderBrush>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1, 0">
+                    <GradientStop Color="{StaticResource MiddleDark}" Offset="0.0" />
+                    <GradientStop Color="{StaticResource  VeryDark}" Offset="0.5" />
+                    <GradientStop Color="{StaticResource MiddleDark}" Offset="1.0" />
+                </LinearGradientBrush>
+            </Border.BorderBrush>
+        </Border>
+
+        <!-- Лист сообщений -->
+        <local:ChatMessageListControl Grid.Row="2" />
+
+    </Grid>
 
 </local:BasePage>

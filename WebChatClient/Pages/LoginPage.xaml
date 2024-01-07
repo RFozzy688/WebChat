@@ -47,6 +47,7 @@
 
                             <!-- Кнопка входа -->
                             <Button Content="Вход"
+                                    IsDefault="True"
                                     local:IsBusyProperty.Value="{Binding LoginIsRunning}"
                                     Command="{Binding LoginCommand}"
                                     CommandParameter="{Binding ElementName=Page}"

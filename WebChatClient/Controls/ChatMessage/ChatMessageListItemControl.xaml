@@ -7,12 +7,6 @@
              mc:Ignorable="d" 
              d:DesignWidth="400">
 
-    <!--<UserControl.Resources>
-        <Style x:Key="CornerLeft" TargetType="{x:Type Border}">
-            <Setter Property="CornerRadius" Value="10,10,10,0"/>
-        </Style>
-    </UserControl.Resources>-->
-    
     <Border Padding="5" 
             Background="Transparent"
             d:DataContext="{x:Static local:ChatMessageListItemDesignModel.Instance}">
@@ -88,16 +82,6 @@
 
                 </Border>
 
-                <!-- Якорь чата -->
-                <!--<Path Grid.Row="1" 
-                      Stroke="Black"
-                      Panel.ZIndex="1"
-                      Margin="15 -1 15 0"
-                      Data="M 0,0 L 10,10 L 20,0 L 0,0" 
-                      StrokeThickness="0"
-                      HorizontalAlignment="{Binding SentByMe, Converter={local:SentByMeToAlignmentConverter}}"
-                      Fill="{StaticResource VeryLightBrush}" />-->
-
                 <!-- Контейнер времени -->
                 <StackPanel Name="ExtraDetails" 
                             Grid.Row="2"
@@ -108,14 +92,12 @@
                     <!--время отправки сообщения-->
                     <TextBlock Text="{Binding MessageSentTime, Converter={local:TimeToDisplayTimeConverter}}"
                                Foreground="{StaticResource VeryLightBrush}"
-                               
                                FontSize="{StaticResource FontSizeSmall}"
                                Margin="0 0 15 0"/>
 
                     <!-- Время прочтения сообщения -->
                     <TextBlock Text="{Binding MessageReadTime, Converter={local:TimeToReadTimeConverter}}"
                                Foreground="{StaticResource DarkBlueBrush}"
-                               
                                FontSize="{StaticResource FontSizeSmall}"/>
 
                 </StackPanel>
