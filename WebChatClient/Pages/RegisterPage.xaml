@@ -38,7 +38,8 @@
 
                             <!-- Username -->
                             <TextBox Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" 
-                                     Tag="Имя" />
+                                     Tag="Имя"
+                                     local:IsFocusedProperty.Value="True"/>
 
                             <!--Phone-->
                             <TextBox Text="{Binding Phone, UpdateSourceTrigger=PropertyChanged}"
@@ -53,6 +54,7 @@
 
                             <!-- Кнопка регистрации -->
                             <Button Content="Отправить"
+                                    IsDefault="True"
                                     local:IsBusyProperty.Value="{Binding RegisterIsRunning}"
                                     Command="{Binding RegisterCommand}"
                                     CommandParameter="{Binding ElementName=Page}"

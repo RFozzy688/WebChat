@@ -65,7 +65,15 @@ namespace WebChatClient
             // сразу после этого вызова из-за перемещения кадров
             if (oldPageContent is BasePage oldPage)
             {
+                // анимировать старую страницу 
                 oldPage.ShouldAnimateOut = true;
+
+                // Как только это будет сделано, удалите его
+                Task.Delay((int)(oldPage.SlideSeconds * 1000)).ContinueWith((t) =>
+                {
+                    // Удалить старую страницу
+                    Application.Current.Dispatcher.Invoke(() => oldPageFrame.Content = null);
+                });
             }
 
             // Установите новое содержимое страницы
