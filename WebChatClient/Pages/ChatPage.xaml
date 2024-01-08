@@ -72,6 +72,64 @@
         <!-- Лист сообщений -->
         <local:ChatMessageListControl Grid.Row="2" />
 
+        <Border CornerRadius="0,0,10,0" Grid.Row="3" 
+                Background="{StaticResource VeryLightBrush}">
+            
+            <!-- Текстовое поле отправки сообщения -->
+            <Grid MinHeight="50"
+                  MaxHeight="114">
+
+                <Grid.ColumnDefinitions>
+                    <!-- Attach button -->
+                    <ColumnDefinition Width="Auto" />
+
+                    <!-- Text entry box -->
+                    <ColumnDefinition Width="*" />
+
+                    <!-- Additional buttons -->
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Прикрепить кнопку -->
+                <Button Style="{StaticResource IconGrowButton}"
+                        Height="{Binding MinHeight, RelativeSource={RelativeSource AncestorType=Grid}}"
+                        Content="{StaticResource FA_PaperclipIcon}"
+                        VerticalAlignment="Top"
+                        Foreground="{StaticResource MiddleDarkBrush}"/>
+
+                <!-- Окно сообщения -->
+                <TextBox Grid.Column="1" 
+                         Tag="Написать сообщение..."
+                         FontSize="{StaticResource FontSizeRegular}"
+                         VerticalAlignment="Center"
+                         BorderThickness="0"
+                         Padding="0 10"
+                         AcceptsReturn="True"
+                         AcceptsTab="True"
+                         VerticalScrollBarVisibility="Auto"
+                         Margin="10,0,0,0"/>
+
+                <!-- Additional buttons -->
+                <StackPanel Grid.Column="2"
+                            Orientation="Horizontal"
+                            VerticalAlignment="Top"
+                            Margin="0 0 8 0">
+
+                    <!-- Emoji button -->
+                    <Button Style="{StaticResource IconGrowButton}"
+                            Height="{Binding MinHeight, RelativeSource={RelativeSource AncestorType=Grid}}"
+                            Content="{StaticResource FA_EmojiIcon}"
+                            Foreground="{StaticResource OrangeBrush}"/>
+
+                    <!--Send button-->
+                    <Button Content="Отправить"
+                            Padding="8"
+                            Style="{StaticResource SendButton}"
+                            FontSize="{StaticResource FontSizeRegular}"/>
+
+                </StackPanel>
+            </Grid>
+        </Border>
     </Grid>
 
 </local:BasePage>
