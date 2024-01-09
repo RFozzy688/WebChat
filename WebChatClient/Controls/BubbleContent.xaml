@@ -26,12 +26,7 @@
                 <DropShadowEffect BlurRadius="4" ShadowDepth="2" Color="{StaticResource LightBlue}" />
             </Border.Effect>
 
-            <!-- текст -->
-            <TextBlock VerticalAlignment="Center"
-                       TextWrapping="Wrap"
-                       FontFamily="{StaticResource RoundedRegular}"
-                       Foreground="{StaticResource DarkBlueBrush}"
-                       Text="test"/>
+            <ContentControl Content="{Binding Converter={local:PopupContentConverter}}"/>
         </Border>
 
     </Grid>

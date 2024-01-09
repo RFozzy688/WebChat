@@ -29,6 +29,19 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
+        <!-- Наложение всплывающего окна -->
+        <Border Background="Transparent" 
+                Grid.RowSpan="3"
+                Panel.ZIndex="1"
+                Visibility="{Binding AnyPopupVisible, 
+                                     Converter={local:BooleanToVisiblityConverter}, 
+                                     ConverterParameter=True}">
+
+            <Border.InputBindings>
+                <MouseBinding MouseAction="LeftClick" Command="{Binding PopupClickawayCommand}" />
+            </Border.InputBindings>
+        </Border>
+
         <!-- Заголовок -->
         <Grid Height="50" Background="{StaticResource LightBlueBrush}"
               Margin="0,0,2,0">
@@ -76,6 +89,7 @@
 
         <!--всплывающее меню-->
         <Border Grid.Row="2"
+                Panel.ZIndex="2"
                 VerticalAlignment="Bottom"
                 HorizontalAlignment="Left"
                 local:AnimateSlideInFromBottomProperty.Value="{Binding AttachmentMenuVisible}">
@@ -86,20 +100,21 @@
         <Border CornerRadius="0,0,10,0" Grid.Row="3" 
                 Background="{StaticResource VeryLightBrush}"
                 BorderBrush="{StaticResource MiddleDarkBrush}"
-                BorderThickness="1,0,0,0">
+                BorderThickness="1,0,0,0"
+                Panel.ZIndex="3">
             
             <!-- Текстовое поле отправки сообщения -->
             <Grid MinHeight="50"
                   MaxHeight="114">
 
                 <Grid.ColumnDefinitions>
-                    <!-- Attach button -->
+                    <!-- Кнопка прикрепить  -->
                     <ColumnDefinition Width="Auto" />
 
-                    <!-- Text entry box -->
+                    <!-- Поле ввода текста -->
                     <ColumnDefinition Width="*" />
 
-                    <!-- Additional buttons -->
+                    <!-- Дополнительные кнопки -->
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
@@ -122,19 +137,19 @@
                          VerticalScrollBarVisibility="Auto"
                          Margin="10,0,0,0"/>
 
-                    <!-- Additional buttons -->
+                <!-- Дополнительные кнопки -->
                 <StackPanel Orientation="Horizontal"
                             VerticalAlignment="Top"
                             Margin="0 0 8 0"
                             Grid.Column="3">
 
-                    <!-- Emoji button -->
+                    <!-- Emoji кнопка -->
                     <Button Style="{StaticResource IconGrowButton}"
                             Height="{Binding MinHeight, RelativeSource={RelativeSource AncestorType=Grid}}"
                             Content="{StaticResource FA_EmojiIcon}"
                             Foreground="{StaticResource OrangeBrush}"/>
 
-                    <!--Send button-->
+                    <!--Кнопка отправить -->
                     <Button Content="Отправить"
                             Padding="8"
                             Style="{StaticResource SendButton}"

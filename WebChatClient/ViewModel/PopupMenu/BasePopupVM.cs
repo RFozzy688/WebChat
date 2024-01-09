@@ -10,7 +10,7 @@ namespace WebChatClient
     /// <summary>
     /// Модель представления для любых всплывающих меню.
     /// </summary>
-    public class BasePopupMenuVM : BaseViewModel
+    public class BasePopupVM : BaseViewModel
     {
         // Цвет фона пузырька в значении ARGB.
         public string BubbleBackground { get; set; }
@@ -18,7 +18,10 @@ namespace WebChatClient
         // Выравнивание угла пузырька
         public ElementHorizontalAlignment CornerAlignment { get; set; }
 
-        public BasePopupMenuVM()
+        // Содержимое этого всплывающего меню
+        public BaseViewModel Content { get; set; }
+
+        public BasePopupVM()
         {
             // Установить значения по умолчанию
             BubbleBackground = "fafafa";
