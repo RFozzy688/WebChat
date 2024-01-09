@@ -70,10 +70,23 @@
         </Border>
 
         <!-- Лист сообщений -->
-        <local:ChatMessageListControl Grid.Row="2" />
+        <local:ChatMessageListControl Grid.Row="2"
+                                      x:Name="ChatMessageList"
+                                      DataContext="{Binding}"/>
+
+        <!--всплывающее меню-->
+        <Border Grid.Row="2"
+                VerticalAlignment="Bottom"
+                HorizontalAlignment="Left"
+                local:AnimateSlideInFromBottomProperty.Value="{Binding AttachmentMenuVisible}">
+
+            <local:BubbleContent DataContext="{Binding AttachmentMenu}"/>
+        </Border>
 
         <Border CornerRadius="0,0,10,0" Grid.Row="3" 
-                Background="{StaticResource VeryLightBrush}">
+                Background="{StaticResource VeryLightBrush}"
+                BorderBrush="{StaticResource MiddleDarkBrush}"
+                BorderThickness="1,0,0,0">
             
             <!-- Текстовое поле отправки сообщения -->
             <Grid MinHeight="50"
@@ -90,12 +103,12 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <!-- Прикрепить кнопку -->
+                <!-- кнопка прикрепить -->
                 <Button Style="{StaticResource IconGrowButton}"
                         Height="{Binding MinHeight, RelativeSource={RelativeSource AncestorType=Grid}}"
                         Content="{StaticResource FA_PaperclipIcon}"
-                        VerticalAlignment="Top"
-                        Foreground="{StaticResource MiddleDarkBrush}"/>
+                        Foreground="{StaticResource MiddleDarkBrush}"
+                        Command="{Binding AttachmentButtonCommand}"/>
 
                 <!-- Окно сообщения -->
                 <TextBox Grid.Column="1" 
@@ -109,11 +122,11 @@
                          VerticalScrollBarVisibility="Auto"
                          Margin="10,0,0,0"/>
 
-                <!-- Additional buttons -->
-                <StackPanel Grid.Column="2"
-                            Orientation="Horizontal"
+                    <!-- Additional buttons -->
+                <StackPanel Orientation="Horizontal"
                             VerticalAlignment="Top"
-                            Margin="0 0 8 0">
+                            Margin="0 0 8 0"
+                            Grid.Column="3">
 
                     <!-- Emoji button -->
                     <Button Style="{StaticResource IconGrowButton}"
@@ -128,6 +141,7 @@
                             FontSize="{StaticResource FontSizeRegular}"/>
 
                 </StackPanel>
+
             </Grid>
         </Border>
     </Grid>

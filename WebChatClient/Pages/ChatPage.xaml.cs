@@ -25,7 +25,7 @@ namespace WebChatClient
         {
             InitializeComponent();
 
-            DataContext = new ChatPageVM();
+            DataContext = new ChatMessageListVM();
         }
     }
 }

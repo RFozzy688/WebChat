@@ -9,120 +9,185 @@ using System.Windows;
 namespace WebChatClient
 {
     /// <summary>
-    /// Helpers to animate framework elements in specific ways
+    /// Помощники для анимации элементов фреймворка определенными способами.
     /// </summary>
     public static class FrameworkElementAnimations
     {
         /// <summary>
-        /// Slides an element in from the right
+        /// Сдвигает элемент справа
         /// </summary>
-        /// <param name="element">The element to animate</param>
-        /// <param name="seconds">The time the animation will take</param>
-        /// <param name="keepMargin">Whether to keep the element at the same width during animation</param>
-        /// <returns></returns>
-        public static async Task SlideAndFadeInFromRightAsync(this FrameworkElement element, float seconds = 0.3f, bool keepMargin = true)
-        {
-            // Create the storyboard
-            var sb = new Storyboard();
-
-            // Add slide from right animation
-            sb.AddSlideFromRight(seconds, element.ActualWidth, keepMargin: keepMargin);
-
-            // Add fade in animation
-            sb.AddFadeIn(seconds);
-
-            // Start animating
-            sb.Begin(element);
-
-            // Make page visible
-            element.Visibility = Visibility.Visible;
-
-            // Wait for it to finish
-            await Task.Delay((int)(seconds * 1000));
-        }
-
-        /// <summary>
-        /// Slides an element in from the right
-        /// </summary>
-        /// <param name="element">The element to animate</param>
-        /// <param name="seconds">The time the animation will take</param>
-        /// <param name="keepMargin">Whether to keep the element at the same width during animation</param>
+        /// <param name="element">Элемент для анимации</param>
+        /// <param name="seconds">Время, которое займет анимация</param>
+        /// <param name="keepMargin">Сохранять ли элемент одинаковой ширины во время анимации</param>
         /// <returns></returns>
         public static async Task SlideAndFadeInFromLeftAsync(this FrameworkElement element, float seconds = 0.3f, bool keepMargin = true)
         {
-            // Create the storyboard
+            // Создайте раскадровку
             var sb = new Storyboard();
 
-            // Add slide from right animation
+            // Добавить слайд из правой анимации
             sb.AddSlideFromLeft(seconds, element.ActualWidth, keepMargin: keepMargin);
 
-            // Add fade in animation
+            // Добавить затухание анимации
             sb.AddFadeIn(seconds);
 
-            // Start animating
+            // Начать анимацию
             sb.Begin(element);
 
-            // Make page visible
+            // Сделать страницу видимой
             element.Visibility = Visibility.Visible;
 
-            // Wait for it to finish
+            // Подождите, пока это закончится
             await Task.Delay((int)(seconds * 1000));
         }
 
         /// <summary>
-        /// Slides an element out to the left
+        /// Сдвигает элемент влево
         /// </summary>
-        /// <param name="element">The element to animate</param>
-        /// <param name="seconds">The time the animation will take</param>
-        /// <param name="keepMargin">Whether to keep the element at the same width during animation</param>
+        /// <param name="element">Элемент для анимации</param>
+        /// <param name="seconds">Время, которое займет анимация</param>
+        /// <param name="keepMargin">Сохранять ли элемент одинаковой ширины во время анимации</param>
         /// <returns></returns>
         public static async Task SlideAndFadeOutToLeftAsync(this FrameworkElement element, float seconds = 0.3f, bool keepMargin = true)
         {
-            // Create the storyboard
+            // Создайте раскадровку
             var sb = new Storyboard();
 
-            // Add slide from right animation
+            // Добавить слайд из правой анимации
             sb.AddSlideToLeft(seconds, element.ActualWidth, keepMargin: keepMargin);
 
-            // Add fade in animation
+            // Добавить затухание анимации
             sb.AddFadeOut(seconds);
 
-            // Start animating
+            // Начать анимацию
             sb.Begin(element);
 
-            // Make page visible
+            // Сделать страницу видимой
             element.Visibility = Visibility.Visible;
 
-            // Wait for it to finish
+            // Подождите, пока это закончится
+            await Task.Delay((int)(seconds * 1000));
+        }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        /// <summary>
+        /// Сдвигает элемент справа
+        /// </summary>
+        /// <param name="element">Элемент для анимации</param>
+        /// <param name="seconds">Время, которое займет анимация</param>
+        /// <param name="keepMargin">Сохранять ли элемент одинаковой ширины во время анимации</param>
+        /// <returns></returns>
+        public static async Task SlideAndFadeInFromRightAsync(this FrameworkElement element, float seconds = 0.3f, bool keepMargin = true)
+        {
+            // Создайте раскадровку
+            var sb = new Storyboard();
+
+            // Добавить слайд из правой анимации
+            sb.AddSlideFromRight(seconds, element.ActualWidth, keepMargin: keepMargin);
+
+            // Добавить затухание анимации
+            sb.AddFadeIn(seconds);
+
+            // Начать анимацию
+            sb.Begin(element);
+
+            // Сделать страницу видимой
+            element.Visibility = Visibility.Visible;
+
+            // Подождите, пока это закончится
             await Task.Delay((int)(seconds * 1000));
         }
 
         /// <summary>
-        /// Slides an element out to the right
+        /// Сдвигает элемент вправо
         /// </summary>
-        /// <param name="element">The element to animate</param>
-        /// <param name="seconds">The time the animation will take</param>
-        /// <param name="keepMargin">Whether to keep the element at the same width during animation</param>
+        /// <param name="element">Элемент для анимации</param>
+        /// <param name="seconds">Время, которое займет анимация</param>
+        /// <param name="keepMargin">Сохранять ли элемент одинаковой ширины во время анимации</param>
         /// <returns></returns>
         public static async Task SlideAndFadeOutToRightAsync(this FrameworkElement element, float seconds = 0.3f, bool keepMargin = true)
         {
-            // Create the storyboard
+            // Создайте раскадровку
             var sb = new Storyboard();
 
-            // Add slide from right animation
+            // Добавить слайд из правой анимации
             sb.AddSlideToRight(seconds, element.ActualWidth, keepMargin: keepMargin);
 
-            // Add fade in animation
+            // Добавить затухание анимации
             sb.AddFadeOut(seconds);
 
-            // Start animating
+            // Начать анимацию
             sb.Begin(element);
 
-            // Make page visible
+            // Сделать страницу видимой
             element.Visibility = Visibility.Visible;
 
-            // Wait for it to finish
+            // Подождите, пока это закончится
             await Task.Delay((int)(seconds * 1000));
         }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        /// <summary>
+        /// Сдвигает элемент снизу
+        /// </summary>
+        /// <param name="element">Элемент для анимации</param>
+        /// <param name="seconds">The time the animation will take</param>
+        /// <param name="keepMargin">Сохранять ли элемент на той же высоте во время анимации</param>
+        /// <param name="height">Высота анимации для анимации. Если не указано, используется высота элементов.</param>
+        /// <returns></returns>
+        public static async Task SlideAndFadeInFromBottomAsync(this FrameworkElement element, float seconds = 0.3f, bool keepMargin = true, int height = 0)
+        {
+            // Создайте раскадровку
+            var sb = new Storyboard();
+
+            // Добавить слайд анимации снизу 
+            sb.AddSlideFromBottom(seconds, height == 0 ? element.ActualHeight : height, keepMargin: keepMargin);
+
+            // Добавить затухание анимации
+            sb.AddFadeIn(seconds);
+
+            // Начать анимацию
+            sb.Begin(element);
+
+            // Сделать страницу видимой
+            element.Visibility = Visibility.Visible;
+
+            // Подождать, пока закончится
+            await Task.Delay((int)(seconds * 1000));
+        }
+
+        /// <summary>
+        /// Сдвигает элемент вниз
+        /// </summary>
+        /// <param name="element">Элемент для анимации</param>
+        /// <param name="seconds">Время, которое займет анимация</param>
+        /// <param name="keepMargin">Сохранять ли элемент на той же высоте во время анимации</param>
+        /// <param name="height">Высота анимации для анимации. Если не указано, используется высота элементов.</param>
+        /// <returns></returns>
+        public static async Task SlideAndFadeOutToBottomAsync(this FrameworkElement element, float seconds = 0.3f, bool keepMargin = true, int height = 0)
+        {
+            // Создайте раскадровку
+            var sb = new Storyboard();
+
+            // Добавить слайд в нижнюю анимацию
+            sb.AddSlideToBottom(seconds, height == 0 ? element.ActualHeight : height, keepMargin: keepMargin);
+
+            // Добавить затухание анимации
+            sb.AddFadeOut(seconds);
+
+            // Начать анимацию
+            sb.Begin(element);
+
+            // Сделать страницу видимой
+            element.Visibility = Visibility.Visible;
+
+            // Подождать, пока закончится
+            await Task.Delay((int)(seconds * 1000));
+        }
+
     }
 }

@@ -8,80 +8,87 @@ using System.Windows;
 namespace WebChatClient
 {
     /// <summary>
-    /// A base class to run any animation method when a boolean is set to true
-    /// and a reverse animation when set to false
+    /// Базовый класс для запуска любого метода анимации, когда для логического значения установлено значение true
+    /// и обратная анимация, если установлено значение false
     /// </summary>
     /// <typeparam name="Parent"></typeparam>
     public abstract class AnimateBaseProperty<Parent> : BaseAttachedProperty<Parent, bool>
         where Parent : BaseAttachedProperty<Parent, bool>, new()
     {
-        #region Public Properties
-
-        /// <summary>
-        /// A flag indicating if this is the first time this property has been loaded
-        /// </summary>
+        // Флаг, указывающий, загружается ли это свойство в первый раз.
         public bool FirstLoad { get; set; } = true;
-
-        #endregion
 
         public override void OnValueUpdated(DependencyObject sender, object value)
         {
-            // Get the framework element
+            // Получить элемент фреймворка
             if (!(sender is FrameworkElement element))
                 return;
 
-            // Don't fire if the value doesn't change
+            // Не запускать, если значение не изменится
             if (sender.GetValue(ValueProperty) == value && !FirstLoad)
                 return;
 
-            // On first load...
+            // При первой загрузке...
             if (FirstLoad)
             {
-                // Create a single self-unhookable event 
-                // for the elements Loaded event
+                // Создайте одно событие с возможностью самостоятельного отсоединения
+                // для элементов Событие Loaded
                 RoutedEventHandler onLoaded = null;
                 onLoaded = (ss, ee) =>
                 {
-                    // Unhook ourselves
+                    // Отцепитесь от себя
                     element.Loaded -= onLoaded;
 
-                    // Do desired animation
+                    // Сделайте желаемую анимацию
                     DoAnimation(element, (bool)value);
 
-                    // No longer in first load
+                    // Больше не в первой загрузке
                     FirstLoad = false;
                 };
 
-                // Hook into the Loaded event of the element
+                // Подключитесь к событию Loaded элемента
                 element.Loaded += onLoaded;
             }
             else
-                // Do desired animation
+                // Сделайте желаемую анимацию
                 DoAnimation(element, (bool)value);
         }
 
         /// <summary>
-        /// The animation method that is fired when the value changes
+        /// Метод анимации, который запускается при изменении значения.
         /// </summary>
-        /// <param name="element">The element</param>
-        /// <param name="value">The new value</param>
+        /// <param name="element">Элемент</param>
+        /// <param name="value">Новое значение</param>
         protected virtual void DoAnimation(FrameworkElement element, bool value) { }
     }
 
-    /// <summary>
-    /// Animates a framework element sliding it in from the left on show
-    /// and sliding out to the left on hide
-    /// </summary>
+    // Анимирует элемент фреймворка, сдвигая его слева на экране
+    // и сдвигая влево при скрытии
     public class AnimateSlideInFromLeftProperty : AnimateBaseProperty<AnimateSlideInFromLeftProperty>
     {
         protected override async void DoAnimation(FrameworkElement element, bool value)
         {
             if (value)
-                // Animate in
+                // Анимировать в центр
                 await element.SlideAndFadeInFromLeftAsync(FirstLoad ? 0 : 0.3f, keepMargin: false);
             else
-                // Animate out
+                // Анимация скрытия
                 await element.SlideAndFadeOutToLeftAsync(FirstLoad ? 0 : 0.3f, keepMargin: false);
+        }
+    }
+
+    // Анимирует элемент каркаса, скользящий снизу вверх на экране
+    // и движение вниз при скрытии
+    public class AnimateSlideInFromBottomProperty : AnimateBaseProperty<AnimateSlideInFromBottomProperty>
+    {
+        protected override async void DoAnimation(FrameworkElement element, bool value)
+        {
+            if (value)
+                // Animate in
+                await element.SlideAndFadeInFromBottomAsync(FirstLoad ? 0 : 0.3f, keepMargin: false);
+            else
+                // Animate out
+                await element.SlideAndFadeOutToBottomAsync(FirstLoad ? 0 : 0.3f, keepMargin: false);
         }
     }
 }
