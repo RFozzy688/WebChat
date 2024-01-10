@@ -103,6 +103,10 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
+                <local:SettingsControl Grid.ColumnSpan="2"
+                                       Panel.ZIndex="1"
+                                       local:AnimateSlideInFromBottomMarginProperty.Value="{Binding AppVM.SettingsMenuVisible, Source={x:Static local:ViewModelLocator.Instance}}"/>
+
                 <local:PageHost Grid.Column="1"
                        d:DataContext=""
                        DataContext="{Binding AppVM.CurrentPage, 

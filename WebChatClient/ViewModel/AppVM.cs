@@ -14,12 +14,13 @@ namespace WebChatClient
     public class AppVM : BaseViewModel
     {
         // Текущая страница приложения
-        public AppPage CurrentPage { get; private set; } = AppPage.Login;
+        public AppPage CurrentPage { get; private set; } = AppPage.Chat;
 
-        /// <summary>
-        /// True if the side menu should be shown
-        /// </summary>
-        public bool SideMenuVisible { get; set; } = false;
+        // True, если боковое меню должно отображаться
+        public bool SideMenuVisible { get; set; } = true;
+
+        // True, если меню настроек должно отображаться
+        public bool SettingsMenuVisible { get; set; }
 
         /// <summary>
         /// Переход на указанную страницу

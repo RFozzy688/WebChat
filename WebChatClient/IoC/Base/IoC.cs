@@ -9,6 +9,12 @@ namespace WebChatClient
         // Ярлык для доступа к <see cref="IUIManager"/>
         public static IUIManager UI => IoC.Get<IUIManager>();
 
+        // Ярлык для доступа к <see cref="AppVM"/>
+        public static AppVM Application => IoC.Get<AppVM>();
+
+        // Ярлык для доступа к <see cref="SettingsViewModel"/>
+        public static SettingsVM Settings => IoC.Get<SettingsVM>();
+
         public static T Get<T>()
         {
             return Kernel.Get<T>();
@@ -22,6 +28,9 @@ namespace WebChatClient
         private static void BindViewModels()
         {
             Kernel.Bind<AppVM>().ToConstant(new AppVM());
+
+            // Привязка к одному экземпляру модели представления настроек
+            Kernel.Bind<SettingsVM>().ToConstant(new SettingsVM());
         }
     }
 }

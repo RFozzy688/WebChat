@@ -15,5 +15,8 @@ namespace WebChatClient
 
         // Модель представления приложения
         public static AppVM AppVM => IoC.Get<AppVM>();
+
+        // Модель просмотра настроек
+        public static SettingsVM SettingsVM => IoC.Settings;
     }
 }

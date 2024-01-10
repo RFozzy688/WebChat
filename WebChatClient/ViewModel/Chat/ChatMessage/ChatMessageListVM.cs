@@ -33,16 +33,16 @@ namespace WebChatClient
         public ChatMessageListVM()
         {
             // Создание команд
-            AttachmentButtonCommand = new Command((param) => AttachmentButton(param));
-            PopupClickawayCommand = new Command((param) => PopupClickaway(param));
-            SendCommand = new Command((param) => Send(param));
+            AttachmentButtonCommand = new Command((o) => AttachmentButton());
+            PopupClickawayCommand = new Command((o) => PopupClickaway());
+            SendCommand = new Command((o) => Send());
 
             // Сделать меню по умолчанию
             AttachmentMenu = new ChatAttachmentPopupMenuVM();
         }
 
         // Когда пользователь нажимает кнопку отправить, отправляет сообщение
-        private void Send(object param)
+        private void Send()
         {
             IoC.UI.ShowMessage(new MessageBoxDialogVM
             {
@@ -53,14 +53,14 @@ namespace WebChatClient
         }
 
         // При нажатии на область щелчка всплывающего окна скрывают все всплывающие окна.
-        private void PopupClickaway(object param)
+        private void PopupClickaway()
         {
             // Скрыть меню вложений
             AttachmentMenuVisible = false;
         }
 
         // При нажатии кнопки вложения показать/скрыть всплывающее окно с вложением
-        public void AttachmentButton(object param)
+        public void AttachmentButton()
         {
             // Переключить видимость меню
             AttachmentMenuVisible ^= true;
