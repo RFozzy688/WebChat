@@ -152,6 +152,7 @@
                     <!--Кнопка отправить -->
                     <Button Content="Отправить"
                             Padding="8"
+                            Command="{Binding SendCommand}"
                             Style="{StaticResource SendButton}"
                             FontSize="{StaticResource FontSizeRegular}"/>
 

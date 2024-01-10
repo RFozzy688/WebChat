@@ -6,6 +6,9 @@ namespace WebChatClient
     {
         public static IKernel Kernel { get; private set; } = new StandardKernel();
 
+        // Ярлык для доступа к <see cref="IUIManager"/>
+        public static IUIManager UI => IoC.Get<IUIManager>();
+
         public static T Get<T>()
         {
             return Kernel.Get<T>();

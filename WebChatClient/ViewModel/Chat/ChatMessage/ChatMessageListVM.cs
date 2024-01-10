@@ -27,14 +27,29 @@ namespace WebChatClient
         // Команда для щелчка по области за пределами всплывающего окна.
         public ICommand PopupClickawayCommand { get; set; }
 
+        // Команда, когда пользователь нажимает кнопку отправки
+        public ICommand SendCommand { get; set; }
+
         public ChatMessageListVM()
         {
             // Создание команд
             AttachmentButtonCommand = new Command((param) => AttachmentButton(param));
             PopupClickawayCommand = new Command((param) => PopupClickaway(param));
+            SendCommand = new Command((param) => Send(param));
 
             // Сделать меню по умолчанию
             AttachmentMenu = new ChatAttachmentPopupMenuVM();
+        }
+
+        // Когда пользователь нажимает кнопку отправить, отправляет сообщение
+        private void Send(object param)
+        {
+            IoC.UI.ShowMessage(new MessageBoxDialogVM
+            {
+                Title = "Send Message",
+                Message = "Thank you for writing a nice message :)",
+                OkText = "OK"
+            });
         }
 
         // При нажатии на область щелчка всплывающего окна скрывают все всплывающие окна.
