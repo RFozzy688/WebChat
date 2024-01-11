@@ -29,9 +29,9 @@ namespace WebChatClient
         // команда входа
         public ICommand LoginCommand { get; set; }
 
-        public RegisterPageVM(RegisterPage view)
+        public RegisterPageVM(/*RegisterPage view*/)
         {
-            _view = view;
+            //_view = view;
             // Создать команду
             RegisterCommand = new Command(async (parameter) => await RegisterAsync(parameter));
             LoginCommand = new Command(async (parameter) => await LoginAsync(parameter));
