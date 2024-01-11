@@ -11,6 +11,18 @@ namespace WebChatClient
     /// </summary>
     public class SettingsVM : BaseViewModel
     {
+        // Имя текущего пользователя
+        public TextEntryVM Name { get; set; }
+
+        // Имя пользователя текущего пользователя
+        public TextEntryVM Username { get; set; }
+
+        // Текущий пароль пользователя
+        public TextEntryVM Password { get; set; }
+
+        // Электронная почта текущего пользователя
+        public TextEntryVM Email { get; set; }
+
         // Команда открытия меню настроек
         public ICommand OpenCommand { get; set; }
 
