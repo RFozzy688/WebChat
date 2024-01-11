@@ -29,6 +29,19 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
+        <!-- Наложение всплывающего окна -->
+        <Border Background="Transparent" 
+                Grid.RowSpan="3"
+                Panel.ZIndex="1"
+                Visibility="{Binding AnyPopupVisible, 
+                                     Converter={local:BooleanToVisiblityConverter}, 
+                                     ConverterParameter=True}">
+
+            <Border.InputBindings>
+                <MouseBinding MouseAction="LeftClick" Command="{Binding PopupClickawayCommand}" />
+            </Border.InputBindings>
+        </Border>
+
         <!-- Заголовок -->
         <Grid Height="50" Background="{StaticResource LightBlueBrush}"
               Margin="0,0,2,0">
@@ -70,8 +83,83 @@
         </Border>
 
         <!-- Лист сообщений -->
-        <local:ChatMessageListControl Grid.Row="2" />
+        <local:ChatMessageListControl Grid.Row="2"
+                                      x:Name="ChatMessageList"
+                                      DataContext="{Binding}"/>
 
+        <!--всплывающее меню-->
+        <Border Grid.Row="2"
+                Panel.ZIndex="2"
+                VerticalAlignment="Bottom"
+                HorizontalAlignment="Left"
+                local:AnimateSlideInFromBottomProperty.Value="{Binding AttachmentMenuVisible}">
+
+            <local:BubbleContent DataContext="{Binding AttachmentMenu}"/>
+        </Border>
+
+        <Border CornerRadius="0,0,10,0" Grid.Row="3" 
+                Background="{StaticResource VeryLightBrush}"
+                BorderBrush="{StaticResource MiddleDarkBrush}"
+                BorderThickness="1,0,0,0"
+                Panel.ZIndex="3">
+            
+            <!-- Текстовое поле отправки сообщения -->
+            <Grid MinHeight="50"
+                  MaxHeight="114">
+
+                <Grid.ColumnDefinitions>
+                    <!-- Кнопка прикрепить  -->
+                    <ColumnDefinition Width="Auto" />
+
+                    <!-- Поле ввода текста -->
+                    <ColumnDefinition Width="*" />
+
+                    <!-- Дополнительные кнопки -->
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <!-- кнопка прикрепить -->
+                <Button Style="{StaticResource IconGrowButton}"
+                        Height="{Binding MinHeight, RelativeSource={RelativeSource AncestorType=Grid}}"
+                        Content="{StaticResource FA_PaperclipIcon}"
+                        Foreground="{StaticResource MiddleDarkBrush}"
+                        Command="{Binding AttachmentButtonCommand}"/>
+
+                <!-- Окно сообщения -->
+                <TextBox Grid.Column="1" 
+                         Tag="Написать сообщение..."
+                         FontSize="{StaticResource FontSizeRegular}"
+                         VerticalAlignment="Center"
+                         BorderThickness="0"
+                         Padding="0 10"
+                         AcceptsReturn="True"
+                         AcceptsTab="True"
+                         VerticalScrollBarVisibility="Auto"
+                         Margin="10,0,0,0"/>
+
+                <!-- Дополнительные кнопки -->
+                <StackPanel Orientation="Horizontal"
+                            VerticalAlignment="Top"
+                            Margin="0 0 8 0"
+                            Grid.Column="3">
+
+                    <!-- Emoji кнопка -->
+                    <Button Style="{StaticResource IconGrowButton}"
+                            Height="{Binding MinHeight, RelativeSource={RelativeSource AncestorType=Grid}}"
+                            Content="{StaticResource FA_EmojiIcon}"
+                            Foreground="{StaticResource OrangeBrush}"/>
+
+                    <!--Кнопка отправить -->
+                    <Button Content="Отправить"
+                            Padding="8"
+                            Command="{Binding SendCommand}"
+                            Style="{StaticResource SendButton}"
+                            FontSize="{StaticResource FontSizeRegular}"/>
+
+                </StackPanel>
+
+            </Grid>
+        </Border>
     </Grid>
 
 </local:BasePage>

@@ -14,11 +14,6 @@ namespace WebChatClient
     /// </summary>
     public class ChatPageVM : BaseViewModel
     {
-        ChatPage _view;
 
-        public ChatPageVM()
-        {
-            
-        }
     }
 }

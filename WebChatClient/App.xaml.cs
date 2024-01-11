@@ -23,11 +23,22 @@ namespace WebChatClient
             //базовое приложение делат то, что ему нужно.
             base.OnStartup(e);
 
-            IoC.Setup();
+            // Настройка основного приложения 
+            ApplicationSetup();
 
             // Показать главное окно
             Current.MainWindow = new MainWindow();
             Current.MainWindow.Show();
+        }
+
+        // Настраивает наше приложение, готовое к использованию
+        private void ApplicationSetup()
+        {
+            // Setup IoC
+            IoC.Setup();
+
+            // Привязать UI Manager
+            IoC.Kernel.Bind<IUIManager>().ToConstant(new UIManager());
         }
     }
 }

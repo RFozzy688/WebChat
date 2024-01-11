@@ -49,18 +49,25 @@ namespace WebChatClient
 
         // Высота строки заголовка окна
         public int TitleHeight { get; set; } = 50;
-        // Высота строки заголовка окна        
+
+        // Высота строки заголовка окна
         public GridLength TitleHeightGridLength => new GridLength(TitleHeight);
+
         //Наименьшая ширина окна.
         public double WindowMinimumWidth { get; set; } = 800;
+
         //Наименьшая высота окна.
         public double WindowMinimumHeight { get; set; } = 500;
+
         // Команда сворачивания окна
         public ICommand MinimizeCommand { get; set; }
+
         // Команда максимизации окна
         public ICommand MaximizeCommand { get; set; }
+
         // Команда закрытия окна
         public ICommand CloseCommand { get; set; }
+
         // Команда показа системного меню окна
         public ICommand MenuCommand { get; set; }
         

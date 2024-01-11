@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -17,15 +16,13 @@ using System.Windows.Shapes;
 namespace WebChatClient
 {
     /// <summary>
-    /// Логика взаимодействия для ChatPage.xaml
+    /// Логика взаимодействия для VerticalMenu.xaml
     /// </summary>
-    public partial class ChatPage : BasePage
+    public partial class VerticalMenu : UserControl
     {
-        public ChatPage()
+        public VerticalMenu()
         {
             InitializeComponent();
-
-            DataContext = new ChatMessageListVM();
         }
     }
 }

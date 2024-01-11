@@ -31,6 +31,10 @@
     <None Remove="Fonts\Rounded\MPLUSRounded1c-Thin.ttf" />
     <None Remove="Images\Background\emoji-background.png" />
     <None Remove="Images\Logo\logo-icon.png" />
+    <None Remove="Images\Samples\p1.jpg" />
+    <None Remove="Images\Samples\p2.jpg" />
+    <None Remove="Images\Samples\p3.jpg" />
+    <None Remove="Images\Samples\p4.jpg" />
   </ItemGroup>
 
   <ItemGroup>
@@ -67,6 +71,10 @@
     <Resource Include="Fonts\Rounded\MPLUSRounded1c-Thin.ttf" />
     <Resource Include="Images\Background\emoji-background.png" />
     <Resource Include="Images\Logo\logo-icon.png" />
+    <Resource Include="Images\Samples\p1.jpg" />
+    <Resource Include="Images\Samples\p2.jpg" />
+    <Resource Include="Images\Samples\p3.jpg" />
+    <Resource Include="Images\Samples\p4.jpg" />
   </ItemGroup>
 
   <ItemGroup>
