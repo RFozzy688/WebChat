@@ -1,4 +1,4 @@
-﻿<local:BasePage 
+﻿<local:BasePage x:TypeArguments="local:ChatMessageListVM"
     x:Class="WebChatClient.ChatPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -6,11 +6,10 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
     xmlns:local="clr-namespace:WebChatClient"
     mc:Ignorable="d"
-    Title="ChatPage"
     x:Name="Page"
       
     Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=Window}}"
-    Height="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=Window}}">
+    Height="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=Window}}"><!---->
 
     <Grid>
 

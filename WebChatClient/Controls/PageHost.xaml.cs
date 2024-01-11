@@ -64,13 +64,13 @@ namespace WebChatClient
             var oldPageFrame = (d as PageHost).OldPage;
 
             // Если текущая страница не изменилась, просто обновите модель представления
-            //if (newPageFrame.Content is BasePage page && page.ToApplicationPage() == currentPage)
-            //{
-            //    // Just update the view model
-            //    page.ViewModelObject = currentPageViewModel;
+            if (newPageFrame.Content is BasePage page && page.ToApplicationPage() == currentPage)
+            {
+                // Just update the view model
+                page.ViewModelObject = currentPageViewModel;
 
-            //    return value;
-            //}
+                return value;
+            }
 
             // Сохраните содержимое текущей страницы как старую страницу.
             var oldPageContent = newPageFrame.Content;
@@ -97,7 +97,7 @@ namespace WebChatClient
             }
 
             // Установите новое содержимое страницы
-            newPageFrame.Content = new AppPageValueConverter().Convert(currentPage, null, currentPageViewModel, null);
+            newPageFrame.Content = currentPage.ToBasePage(currentPageViewModel);
 
             return value;
         }
