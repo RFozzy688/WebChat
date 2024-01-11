@@ -6,13 +6,18 @@
              xmlns:local="clr-namespace:WebChatClient"
              mc:Ignorable="d" 
              d:DesignHeight="50" d:DesignWidth="400"
-             DataContext="{x:Static local:TextEntryDesignModel.Instance}">
+             d:DataContext="{x:Static local:TextEntryDesignModel.Instance}">
 
     <!-- Серое подчеркивание -->
     <Border BorderBrush="{StaticResource MiddleDarkBrush}"
             BorderThickness="0 0 0 0.5">
 
         <Grid Background="{StaticResource VeryLightBrush}">
+
+            <!--двойной клик для редактирования-->
+            <Grid.InputBindings>
+                <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding EditCommand}" />
+            </Grid.InputBindings>
 
             <!-- Наведите курсор, чтобы отобразить кнопку редактирования -->
             <Grid.Triggers>
@@ -40,20 +45,21 @@
 
             <!-- Лейбл -> Имя* -> Кнопки -->
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Name="LabelColumnDefinition" Width="Auto" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
             <!-- Label -->
             <TextBlock Text="{Binding Label}"
+                       Name="Label"
                        Margin="15 12"
                        VerticalAlignment="Center"
                        FontFamily="{StaticResource RoundedRegular}"
                        />
 
             <!-- Редактировать контент -->
-            <TextBox Text="{Binding EditedText}"
+            <TextBox Text="{Binding EditedText, UpdateSourceTrigger=PropertyChanged}"
                      Grid.Column="1"
                      local:AnimateFadeInProperty.Value="{Binding Editing}"
                      local:FocusAndSelectProperty.Value="{Binding Editing}"
@@ -77,7 +83,6 @@
                 <!-- Кнопка редактирования --><!---->
                 <Button Style="{StaticResource SettingsButtons}" 
                         Content="{StaticResource FA_EllipsisIcon}"
-                        FontFamily="{StaticResource FontAwesome}"
                         x:Name="EditButton"
                         Opacity="0"
                         Padding="8 5"
@@ -97,7 +102,6 @@
                 <!-- Кнопка сохранить -->
                 <Button Style="{StaticResource SettingsButtons}"
                         Content="{StaticResource FA_TickIcon}"
-                        FontFamily="{StaticResource FontAwesome}"
                         local:AnimateFadeInProperty.Value="{Binding Editing}"
                         IsDefault="True"
                         Cursor="Hand"
@@ -112,7 +116,6 @@
                 <!-- Кнопка отмены -->
                 <Button Style="{StaticResource SettingsButtons}"
                         Content="{StaticResource FA_CloseIcon}"
-                        FontFamily="{StaticResource FontAwesome}"
                         local:AnimateFadeInProperty.Value="{Binding Editing}"
                         IsCancel="True"
                         Cursor="Hand"

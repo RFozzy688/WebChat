@@ -34,6 +34,11 @@ namespace WebChatClient
             // Создание команд
             OpenCommand = new Command((o) => Open());
             CloseCommand = new Command((o) => Close());
+
+            Name = new TextEntryVM { Label = "Name", OriginalText = "Luke Malpass" };
+            Username = new TextEntryVM { Label = "Username", OriginalText = "luke" };
+            Password = new TextEntryVM { Label = "Password", OriginalText = "********" };
+            Email = new TextEntryVM { Label = "Email", OriginalText = "contact@angelsix.com" };
         }
 
         // Откройте меню настроек
