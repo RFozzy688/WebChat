@@ -81,6 +81,9 @@
     <Compile Update="Controls\ChatMessage\ChatMessageListControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Controls\Input\PasswordEntryControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Pages\ChatPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>

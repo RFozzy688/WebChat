@@ -61,6 +61,7 @@
 
                 <!-- Изображение профиля -->
                 <Grid Margin="0 0 10 0"
+                      VerticalAlignment="Top"
                       Height="{Binding ActualWidth, RelativeSource={RelativeSource Self}}">
 
                     <!-- Маска для закругленных углов-->
@@ -74,7 +75,8 @@
                             <VisualBrush Visual="{Binding ElementName=Mask}" />
                         </Grid.OpacityMask>
 
-                        <Image Source="/Images/Samples/p1.jpg" Stretch="UniformToFill" />
+                        <Image Source="/Images/Samples/p1.jpg" 
+                               Stretch="UniformToFill"/>
                     </Grid>
 
                 </Grid>
@@ -85,9 +87,13 @@
                     
                     <local:TextEntryControl DataContext="{Binding Name}" />
                     <local:TextEntryControl DataContext="{Binding Username}" />
-                    <local:TextEntryControl DataContext="{Binding Password}" />
+                    <local:PasswordEntryControl DataContext="{Binding Password}" />
                     <local:TextEntryControl DataContext="{Binding Email}" />
 
+                    <Button Content="{Binding LogoutButtonText}"
+                            Style="{StaticResource OrangeButton}"
+                            FontSize="{StaticResource FontSizeRegular}"
+                            Command="{Binding LogoutCommand}"/>
                 </StackPanel>
 
             </Grid>

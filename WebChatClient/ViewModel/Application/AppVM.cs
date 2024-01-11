@@ -28,6 +28,9 @@ namespace WebChatClient
         /// <param name="page">Страница, на которую нужно перейти</param>
         public void GoToPage(AppPage page)
         {
+            // Всегда скрывать страницу настроек, если мы меняем страницы
+            SettingsMenuVisible = false;
+
             // Установить текущую страницу
             CurrentPage = page;
 
