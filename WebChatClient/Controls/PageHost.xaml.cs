@@ -1,17 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Microsoft.VisualBasic.ApplicationServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using WebChatCore;
 
 namespace WebChatClient
 {
@@ -20,12 +11,10 @@ namespace WebChatClient
     /// </summary>
     public partial class PageHost : UserControl
     {
-        /// <summary>
-        /// Текущая страница, которая будет отображаться в PageHost
-        /// </summary>
-        public BasePage CurrentPage
+        // Текущая страница, которая будет отображаться в PageHost
+        public AppPage CurrentPage
         {
-            get => (BasePage)GetValue(CurrentPageProperty);
+            get => (AppPage)GetValue(CurrentPageProperty);
             set => SetValue(CurrentPageProperty, value);
         }
 
@@ -33,7 +22,25 @@ namespace WebChatClient
         /// Регистрирует <see cref="CurrentPage"/> как свойство зависимости.
         /// </summary>
         public static readonly DependencyProperty CurrentPageProperty =
-            DependencyProperty.Register(nameof(CurrentPage), typeof(BasePage), typeof(PageHost), new UIPropertyMetadata(CurrentPagePropertyChanged));
+            DependencyProperty.Register(nameof(CurrentPage), 
+                typeof(AppPage), 
+                typeof(PageHost), 
+                new UIPropertyMetadata(default(AppPage), null, CurrentPagePropertyChanged));
+
+        // Текущая страница, отображаемая на хосте страниц
+        public BaseViewModel CurrentPageViewModel
+        {
+            get => (BaseViewModel)GetValue(CurrentPageViewModelProperty);
+            set => SetValue(CurrentPageViewModelProperty, value);
+        }
+
+        /// <summary>
+        /// Регистрирует <see cref="Текущая модель просмотра страницы"/> как свойство зависимости
+        /// </summary>
+        public static readonly DependencyProperty CurrentPageViewModelProperty =
+            DependencyProperty.Register(nameof(CurrentPageViewModel),
+                typeof(BaseViewModel), typeof(PageHost),
+                new UIPropertyMetadata());
 
         public PageHost()
         {
@@ -46,11 +53,24 @@ namespace WebChatClient
         /// </summary>
         /// <param name="d"></param>
         /// <param name="e"></param>
-        private static void CurrentPagePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static object CurrentPagePropertyChanged(DependencyObject d, object value)
         {
+            // Get current values
+            var currentPage = (AppPage)d.GetValue(CurrentPageProperty);
+            var currentPageViewModel = d.GetValue(CurrentPageViewModelProperty);
+
             // Получите кадры
             var newPageFrame = (d as PageHost).NewPage;
             var oldPageFrame = (d as PageHost).OldPage;
+
+            // Если текущая страница не изменилась, просто обновите модель представления
+            //if (newPageFrame.Content is BasePage page && page.ToApplicationPage() == currentPage)
+            //{
+            //    // Just update the view model
+            //    page.ViewModelObject = currentPageViewModel;
+
+            //    return value;
+            //}
 
             // Сохраните содержимое текущей страницы как старую страницу.
             var oldPageContent = newPageFrame.Content;
@@ -77,7 +97,9 @@ namespace WebChatClient
             }
 
             // Установите новое содержимое страницы
-            newPageFrame.Content = e.NewValue;
+            newPageFrame.Content = new AppPageValueConverter().Convert(currentPage, null, currentPageViewModel, null);
+
+            return value;
         }
     }
 }
