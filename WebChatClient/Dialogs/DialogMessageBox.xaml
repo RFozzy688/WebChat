@@ -16,12 +16,14 @@
                Foreground="{StaticResource VeryDarkBrush}"/>
 
             <Button Style="{StaticResource OrangeButton}"
-            Content="{Binding OkText}"
-            Height="35"
-            Width="125"
-            HorizontalAlignment="Center"
-            FontSize="{StaticResource FontSizeRegular}"
-            Command="{Binding CloseCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:BaseDialogUserControl}}}"/>
+                    Content="{Binding OkText}"
+                    IsDefault="True"
+                    IsCancel="True"
+                    Height="35"
+                    Width="125"
+                    HorizontalAlignment="Center"
+                    FontSize="{StaticResource FontSizeRegular}"
+                    Command="{Binding CloseCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:BaseDialogUserControl}}}"/>
         </StackPanel>
     </Border>
     

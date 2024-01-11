@@ -27,6 +27,8 @@
     </i:Interaction.Triggers>
 
     <Border CornerRadius="10"
+            BorderBrush="{StaticResource DarkBlueBrush}"
+            BorderThickness="1"
             Background="{StaticResource VeryLightBrush}">
 
         <Grid>

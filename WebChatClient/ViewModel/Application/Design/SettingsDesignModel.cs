@@ -10,7 +10,7 @@ namespace WebChatClient
         {
             Name = new TextEntryVM { Label = "Name", OriginalText = "Luke Malpass" };
             Username = new TextEntryVM { Label = "Username", OriginalText = "luke" };
-            Password = new TextEntryVM { Label = "Password", OriginalText = "********" };
+            Password = new PasswordEntryVM { Label = "Password", FakePassword = "********" };
             Email = new TextEntryVM { Label = "Email", OriginalText = "contact@angelsix.com" };
         }
     }

@@ -1,20 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media.Animation;
 
 namespace WebChatClient
 {
     /// <summary>
     /// Базовая страница для получения базовой функциональности.
     /// </summary>
-    public class BasePage : Page
+    public class BasePage : UserControl
     {
+        // Модель представления, связанная с этой страницей
+        private object _viewModel;
+
         // Анимация, которая воспроизводится при первой загрузке страницы.
         public PageAnimationStyles PageLoadAnimation { get; set; } 
             = PageAnimationStyles.MovesFromRightToCenter;
@@ -29,6 +26,24 @@ namespace WebChatClient
         // Флаг, указывающий, должна ли эта страница анимироваться при загрузке.
         // Полезно, когда мы перемещаем страницу в другой фрейм.
         public bool ShouldAnimateOut { get; set; }
+
+        // Модель представления, связанная с этой страницей
+        public object ViewModelObject
+        {
+            get => _viewModel;
+            set
+            {
+                // Если ничего не изменилось, вернитесь
+                if (_viewModel == value)
+                    return;
+
+                // Обновить значение
+                _viewModel = value;
+
+                // Установите контекст данных для этой страницы
+                DataContext = _viewModel;
+            }
+        }
 
         // Конструктор по умолчанию
         public BasePage()
@@ -68,7 +83,7 @@ namespace WebChatClient
                 return;
 
             // Старт анимации
-            await PageAnimations.SlideAndFadeInFromRightAsync(this, SlideSeconds);
+            await this.SlideAndFadeInAsync(AnimationSlideInDirection.Right, false, SlideSeconds, size: (int)Application.Current.MainWindow.Width);
         }
 
         /// <summary>
@@ -82,7 +97,46 @@ namespace WebChatClient
                 return;
 
             // Старт анимации
-            await PageAnimations.SlideAndFadeOutToLeftAsync(this, SlideSeconds);
+            await this.SlideAndFadeOutAsync(AnimationSlideInDirection.Left, SlideSeconds);
+        }
+    }
+
+    /// <summary>
+    /// Базовая страница с добавленной поддержкой модели представления
+    /// </summary>
+    public class BasePage<VM> : BasePage
+        where VM : BaseViewModel, new()
+    {
+ 
+        // Модель представления, связанная с этой страницей
+        public VM ViewModel
+        {
+            get => (VM)ViewModelObject;
+            set => ViewModelObject = value;
+        }
+
+        public BasePage() : base()
+        {
+            // Создайте модель представления по умолчанию
+            ViewModel = IoC.Get<VM>();
+        }
+
+        /// <summary>
+        /// Конструктор с конкретной моделью представления
+        /// </summary>
+        /// <param name="specificViewModel">Конкретная модель представления, которую следует использовать, если таковая имеется.</param>
+        public BasePage(VM specificViewModel = null) : base()
+        {
+            // Установить конкретную модель представления
+            if (specificViewModel != null)
+            {
+                ViewModel = specificViewModel;
+            }
+            else
+            {
+                // Создайте модель представления по умолчанию
+                ViewModel = IoC.Get<VM>();
+            }
         }
     }
 }

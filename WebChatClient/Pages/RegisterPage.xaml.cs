@@ -19,13 +19,21 @@ namespace WebChatClient
     /// <summary>
     /// Логика взаимодействия для RegisterPage.xaml
     /// </summary>
-    public partial class RegisterPage : BasePage, IHavePassword
+    public partial class RegisterPage : BasePage<RegisterPageVM>, IHavePassword
     {
         public RegisterPage()
         {
             InitializeComponent();
 
-            DataContext = new RegisterPageVM(this);
+            //DataContext = new RegisterPageVM(this);
+        }
+
+        /// <summary>
+        /// Конструктор с конкретной моделью представления
+        /// </summary>
+        public RegisterPage(RegisterPageVM specificViewModel) : base(specificViewModel)
+        {
+            InitializeComponent();
         }
 
         // Надежный пароль для этой страницы входа.

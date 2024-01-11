@@ -1,8 +1,9 @@
 ﻿using System.Security;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
+using System.Xml.Linq;
 using WebChatCore;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace WebChatClient
 {
@@ -55,6 +56,16 @@ namespace WebChatClient
             await Task.Delay(1);
             var pass = (parameter as IHavePassword).SecurePassword.Unsecure();
             var email = Email;
+
+            // OK successfully logged in... now get users data
+            // TODO: Ask server for users info
+
+            // TODO: Удалите это, используя в будущем реальную информацию, полученную
+            //       из нашей базы данных
+            IoC.Settings.Name = new TextEntryVM { Label = "Name", OriginalText = "Luke Malpass" };
+            IoC.Settings.Username = new TextEntryVM { Label = "Username", OriginalText = "luke" };
+            IoC.Settings.Password = new PasswordEntryVM { Label = "Password", FakePassword = "********" };
+            IoC.Settings.Email = new TextEntryVM { Label = "Email", OriginalText = "contact@angelsix.com" };
 
             IoC.Get<AppVM>().GoToPage(AppPage.Chat);
 

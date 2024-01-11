@@ -10,6 +10,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -19,13 +20,22 @@ namespace WebChatClient
     /// <summary>
     /// Логика взаимодействия для ChatPage.xaml
     /// </summary>
-    public partial class ChatPage : BasePage
+    public partial class ChatPage : BasePage<ChatMessageListVM>
     {
-        public ChatPage()
+        public ChatPage() : base()
         {
             InitializeComponent();
 
-            DataContext = new ChatMessageListVM();
+            //DataContext = new ChatMessageListVM();
+        }
+
+        /// <summary>
+        /// Конструктор с конкретной моделью представления
+        /// </summary>
+        /// <param name="specificViewModel">Конкретная модель представления, используемая для этой страницы.</param>
+        public ChatPage(ChatMessageListVM specificViewModel) : base(specificViewModel)
+        {
+            InitializeComponent();
         }
     }
 }

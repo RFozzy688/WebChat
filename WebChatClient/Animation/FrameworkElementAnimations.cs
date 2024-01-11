@@ -15,7 +15,7 @@ namespace WebChatClient
     public static class FrameworkElementAnimations
     {
         /// <summary>
-        /// Вдвигает элемент
+        /// Сдвигает элемент
         /// </summary>
         /// <param name="element">Элемент для анимации</param>
         /// <param name="direction">Направление слайда</param>

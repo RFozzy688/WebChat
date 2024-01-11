@@ -104,17 +104,15 @@
                 </Grid.ColumnDefinitions>
 
                 <local:SettingsControl Grid.ColumnSpan="2"
-                                       Panel.ZIndex="1"
-                                       local:AnimateSlideInFromBottomMarginProperty.Value="{Binding AppVM.SettingsMenuVisible, Source={x:Static local:ViewModelLocator.Instance}}"/>
+                       Panel.ZIndex="1"
+                       local:AnimateSlideInFromBottomMarginProperty.Value="{Binding AppVM.SettingsMenuVisible, Source={x:Static local:ViewModelLocator.Instance}}"/>
 
                 <local:PageHost Grid.Column="1"
-                       d:DataContext=""
-                       DataContext="{Binding AppVM.CurrentPage, 
-                                     Source={x:Static local:ViewModelLocator.Instance}, 
-                                     Converter={local:AppPageValueConverter}}"
-                       CurrentPage="{Binding}"
-                       Background="Transparent"
-                       /><!--local:NoFrameHistory.Value="True"-->
+                                CurrentPage="{Binding AppVM.CurrentPage,
+        Source={x:Static local:ViewModelLocator.Instance}}"
+CurrentPageViewModel="{Binding AppVM.CurrentPageViewModel,
+        Source={x:Static local:ViewModelLocator.Instance}}" 
+                                Background="Transparent"/>
 
                 <!--боковое контент-->
                 <local:SideMenuControl 

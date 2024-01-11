@@ -50,7 +50,7 @@ namespace WebChatClient
     {
         public override void OnValueChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
-            // If we don't have a control, return
+            // Если у нас нет фокуса, вернёмся
             if (sender is TextBoxBase control)
             {
                 if ((bool)e.NewValue)
