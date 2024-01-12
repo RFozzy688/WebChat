@@ -39,9 +39,7 @@ namespace WebChatClient
                 _alreadyLoaded[sender] = false;
 
                 // Прежде чем решить, как анимировать, начните со скрытого изображения
-                // если мы хотим изначально анимироваться
-                if (!(bool)value)
-                    element.Visibility = Visibility.Hidden;
+                element.Visibility = Visibility.Hidden;
 
                 // Создайте одно событие с возможностью самостоятельного отсоединения
                 // для элементов события Loaded
@@ -115,6 +113,17 @@ namespace WebChatClient
         }
     }
 
+    /// <summary>
+    /// Анимирует скольжение элемента каркаса снизу вверх при загрузке
+    /// </summary>
+    public class AnimateSlideInFromBottomOnLoadProperty : AnimateBaseProperty<AnimateSlideInFromBottomOnLoadProperty>
+    {
+        protected override async void DoAnimation(FrameworkElement element, bool value, bool firstLoad)
+        {
+            // Animate in
+            await element.SlideAndFadeInAsync(AnimationSlideInDirection.Bottom, !value, !value ? 0 : 0.3f, keepMargin: false);
+        }
+    }
 
     /// <summary>
     /// Анимирует элемент каркаса, скользящий вверх снизу на экране.

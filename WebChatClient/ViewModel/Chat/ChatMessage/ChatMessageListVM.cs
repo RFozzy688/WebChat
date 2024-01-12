@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 
 namespace WebChatClient
@@ -10,13 +11,16 @@ namespace WebChatClient
     public class ChatMessageListVM : BaseViewModel
     {
         // Элементы ветки чата для списка
-        public List<ChatMessageListItemVM> Items { get; set; }
+        public ObservableCollection<ChatMessageListItemVM> Items { get; set; }
 
         // True, чтобы показать меню вложений, false, чтобы скрыть его.
         public bool AttachmentMenuVisible { get; set; }
 
         // Истинно, если видны всплывающие меню.
         public bool AnyPopupVisible => AttachmentMenuVisible;
+
+        // Текст для текущего сообщения
+        public string PendingMessageText { get; set; }
 
         // Модель представления меню вложений
         public ChatAttachmentPopupMenuVM AttachmentMenu { get; set; }
@@ -42,14 +46,24 @@ namespace WebChatClient
         }
 
         // Когда пользователь нажимает кнопку отправить, отправляет сообщение
-        private void Send()
+        public void Send()
         {
-            IoC.UI.ShowMessage(new MessageBoxDialogVM
+            if (Items == null)
+                Items = new ObservableCollection<ChatMessageListItemVM>();
+
+            // отправить фейковое новое сообщение
+            Items.Add(new ChatMessageListItemVM
             {
-                Title = "Send Message",
-                Message = "Thank you for writing a nice message :)",
-                OkText = "OK"
+                Initials = "LM",
+                Message = PendingMessageText,
+                MessageSentTime = DateTime.UtcNow,
+                SentByMe = true,
+                SenderName = "Luke Malpass",
+                NewItem = true
             });
+
+            // Очистить текст ожидающего сообщения
+            PendingMessageText = string.Empty;
         }
 
         // При нажатии на область щелчка всплывающего окна скрывают все всплывающие окна.

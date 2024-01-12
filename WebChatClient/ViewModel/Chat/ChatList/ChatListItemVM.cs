@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 using WebChatCore;
 
@@ -53,7 +54,7 @@ namespace WebChatClient
             {
                 //DisplayTitle = "Parnell, Me",
 
-                Items = new List<ChatMessageListItemVM>
+                Items = new ObservableCollection<ChatMessageListItemVM>
                 {
                     new ChatMessageListItemVM
                     {

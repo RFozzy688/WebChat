@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Xml.Linq;
+﻿using System.Collections.ObjectModel;
 
 namespace WebChatClient
 {
@@ -20,7 +14,7 @@ namespace WebChatClient
         /// </summary>
         public ChatListDesignModel()
         {
-            Items = new List<ChatListItemVM>
+            Items = new ObservableCollection<ChatListItemVM>
             {
                 new ChatListItemVM
                 {

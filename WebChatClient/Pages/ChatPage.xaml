@@ -9,7 +9,8 @@
     x:Name="Page"
       
     Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=Window}}"
-    Height="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=Window}}"><!---->
+    Height="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=Window}}"
+    d:DataContext="{x:Static local:ChatMessageListDesignModel.Instance}"><!---->
 
     <Grid>
 
@@ -125,16 +126,20 @@
                         Command="{Binding AttachmentButtonCommand}"/>
 
                 <!-- Окно сообщения -->
-                <TextBox Grid.Column="1" 
+                <TextBox x:Name="MessageText" 
+                         Grid.Column="1" 
                          Tag="Написать сообщение..."
                          FontSize="{StaticResource FontSizeRegular}"
+                         Text="{Binding PendingMessageText, UpdateSourceTrigger=PropertyChanged}"
+                         local:IsFocusedProperty.Value="True"
                          VerticalAlignment="Center"
                          BorderThickness="0"
                          Padding="0 10"
                          AcceptsReturn="True"
                          AcceptsTab="True"
                          VerticalScrollBarVisibility="Auto"
-                         Margin="10,0,0,0"/>
+                         Margin="10,0,0,0"
+                         PreviewKeyDown="MessageText_PreviewKeyDown"/>
 
                 <!-- Дополнительные кнопки -->
                 <StackPanel Orientation="Horizontal"
@@ -151,6 +156,8 @@
                     <!--Кнопка отправить -->
                     <Button Content="Отправить"
                             Padding="8"
+                            IsDefault="True"
+                            Focusable="False"
                             Command="{Binding SendCommand}"
                             Style="{StaticResource SendButton}"
                             FontSize="{StaticResource FontSizeRegular}"/>

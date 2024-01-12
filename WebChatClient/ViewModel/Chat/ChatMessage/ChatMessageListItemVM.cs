@@ -41,5 +41,9 @@ namespace WebChatClient
 
         // Время отправки сообщения
         public DateTimeOffset MessageSentTime { get; set; }
+
+        // Флаг, указывающий, был ли этот элемент добавлен с момента создания первого основного списка элементов.
+        // Используется как флаг для анимации
+        public bool NewItem { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using WebChatCore;
 
 namespace WebChatClient
@@ -13,7 +14,7 @@ namespace WebChatClient
 
         public MenuDesignModel()
         {
-            Items = new List<MenuItemVM>(new[]
+            Items = new ObservableCollection<MenuItemVM>(new[]
             {
                 new MenuItemVM { Type = MenuItemType.Header, Text = "Design time header..." },
                 new MenuItemVM { Text = "Menu item 1", Icon = IconType.File },
