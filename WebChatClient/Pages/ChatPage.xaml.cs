@@ -86,7 +86,7 @@ namespace WebChatClient
                 }
                 else
                 {
-                    // Send the message
+                    // Отправить сообщение
                     ViewModel.Send();
                 }
 

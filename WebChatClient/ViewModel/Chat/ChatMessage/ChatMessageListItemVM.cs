@@ -45,5 +45,15 @@ namespace WebChatClient
         // Флаг, указывающий, был ли этот элемент добавлен с момента создания первого основного списка элементов.
         // Используется как флаг для анимации
         public bool NewItem { get; set; }
+
+
+        // Вложение к сообщению, если оно имеет тип изображения
+        public ChatMessageListItemImageAttachmentVM ImageAttachment { get; set; }
+
+        // Флаг, указывающий, есть ли у нас текст сообщения или нет
+        public bool HasMessage => Message != null;
+
+        // Флаг, указывающий, есть ли у нас изображение, прикрепленное к этому сообщению
+        public bool HasImageAttachment => ImageAttachment != null;
     }
 }

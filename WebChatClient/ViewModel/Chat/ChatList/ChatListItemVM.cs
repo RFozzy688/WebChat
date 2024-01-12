@@ -101,19 +101,19 @@ namespace WebChatClient
                         SenderName = "Parnell",
                         SentByMe = false,
                     },
-                    //new ChatMessageListItemVM
-                    //{
-                    //    Message = "A received message",
-                    //    ImageAttachment = new ChatMessageListItemImageAttachmentVM
-                    //    {
-                    //        ThumbnailUrl = "http://anywhere"
-                    //    },
-                    //    Initials = Initials,
-                    //    MessageSentTime = DateTime.UtcNow,
-                    //    ProfilePictureRGB = "FF0000",
-                    //    SenderName = "Parnell",
-                    //    SentByMe = false,
-                    //},
+                    new ChatMessageListItemVM
+                    {
+                        Message = "A received message",
+                        ImageAttachment = new ChatMessageListItemImageAttachmentVM
+                        {
+                            ThumbnailUrl = "http://anywhere"
+                        },
+                        Initials = Initials,
+                        MessageSentTime = DateTime.UtcNow,
+                        ProfilePictureRGB = "FF0000",
+                        SenderName = "Parnell",
+                        SentByMe = false,
+                    },
                 }
             });
         }

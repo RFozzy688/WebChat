@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace WebChatClient
 {
@@ -77,6 +78,37 @@ namespace WebChatClient
         /// <param name="element">Элемент</param>
         /// <param name="value">Новое значение</param>
         protected virtual void DoAnimation(FrameworkElement element, bool value, bool firstLoad) { }
+    }
+
+    /// <summary>
+    /// Исчезает на изображение при загрузке источника
+    /// </summary>
+    public class FadeInImageOnLoadProperty : AnimateBaseProperty<FadeInImageOnLoadProperty>
+    {
+        public override void OnValueUpdated(DependencyObject sender, object value)
+        {
+            // Убедитесь, что у нас есть изображение
+            if (!(sender is Image image))
+                return;
+
+            // Если мы хотим анимировать
+            if ((bool)value)
+            {
+                // Слушайте изменение цели
+                image.TargetUpdated += Image_TargetUpdatedAsync;
+            }
+            else
+            {
+                // Убедитесь, что мы отцепились
+                image.TargetUpdated -= Image_TargetUpdatedAsync;
+            }
+        }
+
+        private async void Image_TargetUpdatedAsync(object sender, System.Windows.Data.DataTransferEventArgs e)
+        {
+            // Затухание изображения
+            await (sender as Image).FadeInAsync(false);
+        }
     }
 
     /// <summary>
