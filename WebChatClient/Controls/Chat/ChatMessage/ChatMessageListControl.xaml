@@ -11,7 +11,8 @@
           Background="Transparent"
           VerticalAlignment="Bottom">
 
-        <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <ScrollViewer VerticalScrollBarVisibility="Auto"
+                      local:ScrollToBottomOnLoadProperty.Value="True">
             <ItemsControl ItemsSource="{Binding Items}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>

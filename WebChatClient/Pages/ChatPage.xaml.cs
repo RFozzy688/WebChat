@@ -37,5 +37,20 @@ namespace WebChatClient
         {
             InitializeComponent();
         }
+
+        /// <summary>
+        /// Запускается при изменении модели представления
+        /// </summary>
+        protected override void OnViewModelChanged()
+        {
+            // Сначала убедитесь, что пользовательский интерфейс существует
+            if (ChatMessageList == null)
+                return;
+
+            // Затухание списка сообщений чата
+            var storyboard = new Storyboard();
+            storyboard.AddFadeIn(0.5f);
+            storyboard.Begin(ChatMessageList);
+        }
     }
 }

@@ -16,7 +16,7 @@ namespace WebChatClient
         /// <param name="page">Страница для анимации</param>
         /// <param name="seconds">Время, которое займет анимация</param>
         /// <returns></returns>
-        public static async Task SlideAndFadeInFromRightAsync(Page page, float seconds)
+        public static async Task SlideAndFadeInFromRightAsync(this Page page, float seconds)
         {
             // Создайте раскадровку
             var sb = new Storyboard();
@@ -43,7 +43,7 @@ namespace WebChatClient
         /// <param name="page">Страница для анимации</param>
         /// <param name="seconds">Время, которое займет анимация</param>
         /// <returns></returns>
-        public static async Task SlideAndFadeOutToLeftAsync(Page page, float seconds)
+        public static async Task SlideAndFadeOutToLeftAsync(this Page page, float seconds)
         {
             // Создайте раскадровку
             var sb = new Storyboard();

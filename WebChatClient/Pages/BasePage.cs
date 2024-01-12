@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.ComponentModel;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -39,6 +40,9 @@ namespace WebChatClient
 
                 // Обновить значение
                 _viewModel = value;
+
+                // Запустите измененный метод модели представления
+                OnViewModelChanged();
 
                 // Установите контекст данных для этой страницы
                 DataContext = _viewModel;
@@ -98,6 +102,12 @@ namespace WebChatClient
 
             // Старт анимации
             await this.SlideAndFadeOutAsync(AnimationSlideInDirection.Left, SlideSeconds);
+        }
+
+        // Запускается при изменении модели представления
+        protected virtual void OnViewModelChanged()
+        {
+
         }
     }
 

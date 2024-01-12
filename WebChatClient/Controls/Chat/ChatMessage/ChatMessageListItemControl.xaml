@@ -43,7 +43,7 @@
                         <BeginStoryboard>
                             <Storyboard Storyboard.TargetName="ExtraDetails" 
                                         Storyboard.TargetProperty="Opacity">
-                                <DoubleAnimation To="1" Duration="00:00:00.5" />
+                                <DoubleAnimation To="1" Duration="00:00:00.3" />
                             </Storyboard>
                         </BeginStoryboard>
                     </EventTrigger>
@@ -53,7 +53,7 @@
                         <BeginStoryboard>
                             <Storyboard Storyboard.TargetName="ExtraDetails" 
                                         Storyboard.TargetProperty="Opacity">
-                                <DoubleAnimation To="0" Duration="00:00:00.5" />
+                                <DoubleAnimation To="0" Duration="00:00:00.3" />
                             </Storyboard>
                         </BeginStoryboard>
                     </EventTrigger>
