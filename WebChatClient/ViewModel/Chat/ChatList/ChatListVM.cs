@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace WebChatClient
 {
@@ -10,6 +11,6 @@ namespace WebChatClient
         /// <summary>
         /// Список чата
         /// </summary>
-        public List<ChatListItemVM> Items { get; set; }
+        public ObservableCollection<ChatListItemVM> Items { get; set; }
     }
 }

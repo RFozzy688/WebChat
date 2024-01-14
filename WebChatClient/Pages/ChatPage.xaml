@@ -9,7 +9,8 @@
     x:Name="Page"
       
     Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=Window}}"
-    Height="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=Window}}"><!---->
+    Height="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=Window}}"
+    d:DataContext="{x:Static local:ChatMessageListDesignModel.Instance}"><!---->
 
     <Grid>
 
@@ -52,7 +53,7 @@
             </Grid.ColumnDefinitions>
 
             <!-- Текст заголовка -->
-            <TextBlock Text="Parnell" 
+            <TextBlock Text="{Binding DisplayTitle}" 
                        Grid.ColumnSpan="2"
                        Foreground="{StaticResource VeryLightBrush}"
                        FontSize="{StaticResource FontSizeXLarge}"
@@ -63,9 +64,50 @@
 
             <!-- Кнопки в заголовке -->
             <StackPanel Orientation="Horizontal" Grid.Column="1">
-                <Button Style="{StaticResource IconButton}" Content="{StaticResource FA_SearchIcon}" />
+                <Button Style="{StaticResource IconButton}" 
+                        Content="{StaticResource FA_SearchIcon}"
+                        Command="{Binding OpenSearchCommand}"/>
                 <Button Style="{StaticResource IconButton}" Content="{StaticResource FA_EllipsisVerticalIcon}" />
             </StackPanel>
+
+            <!-- Строка поиска -->
+            <Grid Grid.ColumnSpan="2"
+                  local:AnimateSlideInFromRightMarginProperty.Value="{Binding SearchIsOpen}"
+                  >
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Кнопка закрытия поиска -->
+                <Button Style="{StaticResource IconButton}" 
+                        Content="{StaticResource FA_CloseIcon}"
+                        Command="{Binding CloseSearchCommand}"
+                        Foreground="{StaticResource VeryLightBrush}"
+                        Margin="0 2 2 2"
+                        />
+
+                <!-- Search box -->
+                <TextBox 
+                    Grid.Column="1" 
+                    Tag="Поиск текста..."
+                    local:FocusProperty.Value="{Binding SearchIsOpen}"
+                    Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                    Margin="0 2 2 2"
+                    FontSize="{StaticResource FontSizeRegular}"
+                    BorderThickness="0"
+                    >
+                    <TextBox.InputBindings>
+                        <!-- Clear text on Esc -->
+                        <KeyBinding Command="{Binding ClearSearchCommand}" Key="Esc" />
+                        <!-- Search on enter -->
+                        <KeyBinding Command="{Binding SearchCommand}" Key="Return" />
+                    </TextBox.InputBindings>
+                </TextBox>
+
+
+            </Grid>
 
         </Grid>
 
@@ -125,16 +167,20 @@
                         Command="{Binding AttachmentButtonCommand}"/>
 
                 <!-- Окно сообщения -->
-                <TextBox Grid.Column="1" 
+                <TextBox x:Name="MessageText" 
+                         Grid.Column="1" 
                          Tag="Написать сообщение..."
                          FontSize="{StaticResource FontSizeRegular}"
+                         Text="{Binding PendingMessageText, UpdateSourceTrigger=PropertyChanged}"
+                         local:IsFocusedProperty.Value="True"
                          VerticalAlignment="Center"
                          BorderThickness="0"
                          Padding="0 10"
                          AcceptsReturn="True"
                          AcceptsTab="True"
                          VerticalScrollBarVisibility="Auto"
-                         Margin="10,0,0,0"/>
+                         Margin="10,0,0,0"
+                         PreviewKeyDown="MessageText_PreviewKeyDown"/>
 
                 <!-- Дополнительные кнопки -->
                 <StackPanel Orientation="Horizontal"
@@ -151,6 +197,8 @@
                     <!--Кнопка отправить -->
                     <Button Content="Отправить"
                             Padding="8"
+                            IsDefault="True"
+                            Focusable="False"
                             Command="{Binding SendCommand}"
                             Style="{StaticResource SendButton}"
                             FontSize="{StaticResource FontSizeRegular}"/>

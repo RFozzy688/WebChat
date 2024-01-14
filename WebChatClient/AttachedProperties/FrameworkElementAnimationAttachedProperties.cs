@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace WebChatClient
 {
@@ -39,9 +40,7 @@ namespace WebChatClient
                 _alreadyLoaded[sender] = false;
 
                 // Прежде чем решить, как анимировать, начните со скрытого изображения
-                // если мы хотим изначально анимироваться
-                if (!(bool)value)
-                    element.Visibility = Visibility.Hidden;
+                element.Visibility = Visibility.Hidden;
 
                 // Создайте одно событие с возможностью самостоятельного отсоединения
                 // для элементов события Loaded
@@ -82,6 +81,37 @@ namespace WebChatClient
     }
 
     /// <summary>
+    /// Исчезает на изображение при загрузке источника
+    /// </summary>
+    public class FadeInImageOnLoadProperty : AnimateBaseProperty<FadeInImageOnLoadProperty>
+    {
+        public override void OnValueUpdated(DependencyObject sender, object value)
+        {
+            // Убедитесь, что у нас есть изображение
+            if (!(sender is Image image))
+                return;
+
+            // Если мы хотим анимировать
+            if ((bool)value)
+            {
+                // Слушайте изменение цели
+                image.TargetUpdated += Image_TargetUpdatedAsync;
+            }
+            else
+            {
+                // Убедитесь, что мы отцепились
+                image.TargetUpdated -= Image_TargetUpdatedAsync;
+            }
+        }
+
+        private async void Image_TargetUpdatedAsync(object sender, System.Windows.Data.DataTransferEventArgs e)
+        {
+            // Затухание изображения
+            await (sender as Image).FadeInAsync(false);
+        }
+    }
+
+    /// <summary>
     /// Анимирует элемент фреймворка, сдвигая его слева на экране.
     /// и выдвигаемся влево при скрытии
     /// </summary>
@@ -95,6 +125,40 @@ namespace WebChatClient
             else
                 // Animate out
                 await element.SlideAndFadeOutAsync(AnimationSlideInDirection.Left, firstLoad ? 0 : 0.3f, keepMargin: false);
+        }
+    }
+
+    /// <summary>
+    /// Анимирует элемент структуры, перемещая его справа на экране
+    /// и двигать вправо при скрытии
+    /// </summary>
+    public class AnimateSlideInFromRightProperty : AnimateBaseProperty<AnimateSlideInFromRightProperty>
+    {
+        protected override async void DoAnimation(FrameworkElement element, bool value, bool firstLoad)
+        {
+            if (value)
+                // Animate in
+                await element.SlideAndFadeInAsync(AnimationSlideInDirection.Right, firstLoad, firstLoad ? 0 : 0.3f, keepMargin: false);
+            else
+                // Animate out
+                await element.SlideAndFadeOutAsync(AnimationSlideInDirection.Right, firstLoad ? 0 : 0.3f, keepMargin: false);
+        }
+    }
+
+    /// <summary>
+    /// Анимирует элемент структуры, перемещая его справа на экране
+    /// и двигать вправо при скрытии
+    /// </summary>
+    public class AnimateSlideInFromRightMarginProperty : AnimateBaseProperty<AnimateSlideInFromRightMarginProperty>
+    {
+        protected override async void DoAnimation(FrameworkElement element, bool value, bool firstLoad)
+        {
+            if (value)
+                // Animate in
+                await element.SlideAndFadeInAsync(AnimationSlideInDirection.Right, firstLoad, firstLoad ? 0 : 0.3f, keepMargin: true);
+            else
+                // Animate out
+                await element.SlideAndFadeOutAsync(AnimationSlideInDirection.Right, firstLoad ? 0 : 0.3f, keepMargin: true);
         }
     }
 
@@ -115,6 +179,17 @@ namespace WebChatClient
         }
     }
 
+    /// <summary>
+    /// Анимирует скольжение элемента каркаса снизу вверх при загрузке
+    /// </summary>
+    public class AnimateSlideInFromBottomOnLoadProperty : AnimateBaseProperty<AnimateSlideInFromBottomOnLoadProperty>
+    {
+        protected override async void DoAnimation(FrameworkElement element, bool value, bool firstLoad)
+        {
+            // Animate in
+            await element.SlideAndFadeInAsync(AnimationSlideInDirection.Bottom, !value, !value ? 0 : 0.3f, keepMargin: false);
+        }
+    }
 
     /// <summary>
     /// Анимирует элемент каркаса, скользящий вверх снизу на экране.

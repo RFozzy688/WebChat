@@ -11,11 +11,12 @@
           Background="Transparent"
           VerticalAlignment="Bottom">
 
-        <ScrollViewer VerticalScrollBarVisibility="Auto">
-            <ItemsControl ItemsSource="{Binding Items}">
+        <ScrollViewer VerticalScrollBarVisibility="Auto"
+                      local:ScrollToBottomOnLoadProperty.Value="True">
+            <ItemsControl ItemsSource="{Binding FilteredItems}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <local:ChatMessageListItemControl />
+                        <local:ChatMessageListItemControl local:AnimateSlideInFromBottomOnLoadProperty.Value="{Binding NewItem}"/>
 
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
