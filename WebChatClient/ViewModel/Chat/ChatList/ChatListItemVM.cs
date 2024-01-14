@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 using WebChatCore;
 
@@ -51,9 +52,9 @@ namespace WebChatClient
 
             IoC.Application.GoToPage(AppPage.Chat, new ChatMessageListVM
             {
-                //DisplayTitle = "Parnell, Me",
+                DisplayTitle = "Parnell, Me",
 
-                Items = new List<ChatMessageListItemVM>
+                Items = new ObservableCollection<ChatMessageListItemVM>
                 {
                     new ChatMessageListItemVM
                     {
@@ -100,19 +101,19 @@ namespace WebChatClient
                         SenderName = "Parnell",
                         SentByMe = false,
                     },
-                    //new ChatMessageListItemVM
-                    //{
-                    //    Message = "A received message",
-                    //    ImageAttachment = new ChatMessageListItemImageAttachmentVM
-                    //    {
-                    //        ThumbnailUrl = "http://anywhere"
-                    //    },
-                    //    Initials = Initials,
-                    //    MessageSentTime = DateTime.UtcNow,
-                    //    ProfilePictureRGB = "FF0000",
-                    //    SenderName = "Parnell",
-                    //    SentByMe = false,
-                    //},
+                    new ChatMessageListItemVM
+                    {
+                        Message = "A received message",
+                        ImageAttachment = new ChatMessageListItemImageAttachmentVM
+                        {
+                            ThumbnailUrl = "http://anywhere"
+                        },
+                        Initials = Initials,
+                        MessageSentTime = DateTime.UtcNow,
+                        ProfilePictureRGB = "FF0000",
+                        SenderName = "Parnell",
+                        SentByMe = false,
+                    },
                 }
             });
         }

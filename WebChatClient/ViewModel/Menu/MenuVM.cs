@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using WebChatCore;
 
 namespace WebChatClient
@@ -7,6 +8,6 @@ namespace WebChatClient
     public class MenuVM : BaseViewModel
     {
         // Элементы этого меню
-        public List<MenuItemVM> Items { get; set; }
+        public ObservableCollection<MenuItemVM> Items { get; set; }
     }
 }

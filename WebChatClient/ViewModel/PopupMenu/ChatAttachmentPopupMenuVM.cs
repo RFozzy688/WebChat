@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,7 +14,7 @@ namespace WebChatClient
         {
             Content = new MenuVM
             {
-                Items = new List<MenuItemVM>(new[]
+                Items = new ObservableCollection<MenuItemVM>(new[]
                 {
                     new MenuItemVM { Text = "Attach a file...", Type = MenuItemType.Header },
                     new MenuItemVM { Text = "From Computer", Icon = IconType.File },
