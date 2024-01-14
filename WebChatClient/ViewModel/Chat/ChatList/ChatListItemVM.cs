@@ -52,7 +52,7 @@ namespace WebChatClient
 
             IoC.Application.GoToPage(AppPage.Chat, new ChatMessageListVM
             {
-                //DisplayTitle = "Parnell, Me",
+                DisplayTitle = "Parnell, Me",
 
                 Items = new ObservableCollection<ChatMessageListItemVM>
                 {

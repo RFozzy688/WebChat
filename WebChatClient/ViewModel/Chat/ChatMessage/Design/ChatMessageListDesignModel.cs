@@ -21,6 +21,8 @@ namespace WebChatClient
 
         public ChatMessageListDesignModel()
         {
+            DisplayTitle = "Parnell";
+
             Items = new ObservableCollection<ChatMessageListItemVM>
             {
                 new ChatMessageListItemVM
