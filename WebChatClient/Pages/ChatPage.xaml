@@ -1,20 +1,74 @@
-<Page 
-    x:Class="WebChatClient.ChatPage"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-    xmlns:local="clr-namespace:WebChatClient"
-    mc:Ignorable="d"
-    x:Name="Page"
-      
-    Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=Window}}"
-    Height="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=Window}}">
+﻿<Page x:Class="WebChatClient.ChatPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:WebChatClient"
+      mc:Ignorable="d" 
+      x:Name="Page"  
+      Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=Window}}"
+      Height="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=Window}}"
+      d:DesignHeight="450" d:DesignWidth="800">
 
-    <Border>
-        <Button Width="200"
-                Height="200"
-                Content="button"/>
+    <Border CornerRadius="0,0,10,10"
+            Background="Transparent">
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <!--левая колонка: меню и список контактов-->
+                <ColumnDefinition Width="320"/>
+                <!--правая колонка: заголовок и ветка сообщений контакта-->
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!--левая колонка: меню и список контактов-->
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <!--меню-->
+                    <RowDefinition Height="Auto"/>
+                    <!--список контактов-->
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!--меню-->
+                <Grid Grid.Row="0"
+                      Height="50"
+                      Background="{StaticResource LightBlueBrush}">
+                    
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!--main button-->
+                    <StackPanel Grid.Column="0"
+                                Orientation="Horizontal">
+                        <Button Style="{StaticResource IconButton}" 
+                                Content="{StaticResource FA_ChatIcon}"/>
+                        <Button Style="{StaticResource IconButton}" 
+                                Content="{StaticResource FA_UserIcon}"/>
+                        <Button Style="{StaticResource IconButton}" 
+                                Content="{StaticResource FA_PictureIcon}"/>
+                    </StackPanel>
+
+                    <!--setting button-->
+                    <Button Grid.Column="2"
+                            Style="{StaticResource IconButton}" 
+                            Content="{StaticResource FA_CogIcon}"
+                            Margin="2"/>
+                </Grid>
+
+                <!--список контактов-->
+                <ScrollViewer Grid.Row="1"
+                              VerticalScrollBarVisibility="Auto">
+                    
+                    <ListBox Style="{StaticResource ListBoxContact}">
+
+                    </ListBox>
+                </ScrollViewer>
+                
+            </Grid>
+        </Grid>
     </Border>
-
 </Page>

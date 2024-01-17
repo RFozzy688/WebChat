@@ -98,7 +98,8 @@
                                 ImageSource="Images/Background/emoji-background.png"/>
                 </Grid.Background>
 
-                <Frame Content="{Binding CurrentPage}"/>
+                <Frame Content="{Binding CurrentPage}"
+                       local:NoFrameHistory.Value="True"/>
 
             </Grid>
         </Grid>

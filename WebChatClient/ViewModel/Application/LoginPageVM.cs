@@ -48,9 +48,11 @@ namespace WebChatClient
 
             LoginIsRunning = true;
 
-            await Task.Delay(5000);
+            await Task.Delay(1);
             var pass = (parameter as IHavePassword).SecurePassword.Unsecure();
             var email = Email;
+
+            ((MainWindowVM)((MainWindow)Application.Current.MainWindow).DataContext).CurrentPage = new ChatPage();
 
             LoginIsRunning = false;
         }
