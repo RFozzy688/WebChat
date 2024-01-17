@@ -68,7 +68,7 @@ namespace WebChatClient
         public ICommand MenuCommand { get; set; }
  
         // Текущая страница приложения
-        public Page CurrentPage { get; set; } = new LoginPage();
+        public Page CurrentPage { get; set; } = new ChatPage();
         //Получает текущую позицию мыши на экране
         private Point GetMousePosition()
         {
