@@ -18,10 +18,10 @@ namespace WebChatClient
     {
         // Истинно, если это первый раз, когда значение обновляется.
         // Используется, чтобы убедиться, что мы запускаем логику хотя бы один раз во время первой загрузки.
-        protected Dictionary<DependencyObject, bool> _alreadyLoaded = new Dictionary<DependencyObject, bool>();
+        protected Dictionary<WeakReference, bool> _alreadyLoaded = new Dictionary<WeakReference, bool>();
 
         // Самое последнее значение, используемое, если мы изменили значение до первой загрузки.
-        protected Dictionary<DependencyObject, bool> _firstLoadValue = new Dictionary<DependencyObject, bool>();
+        protected Dictionary<WeakReference, bool> _firstLoadValue = new Dictionary<WeakReference, bool>();
 
         public override void OnValueUpdated(DependencyObject sender, object value)
         {
@@ -29,15 +29,24 @@ namespace WebChatClient
             if (!(sender is FrameworkElement element))
                 return;
 
+            // Попробуйте получить уже загруженную ссылку
+            var alreadyLoadedReference = _alreadyLoaded.FirstOrDefault(f => f.Key.Target == sender);
+
+            // Попробуйте получить первую ссылку на загрузку
+            var firstLoadReference = _firstLoadValue.FirstOrDefault(f => f.Key.Target == sender);
+
             // Не запускать, если значение не изменится
-            if ((bool)sender.GetValue(ValueProperty) == (bool)value && _alreadyLoaded.ContainsKey(sender))
+            if ((bool)sender.GetValue(ValueProperty) == (bool)value && alreadyLoadedReference.Key != null)
                 return;
 
             // При первой загрузке...
-            if (!_alreadyLoaded.ContainsKey(sender))
+            if (alreadyLoadedReference.Key == null)
             {
-                // Пометить, что мы находимся на первой загрузке, но еще не завершили ее
-                _alreadyLoaded[sender] = false;
+                // Создать ссылку
+                var weakReference = new WeakReference(sender);
+
+                // Пометить, что мы находимся на первой загрузке, но еще не завершили в ее
+                _alreadyLoaded[weakReference] = false;
 
                 // Прежде чем решить, как анимировать, начните со скрытого изображения
                 element.Visibility = Visibility.Hidden;
@@ -54,22 +63,29 @@ namespace WebChatClient
                     // и их ширина/высота рассчитаны правильно
                     await Task.Delay(5);
 
+                    // Обновите первое значение загрузки, если оно изменилось после задержки в 5 мс.
+                    firstLoadReference = _firstLoadValue.FirstOrDefault(f => f.Key.Target == sender);
+
                     // Сделайте желаемую анимацию
-                    DoAnimation(element, _firstLoadValue.ContainsKey(sender) ? _firstLoadValue[sender] : (bool)value, true);
+                    DoAnimation(element, firstLoadReference.Key != null ? firstLoadReference.Value : (bool)value, true);
 
                     // Отметить, что мы завершили первую загрузку
-                    _alreadyLoaded[sender] = true;
+                    _alreadyLoaded[weakReference] = true;
                 };
 
                 // Подключитесь к событию Loaded элемента
                 element.Loaded += onLoaded;
             }
             // Если мы начали первую загрузку, но еще не запустили анимацию, обновите свойство
-            else if (_alreadyLoaded[sender] == false)
-                _firstLoadValue[sender] = (bool)value;
+            else if (alreadyLoadedReference.Value == false)
+            {
+                _firstLoadValue[new WeakReference(sender)] = (bool)value;
+            }
             else
+            {
                 // Сделайте желаемую анимацию
                 DoAnimation(element, (bool)value, false);
+            }
         }
 
         /// <summary>

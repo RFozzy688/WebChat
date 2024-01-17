@@ -68,7 +68,7 @@ namespace WebChatClient
                 // Обновить значение
                 _searchText = value;
 
-                // Iесли текст поиска пуст...
+                // если текст поиска пуст...
                 if (string.IsNullOrEmpty(SearchText))
                 {
                     // Поиск для восстановления сообщений
