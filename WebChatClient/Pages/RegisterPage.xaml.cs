@@ -25,7 +25,7 @@ namespace WebChatClient
         {
             InitializeComponent();
 
-            DataContext = new RegisterPageVM(this);
+            DataContext = new RegisterPageVM();
         }
 
         // Надежный пароль для этой страницы входа.

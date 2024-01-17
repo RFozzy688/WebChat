@@ -1,7 +1,8 @@
 ﻿using System.Security;
 using System.Runtime.InteropServices;
+using System;
 
-namespace WebChatCore
+namespace WebChatClient
 {
     /// <summary>
     /// Помощники для класса <see cref="SecureString"/>

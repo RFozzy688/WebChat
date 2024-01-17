@@ -49,10 +49,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WebChatCore\WebChatCore.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Resource Include="Fonts\Balsamiq\BalsamiqSans-Regular.ttf" />
     <Resource Include="Fonts\fontawesome-webfont.ttf" />
     <Resource Include="Fonts\Lato\Lato-Black.ttf" />
@@ -78,12 +74,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Controls\Chat\ChatMessage\ChatMessageListControl.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Controls\Input\PasswordEntryControl.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Update="Pages\ChatPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
