@@ -46,5 +46,7 @@
     <system:String x:Key="FA_TickIcon">&#xf00c;</system:String>
     <system:String x:Key="FA_CloseIcon">&#xf00d;</system:String>
     <system:String x:Key="FA_PaperPlaneIcon">&#xf1d9;</system:String>
+    <system:String x:Key="FA_KeyIcon">&#xf084;</system:String>
+    <system:String x:Key="FA_EmailIcon">&#xf0e0;</system:String>
 
 </ResourceDictionary>

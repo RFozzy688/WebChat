@@ -1,9 +1,6 @@
 ﻿using System.Security;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using System.Xml.Linq;
-using WebChatCore;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace WebChatClient
 {
@@ -32,10 +29,7 @@ namespace WebChatClient
 
         private async Task RegisterAsync(object parameter)
         {
-            //IoC.Get<AppVM>().SideMenuVisible ^= true;
-            //return;
-            //((MainWindowVM)((MainWindow)Application.Current.MainWindow).DataContext).CurrentPage = AppPage.Register;
-            IoC.Get<AppVM>().GoToPage(AppPage.Register);
+            ((MainWindowVM)((MainWindow)Application.Current.MainWindow).DataContext).CurrentPage = new RegisterPage();
 
             await Task.Delay(1);
         }
@@ -53,21 +47,9 @@ namespace WebChatClient
 
             LoginIsRunning = true;
 
-            await Task.Delay(1);
+            await Task.Delay(5000);
             var pass = (parameter as IHavePassword).SecurePassword.Unsecure();
             var email = Email;
-
-            // OK successfully logged in... now get users data
-            // TODO: Ask server for users info
-
-            // TODO: Удалите это, используя в будущем реальную информацию, полученную
-            //       из нашей базы данных
-            IoC.Settings.Name = new TextEntryVM { Label = "Name", OriginalText = "Luke Malpass" };
-            IoC.Settings.Username = new TextEntryVM { Label = "Username", OriginalText = "luke" };
-            IoC.Settings.Password = new PasswordEntryVM { Label = "Password", FakePassword = "********" };
-            IoC.Settings.Email = new TextEntryVM { Label = "Email", OriginalText = "contact@angelsix.com" };
-
-            IoC.Get<AppVM>().GoToPage(AppPage.Chat);
 
             LoginIsRunning = false;
         }

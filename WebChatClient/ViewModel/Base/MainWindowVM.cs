@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using WebChatCore;
+using System.Windows.Controls;
 
 namespace WebChatClient
 {
@@ -15,9 +15,8 @@ namespace WebChatClient
         // Окно, которым управляет эта модель представления
         private Window _view;
 
-        /// <summary>
-        /// Помощник по изменению размера окна, который поддерживает правильный размер окна в различных состояниях.
-        /// </summary>
+        // Помощник по изменению размера окна, который поддерживает правильный размер окна в различных состояниях.
+
         private WindowResizer _windowResizer;
 
         public MainWindowVM(Window view)
@@ -50,9 +49,6 @@ namespace WebChatClient
         // Высота строки заголовка окна
         public int TitleHeight { get; set; } = 50;
 
-        // Высота строки заголовка окна
-        public GridLength TitleHeightGridLength => new GridLength(TitleHeight);
-
         //Наименьшая ширина окна.
         public double WindowMinimumWidth { get; set; } = 800;
 
@@ -70,7 +66,9 @@ namespace WebChatClient
 
         // Команда показа системного меню окна
         public ICommand MenuCommand { get; set; }
-        
+ 
+        // Текущая страница приложения
+        public Page CurrentPage { get; set; } = new LoginPage();
         //Получает текущую позицию мыши на экране
         private Point GetMousePosition()
         {

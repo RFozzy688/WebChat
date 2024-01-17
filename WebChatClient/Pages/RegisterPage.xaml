@@ -1,15 +1,15 @@
-﻿<local:BasePage
-    x:TypeArguments="local:RegisterPageVM"
-      x:Class="WebChatClient.RegisterPage"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:WebChatClient"
-      mc:Ignorable="d"
-      Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=Window}}"
-      Height="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=Window}}"
-      x:Name="Page">
+<Page 
+    x:Class="WebChatClient.RegisterPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:WebChatClient"
+    mc:Ignorable="d"
+    x:Name="Page"
+      
+    Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=Window}}"
+    Height="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=Window}}">
 
     <Border>
         <Grid>
@@ -18,42 +18,86 @@
                 <StackPanel HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             TextBlock.TextAlignment="Center">
-                    <!--регистрация-->
+                    <!--Регистрация-->
                     <Border Background="{StaticResource VeryLightBrush}" 
                             CornerRadius="10"
                             Padding="15 50 15 15"
                             Width="330"
                             Margin="50 50 50 0">
                         <StackPanel>
-                            <!-- Заголовок регистрации -->
+                            <!-- Заголовок входа -->
                             <TextBlock Text="Регистрация" 
                                        FontSize="{StaticResource FontSizeXXLarge}"
                                        Foreground="{StaticResource LightBlueBrush}" />
 
-                            <!-- подтекст-->
+                            <!-- Вход, подтекст-->
                             <TextBlock Text="Заходи, будет весело" 
                                        FontSize="{StaticResource FontSizeLarge}"
                                        Foreground="{StaticResource MiddleDarkBrush}"
                                        Margin="0 0 0 20"/>
 
-                            <!-- Username -->
-                            <TextBox Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" 
-                                     Tag="Имя"
-                                     local:IsFocusedProperty.Value="True"/>
+                            <!-- user -->
+                            <TextBlock Text="Имя"
+                                             Style="{StaticResource TextTitle}"/>
 
-                            <!--Phone-->
-                            <TextBox Text="{Binding Phone, UpdateSourceTrigger=PropertyChanged}"
-                                     Tag="Телефон"/>
+                            <Grid Margin="5, 5 ,5, 20">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Style="{StaticResource TextIcon}"
+                                           Text="{Binding Converter={local:StringToIconTextConverter}, ConverterParameter=UserIcon}"/>
+
+                                <TextBox Style="{StaticResource TextBoxStyle}"
+                                         Grid.ColumnSpan="2"
+                                         HorizontalContentAlignment="Left"
+                                         VerticalContentAlignment="Center"
+                                         Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"/>
+                            </Grid>
 
                             <!-- Email -->
-                            <TextBox Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"
-                                     Tag="Email"/>
+                            <TextBlock Text="Почта"
+                                       Style="{StaticResource TextTitle}"/>
+
+                            <Grid Margin="5, 5 ,5, 20">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Style="{StaticResource TextIcon}"
+                                            Text="{Binding Converter={local:StringToIconTextConverter}, ConverterParameter=EmailIcon}"/>
+
+                                <TextBox Style="{StaticResource TextBoxStyle}"
+                                         Grid.ColumnSpan="2"
+                                         HorizontalContentAlignment="Left"
+                                         VerticalContentAlignment="Center"
+                                         Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"/>
+                            </Grid>
 
                             <!-- Password -->
-                            <PasswordBox x:Name="PasswordText" Tag="Пароль"/>
+                            <TextBlock Text="Пароль"
+                                       Style="{StaticResource TextTitle}"/>
+
+                            <Grid Margin="5,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Style="{StaticResource TextIcon}"
+                                           Text="{Binding Converter={local:StringToIconTextConverter}, ConverterParameter=KeyIcon}"/>
+
+                                <PasswordBox Style="{StaticResource TextBoxStyle}"
+                                             Grid.ColumnSpan="2"
+                                             HorizontalContentAlignment="Left"
+                                             VerticalContentAlignment="Center"
+                                             x:Name="PasswordText"/>
+                            </Grid>
 
                             <!-- Кнопка регистрации -->
-                            <Button Content="Отправить"
+                            <Button Content="Регистрация"
                                     IsDefault="True"
                                     local:IsBusyProperty.Value="{Binding RegisterIsRunning}"
                                     Command="{Binding RegisterCommand}"
@@ -67,7 +111,7 @@
                     </Border>
 
                     <Button Command="{Binding LoginCommand}"
-                            Content="У меня уже есть аккаунт..." 
+                            Content="Создать аккаунт..." 
                             HorizontalAlignment="Center"
                             Style="{StaticResource TextButton}"/>
 
@@ -76,4 +120,4 @@
             </ScrollViewer>
         </Grid>
     </Border>
-</local:BasePage>
+</Page>
