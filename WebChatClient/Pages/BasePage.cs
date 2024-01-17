@@ -86,8 +86,16 @@ namespace WebChatClient
             if (PageLoadAnimation == PageAnimationStyles.None)
                 return;
 
-            // Старт анимации
-            await this.SlideAndFadeInAsync(AnimationSlideInDirection.Right, false, SlideSeconds, size: (int)Application.Current.MainWindow.Width);
+            switch (PageLoadAnimation)
+            {
+                case PageAnimationStyles.MovesFromRightToCenter:
+                    // Старт анимации
+                    await this.SlideAndFadeInAsync(AnimationSlideInDirection.Right, 
+                        false, 
+                        SlideSeconds, 
+                        size: (int)Application.Current.MainWindow.Width);
+                    break;
+            }
         }
 
         /// <summary>
@@ -100,8 +108,13 @@ namespace WebChatClient
             if (PageUnloadAnimation == PageAnimationStyles.None)
                 return;
 
-            // Старт анимации
-            await this.SlideAndFadeOutAsync(AnimationSlideInDirection.Left, SlideSeconds);
+            switch (PageUnloadAnimation)
+            {
+                case PageAnimationStyles.MovesFromCenterToLeft:
+                    // Старт анимации
+                    await this.SlideAndFadeOutAsync(AnimationSlideInDirection.Left, SlideSeconds);
+                    break;
+            }
         }
 
         // Запускается при изменении модели представления
