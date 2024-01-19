@@ -21,7 +21,11 @@ namespace WebChatClient
         // ссылка на модель контактов
         ContactsModel _contactsModel;
 
+         // индекс предыдущего выбора контакта
         int _indexOldSelected;
+
+        // имя выбранного контакта
+        public string NameSelectedContact { get; set; }
 
         // Открывает текущую ветку сообщений
         public ICommand OpenMessageCommand { get; set; }
@@ -48,6 +52,8 @@ namespace WebChatClient
             _contactsVM[_view.ListContacts.SelectedIndex].IsSelected = true;
 
             _indexOldSelected = _view.ListContacts.SelectedIndex;
+
+            NameSelectedContact = _contactsVM[_view.ListContacts.SelectedIndex].Name;
         }
 
         /// <summary>

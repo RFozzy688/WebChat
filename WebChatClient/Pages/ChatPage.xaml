@@ -104,9 +104,51 @@
                 </ListBox>
             </Grid>
 
-            <!--правая колонка: заголовок и ветка сообщений контакта-->
+            <!--правая колонка: имя контакта и ветка сообщений контакта-->
             <Grid Grid.Column="1">
-                
+                <Grid.RowDefinitions>
+                    <!--имя контакта, иконка поиска, доп меню-->
+                    <RowDefinition Height="Auto"/>
+                    <!--тень-->
+                    <RowDefinition Height="Auto"/>
+                    <!--дерево сообщений-->
+                    <RowDefinition Height="*"/>
+                    <!--поле для ввода и отправки сообщения-->
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!--имя контакта, иконка поиска, доп меню-->
+                <Grid Grid.Row="0"
+                      Height="50"
+                      Background="{StaticResource LightBlueBrush}">
+
+                    <Grid.ColumnDefinitions>
+                        <!--имя контакта-->
+                        <ColumnDefinition Width="*"/>
+                        <!--строка поиска, доп меню-->
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!--имя выбранного контакта-->
+                    <TextBlock Text="{Binding NameSelectedContact}"
+                               Grid.ColumnSpan="2"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Foreground="{StaticResource VeryLightBrush}"
+                               FontSize="{StaticResource FontSizeXXLarge}"
+                               FontFamily="{StaticResource RoundedBold}"/>
+
+                    <!--main button-->
+                    <StackPanel Grid.Column="1"
+                                Orientation="Horizontal"
+                                Margin="0 0 2 0">
+                        <Button Style="{StaticResource IconButton}" 
+                                Content="{StaticResource FA_SearchIcon}"/>
+                        <Button Style="{StaticResource IconButton}" 
+                                Content="{StaticResource FA_EllipsisVerticalIcon}"/>
+                    </StackPanel>
+                </Grid>
+
             </Grid>
         </Grid>
     </Border>
