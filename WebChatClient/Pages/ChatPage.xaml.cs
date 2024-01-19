@@ -10,6 +10,8 @@ namespace WebChatClient
         public ChatPage()
         {
             InitializeComponent();
+
+            DataContext = new ChatPageVM(this);
         }
     }
 }

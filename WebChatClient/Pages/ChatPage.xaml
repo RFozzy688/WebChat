@@ -3,12 +3,14 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
       xmlns:local="clr-namespace:WebChatClient"
       mc:Ignorable="d" 
       x:Name="Page"  
       Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=Window}}"
       Height="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=Window}}"
       d:DesignHeight="450" d:DesignWidth="800">
+    
 
     <Border CornerRadius="0,0,10,10"
             Background="Transparent">
@@ -25,6 +27,8 @@
             <Grid Grid.Column="0">
                 <Grid.RowDefinitions>
                     <!--меню-->
+                    <RowDefinition Height="Auto"/>
+                    <!--тень-->
                     <RowDefinition Height="Auto"/>
                     <!--список контактов-->
                     <RowDefinition Height="*"/>
@@ -59,14 +63,49 @@
                             Margin="2"/>
                 </Grid>
 
-                <!--список контактов-->
-                <ScrollViewer Grid.Row="1"
-                              VerticalScrollBarVisibility="Auto">
-                    
-                    <ListBox Style="{StaticResource ListBoxContact}">
+                <!-- Тень -->
+                <Border Grid.Row="1" BorderThickness="0 0.5 0 0">
+                    <!-- Линия тени -->
+                    <Border.BorderBrush>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1, 0">
+                            <GradientStop Color="{StaticResource MiddleDark}" Offset="0.0" />
+                            <GradientStop Color="{StaticResource  VeryDark}" Offset="0.5" />
+                            <GradientStop Color="{StaticResource MiddleDark}" Offset="1.0" />
+                        </LinearGradientBrush>
+                    </Border.BorderBrush>
+                </Border>
 
-                    </ListBox>
-                </ScrollViewer>
+                <!--список контактов-->
+                <ListBox Style="{StaticResource ListBoxContact}"
+                         x:Name="ListContacts"
+                         Grid.Row="2">
+                    <!--открыть ветку сообщений-->
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="SelectionChanged">
+                            <i:InvokeCommandAction Command="{Binding OpenMessageCommand}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    
+                    <!--убрать подсветку при наведении мышью-->
+                    <ListBox.Resources>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ListBoxItem">
+                                        <Border Background="Transparent">
+                                            <ContentPresenter/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ListBox.Resources>
+
+                </ListBox>
+            </Grid>
+
+            <!--правая колонка: заголовок и ветка сообщений контакта-->
+            <Grid Grid.Column="1">
                 
             </Grid>
         </Grid>
