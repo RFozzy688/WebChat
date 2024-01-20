@@ -21,11 +21,16 @@ namespace WebChatClient
         // ссылка на модель контактов
         ContactsModel _contactsModel;
 
-         // индекс предыдущего выбора контакта
+        ObservableCollection<MessageVM> _messageVM;
+
+        // индекс предыдущего выбора контакта
         int _indexOldSelected;
 
         // имя выбранного контакта
         public string NameSelectedContact { get; set; }
+
+        // Значения RGB (в шестнадцатеричном формате) для цвета фона изображения профиля.
+        public string ProfilePictureRGB { get; set; }
 
         // Открывает текущую ветку сообщений
         public ICommand OpenMessageCommand { get; set; }
@@ -37,6 +42,7 @@ namespace WebChatClient
             // инициализация
             _contactsVM = new ObservableCollection<ContactVM>();
             _contactsModel = new ContactsModel();
+            _messageVM = new ObservableCollection<MessageVM>();
 
             // Создание команд
             OpenMessageCommand = new Command((o) => OpenMessage());
@@ -48,12 +54,36 @@ namespace WebChatClient
         // открыть ветку с сообщениями
         private void OpenMessage()
         {
+            int currentSelectedIndex = _view.ListContacts.SelectedIndex;
+
             _contactsVM[_indexOldSelected].IsSelected = false;
-            _contactsVM[_view.ListContacts.SelectedIndex].IsSelected = true;
+            _contactsVM[currentSelectedIndex].IsSelected = true;
 
             _indexOldSelected = _view.ListContacts.SelectedIndex;
 
-            NameSelectedContact = _contactsVM[_view.ListContacts.SelectedIndex].Name;
+            NameSelectedContact = _contactsVM[currentSelectedIndex].Name;
+
+            TreeMessagesContactModel treeMessagesModel = new TreeMessagesContactModel(_contactsVM[currentSelectedIndex].UserID);
+
+            foreach (Message message in treeMessagesModel.TreeMessagesContact)
+            {
+                MessageVM messageVM = new MessageVM();
+
+                messageVM.Message = message.TextMessage;
+                messageVM.MessageSentTime = message.MessageSentTime;
+                messageVM.SentByMe = message.SentByMe;
+                messageVM.Initials = _contactsVM[currentSelectedIndex].Initials;
+                messageVM.ProfilePictureRGB = _contactsVM[currentSelectedIndex].ProfilePictureRGB;
+
+                _messageVM.Add(messageVM);
+
+                MessageControl messageControl = new MessageControl();
+                messageControl.DataContext = messageVM;
+
+                ListBoxItem lbi = new ListBoxItem();
+                lbi.Content = messageControl;
+                _view.TreeMessages.Items.Add(lbi);
+            }
         }
 
         /// <summary>
@@ -68,6 +98,7 @@ namespace WebChatClient
                 ContactVM contactVM = new ContactVM();
 
                 // связать VM c M
+                contactVM.UserID = item.UserID;
                 contactVM.Name = item.Name;
                 contactVM.Message = item.Message;
                 contactVM.Initials = item.Initials;
