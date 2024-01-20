@@ -84,6 +84,8 @@ namespace WebChatClient
                 lbi.Content = messageControl;
                 _view.TreeMessages.Items.Add(lbi);
             }
+
+            _view.TreeMessages.ScrollIntoView(_view.TreeMessages.Items[_view.TreeMessages.Items.Count - 1]);
         }
 
         /// <summary>
