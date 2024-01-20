@@ -21,6 +21,7 @@ namespace WebChatClient
         // ссылка на модель контактов
         ContactsModel _contactsModel;
 
+        // ссылка на коллекцию моделей представления дерева сообщений
         ObservableCollection<MessageVM> _messageVM;
 
         // индекс предыдущего выбора контакта
@@ -38,7 +39,10 @@ namespace WebChatClient
         public ChatPageVM(ChatPage view)
         {
             _view = view;
-            
+
+            // при первом открытии приложения
+            _indexOldSelected = -1; 
+
             // инициализация
             _contactsVM = new ObservableCollection<ContactVM>();
             _contactsModel = new ContactsModel();
@@ -54,38 +58,65 @@ namespace WebChatClient
         // открыть ветку с сообщениями
         private void OpenMessage()
         {
+            // индекс текущего выделенного елемента
             int currentSelectedIndex = _view.ListContacts.SelectedIndex;
 
-            _contactsVM[_indexOldSelected].IsSelected = false;
+            if (currentSelectedIndex == _indexOldSelected)
+            {
+                return;
+            }
+
+            if (_indexOldSelected != -1)
+            {
+                // снять выделение с предыдущего елемента
+                _contactsVM[_indexOldSelected].IsSelected = false;
+            }
+           
+            // выделить текущий
             _contactsVM[currentSelectedIndex].IsSelected = true;
 
+            // сохраняем индекс текущего выделенного елемента
             _indexOldSelected = _view.ListContacts.SelectedIndex;
 
+            // имя контакта в заголовке дерева сообщений
             NameSelectedContact = _contactsVM[currentSelectedIndex].Name;
 
+            _view.TreeMessages.Items.Clear();
+
+            // создать модель дерева сообщений
+            // передать id выделенного контакта и загрузить сообщения в модель
             TreeMessagesContactModel treeMessagesModel = new TreeMessagesContactModel(_contactsVM[currentSelectedIndex].UserID);
 
+            int i = 0;
             foreach (Message message in treeMessagesModel.TreeMessagesContact)
             {
+                // создать модель представления сообщения
                 MessageVM messageVM = new MessageVM();
 
+                // проинициализировать VM из M
                 messageVM.Message = message.TextMessage;
                 messageVM.MessageSentTime = message.MessageSentTime;
                 messageVM.SentByMe = message.SentByMe;
+                // инициализация VM из VM контакта
                 messageVM.Initials = _contactsVM[currentSelectedIndex].Initials;
                 messageVM.ProfilePictureRGB = _contactsVM[currentSelectedIndex].ProfilePictureRGB;
 
+                // добавить в коллекцию VM
                 _messageVM.Add(messageVM);
 
+                // создать пузырь сообщения
                 MessageControl messageControl = new MessageControl();
+                // связать V с VM
                 messageControl.DataContext = messageVM;
 
+                // добавить сообщение в ListBox
                 ListBoxItem lbi = new ListBoxItem();
                 lbi.Content = messageControl;
-                _view.TreeMessages.Items.Add(lbi);
+                _view.TreeMessages.Items.Add(lbi);i++;
             }
 
-            _view.TreeMessages.ScrollIntoView(_view.TreeMessages.Items[_view.TreeMessages.Items.Count - 1]);
+            // прокрутить ListBox в конец
+            _view.TreeMessages.ScrollIntoView(_view.TreeMessages.Items[_view.TreeMessages.Items.Count - 2]);
         }
 
         /// <summary>
