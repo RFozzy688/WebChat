@@ -278,7 +278,8 @@
                                  AcceptsReturn="True"
                                  AcceptsTab="True"
                                  VerticalScrollBarVisibility="Auto"
-                                 Margin="10,0,0,0"/>
+                                 Margin="10,0,0,0"
+                                 PreviewKeyDown="MessageText_PreviewKeyDown"/>
 
                         <!-- Дополнительные кнопки -->
                         <StackPanel Orientation="Horizontal"
