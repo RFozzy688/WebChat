@@ -12,6 +12,9 @@ namespace WebChatClient
     /// </summary>
     public class ContactVM : BaseViewModel
     {
+        // уникальный идентификатор пользователя в этом приложении
+        public string UserID { get; set; }
+
         // Отображаемое имя в списке чатов
         public string Name { get; set; }
 

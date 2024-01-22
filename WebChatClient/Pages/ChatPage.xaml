@@ -104,9 +104,208 @@
                 </ListBox>
             </Grid>
 
-            <!--правая колонка: заголовок и ветка сообщений контакта-->
+            <!--правая колонка: имя контакта и ветка сообщений контакта-->
             <Grid Grid.Column="1">
-                
+                <Grid.RowDefinitions>
+                    <!--имя контакта, иконка поиска, доп меню-->
+                    <RowDefinition Height="Auto"/>
+                    <!--тень-->
+                    <RowDefinition Height="Auto"/>
+                    <!--дерево сообщений-->
+                    <RowDefinition Height="*"/>
+                    <!--поле для ввода и отправки сообщения-->
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!--имя контакта, иконка поиска, доп меню-->
+                <Grid Grid.Row="0"
+                      Height="50"
+                      Background="{StaticResource LightBlueBrush}">
+
+                    <Grid.ColumnDefinitions>
+                        <!--имя контакта-->
+                        <ColumnDefinition Width="*"/>
+                        <!--строка поиска, доп меню-->
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!--имя выбранного контакта-->
+                    <TextBlock Text="{Binding NameSelectedContact}"
+                               Grid.ColumnSpan="2"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Foreground="{StaticResource VeryLightBrush}"
+                               FontSize="{StaticResource FontSizeXXLarge}"
+                               FontFamily="{StaticResource RoundedBold}"/>
+
+                    <!--main button-->
+                    <StackPanel Grid.Column="1"
+                                Orientation="Horizontal"
+                                Margin="0 0 2 0">
+                        <Button Style="{StaticResource IconButton}" 
+                                Content="{StaticResource FA_SearchIcon}"
+                                Command="{Binding OpenSearchCommand}"/>
+                        <Button Style="{StaticResource IconButton}" 
+                                Content="{StaticResource FA_EllipsisVerticalIcon}"/>
+                    </StackPanel>
+
+                    <!-- Строка поиска -->
+                    <Grid Grid.ColumnSpan="2"
+                          Visibility="{Binding SearchIsOpen, 
+                                       Converter={local:BooleanToVisiblityConverter},
+                                       ConverterParameter=false}">
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Кнопка закрытия поиска -->
+                        <Button Style="{StaticResource IconButton}" 
+                                Content="{StaticResource FA_CloseIcon}"
+                                Command="{Binding CloseSearchCommand}"
+                                Foreground="{StaticResource VeryLightBrush}"
+                                Margin="0 2 2 2"/>
+
+                        <!-- Search box -->
+                        <TextBox Grid.Column="1" 
+                                 Style="{StaticResource MessageBoxStyle}"
+                                 Tag="Поиск текста..."
+                                 local:FocusProperty.Value="{Binding SearchIsOpen}"
+                                 Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                                 Margin="0 2 2 2"
+                                 FontSize="{StaticResource FontSizeRegular}"
+                                 BorderThickness="0"
+                                 VerticalContentAlignment="Center">
+                            
+                            <TextBox.InputBindings>
+                                <!-- Clear text on Esc -->
+                                <KeyBinding Command="{Binding ClearSearchCommand}" Key="Esc" />
+                                <!-- Search on enter -->
+                                <KeyBinding Command="{Binding SearchCommand}" Key="Return" />
+                            </TextBox.InputBindings>
+                        </TextBox>
+
+
+                    </Grid>
+                </Grid>
+
+                <!--тень-->
+                <Border Grid.Row="1" BorderThickness="0 0.5 0 0">
+                    <!-- Линия тени -->
+                    <Border.BorderBrush>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1, 0">
+                            <GradientStop Color="{StaticResource MiddleDark}" Offset="0.0" />
+                            <GradientStop Color="{StaticResource  VeryDark}" Offset="0.5" />
+                            <GradientStop Color="{StaticResource MiddleDark}" Offset="1.0" />
+                        </LinearGradientBrush>
+                    </Border.BorderBrush>
+                </Border>
+
+                <!--дерево сообщений-->
+                <ListBox x:Name="TreeMessages"
+                         Grid.Row="2">
+                    <!--открыть ветку сообщений-->
+                    <!--<i:Interaction.Triggers>
+                        <i:EventTrigger EventName="SelectionChanged">
+                            <i:InvokeCommandAction Command="{Binding OpenMessageCommand}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>-->
+
+                    <!--убрать подсветку при наведении мышью-->
+                    <ListBox.Resources>
+                        <Style TargetType="ListBox">
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+                        </Style>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ListBoxItem">
+                                        <Border Background="Transparent">
+                                            <ContentPresenter/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ListBox.Resources>
+
+                </ListBox>
+
+                <!--поле для ввода и отправки сообщения-->
+                <Border CornerRadius="0,0,10,0" 
+                        Grid.Row="3" 
+                        Background="{StaticResource VeryLightBrush}"
+                        BorderBrush="{StaticResource MiddleDarkBrush}"
+                        BorderThickness="1,0,0,0"
+                        Panel.ZIndex="3">
+
+                    <!-- Текстовое поле отправки сообщения -->
+                    <Grid MinHeight="50"
+                          MaxHeight="114">
+
+                        <Grid.ColumnDefinitions>
+                            <!-- Кнопка прикрепить  -->
+                            <ColumnDefinition Width="Auto" />
+
+                            <!-- Поле ввода текста -->
+                            <ColumnDefinition Width="*" />
+
+                            <!-- Дополнительные кнопки -->
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <!-- кнопка прикрепить -->
+                        <Button Style="{StaticResource IconGrowButton}"
+                                Height="{Binding MinHeight, RelativeSource={RelativeSource AncestorType=Grid}}"
+                                Content="{StaticResource FA_PaperclipIcon}"
+                                Foreground="{StaticResource MiddleDarkBrush}"
+                                Command="{Binding AttachmentButtonCommand}"/>
+
+                        <!-- Окно сообщения -->
+                        <TextBox Style="{StaticResource MessageBoxStyle}" 
+                                 x:Name="MessageText" 
+                                 Grid.Column="1" 
+                                 Tag="Написать сообщение..."
+                                 FontSize="{StaticResource FontSizeRegular}"
+                                 Text="{Binding PendingMessageText, UpdateSourceTrigger=PropertyChanged}"
+                                 local:IsFocusedProperty.Value="True"
+                                 VerticalAlignment="Center"
+                                 BorderThickness="0"
+                                 Padding="0 10"
+                                 AcceptsReturn="True"
+                                 AcceptsTab="True"
+                                 VerticalScrollBarVisibility="Auto"
+                                 Margin="10,0,0,0"/>
+
+                        <!-- Дополнительные кнопки -->
+                        <StackPanel Orientation="Horizontal"
+                                    VerticalAlignment="Top"
+                                    Margin="0 0 8 0"
+                                    Grid.Column="3">
+
+                            <!-- Emoji кнопка -->
+                            <Button Style="{StaticResource IconGrowButton}"
+                                    Height="{Binding MinHeight, RelativeSource={RelativeSource AncestorType=Grid}}"
+                                    Content="{StaticResource FA_EmojiIcon}"
+                                    Foreground="{StaticResource OrangeBrush}"/>
+
+                            <!--Кнопка отправить -->
+                            <Button Content="Отправить"
+                                    Padding="8"
+                                    IsDefault="True"
+                                    Focusable="False"
+                                    Command="{Binding SendCommand}"
+                                    Style="{StaticResource SendButton}"
+                                    FontSize="{StaticResource FontSizeRegular}"/>
+
+                        </StackPanel>
+
+                    </Grid>
+                </Border>
+
             </Grid>
         </Grid>
     </Border>
