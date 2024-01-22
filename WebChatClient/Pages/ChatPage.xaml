@@ -143,10 +143,51 @@
                                 Orientation="Horizontal"
                                 Margin="0 0 2 0">
                         <Button Style="{StaticResource IconButton}" 
-                                Content="{StaticResource FA_SearchIcon}"/>
+                                Content="{StaticResource FA_SearchIcon}"
+                                Command="{Binding OpenSearchCommand}"/>
                         <Button Style="{StaticResource IconButton}" 
                                 Content="{StaticResource FA_EllipsisVerticalIcon}"/>
                     </StackPanel>
+
+                    <!-- Строка поиска -->
+                    <Grid Grid.ColumnSpan="2"
+                          Visibility="{Binding SearchIsOpen, 
+                                       Converter={local:BooleanToVisiblityConverter},
+                                       ConverterParameter=false}">
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Кнопка закрытия поиска -->
+                        <Button Style="{StaticResource IconButton}" 
+                                Content="{StaticResource FA_CloseIcon}"
+                                Command="{Binding CloseSearchCommand}"
+                                Foreground="{StaticResource VeryLightBrush}"
+                                Margin="0 2 2 2"/>
+
+                        <!-- Search box -->
+                        <TextBox Grid.Column="1" 
+                                 Style="{StaticResource MessageBoxStyle}"
+                                 Tag="Поиск текста..."
+                                 local:FocusProperty.Value="{Binding SearchIsOpen}"
+                                 Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                                 Margin="0 2 2 2"
+                                 FontSize="{StaticResource FontSizeRegular}"
+                                 BorderThickness="0"
+                                 VerticalContentAlignment="Center">
+                            
+                            <TextBox.InputBindings>
+                                <!-- Clear text on Esc -->
+                                <KeyBinding Command="{Binding ClearSearchCommand}" Key="Esc" />
+                                <!-- Search on enter -->
+                                <KeyBinding Command="{Binding SearchCommand}" Key="Return" />
+                            </TextBox.InputBindings>
+                        </TextBox>
+
+
+                    </Grid>
                 </Grid>
 
                 <!--тень-->

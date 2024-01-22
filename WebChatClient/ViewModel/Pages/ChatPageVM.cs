@@ -4,6 +4,7 @@ using System.Windows.Media;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using System;
+using System.Linq;
 
 namespace WebChatClient
 {
@@ -24,8 +25,20 @@ namespace WebChatClient
         // ссылка на коллекцию моделей представления дерева сообщений
         ObservableCollection<MessageVM> _messageVM;
 
+        // Элементы ветки чата для списка, включающие любые поисковые фильтры
+        ObservableCollection<MessageVM> _filteredMessages;
+
         // индекс предыдущего выбора контакта
         int _indexOldSelected;
+
+        // Флаг, указывающий, открыт ли диалог поиска
+        bool _searchIsOpen;
+
+        // Последний искомый текст в этом списке
+        string _lastSearchText;
+
+        // Текст для поиска в команде поиска
+        string _searchText;
 
         // имя выбранного контакта
         public string NameSelectedContact { get; set; }
@@ -33,8 +46,26 @@ namespace WebChatClient
         // Значения RGB (в шестнадцатеричном формате) для цвета фона изображения профиля.
         public string ProfilePictureRGB { get; set; }
 
+        // Флаг, указывающий, открыт ли диалог поиска
+        public bool SearchIsOpen { get; set; }
+
+        // Текст для поиска, когда мы выполняем поиск
+        public string SearchText { get; set; }
+
         // Открывает текущую ветку сообщений
         public ICommand OpenMessageCommand { get; set; }
+
+        // Команда, когда пользователь хочет открыть диалоговое окно поиска
+        public ICommand OpenSearchCommand { get; set; }
+
+        // Команда, когда пользователь хочет закрыть диалоговое окно поиска
+        public ICommand CloseSearchCommand { get; set; }
+
+        // Команда, когда пользователь хочет очистить текст поиска
+        public ICommand ClearSearchCommand { get; set; }
+
+        // Команда, когда пользователь хочет выполнить поиск
+        public ICommand SearchCommand { get; set; }
 
         public ChatPageVM(ChatPage view)
         {
@@ -50,9 +81,87 @@ namespace WebChatClient
 
             // Создание команд
             OpenMessageCommand = new Command((o) => OpenMessage());
+            OpenSearchCommand = new Command((o) => OpenSearch());
+            CloseSearchCommand = new Command((o) => CloseSearch());
+            SearchCommand = new Command((o) => Search());
+            ClearSearchCommand = new Command((o) => ClearSearch());
 
             // загрузка контактов
             LoadingContacts();
+        }
+
+        // Открывает диалог поиска
+        public void OpenSearch() => SearchIsOpen = true;
+
+        // Закрывает диалог поиска
+        public void CloseSearch()
+        {
+            SearchIsOpen = false;
+            SearchText = string.Empty;
+            _lastSearchText = string.Empty;
+
+            // очистить дерево от предыдущих сообщений
+            _view.TreeMessages.Items.Clear();
+
+            foreach (var item in _messageVM)
+            {
+                // создать пузырь сообщения
+                MessageControl messageControl = new MessageControl();
+                // связать V с VM
+                messageControl.DataContext = item;
+
+                // добавить сообщение в ListBox
+                AddToListBox(_view.TreeMessages, messageControl);
+            }
+        }
+
+        // Выполняет поиск в текущем списке сообщений и фильтрует представление
+        public void Search()
+        {
+            if (_messageVM.Count == 0) { return; }
+
+            // Убедитесь, что мы не ищем повторно один и тот же текст
+            if ((string.IsNullOrEmpty(_lastSearchText) && string.IsNullOrEmpty(SearchText)) ||
+                string.Equals(_lastSearchText, SearchText))
+                return;
+
+            // Найти все элементы, содержащие заданный текст
+            _filteredMessages = new ObservableCollection<MessageVM>(
+                _messageVM.Where(item => item.Message.ToLower().Contains(SearchText)));
+
+            // очистить дерево от предыдущих сообщений
+            _view.TreeMessages.Items.Clear();
+
+            foreach (var item in _filteredMessages)
+            {
+                // создать пузырь сообщения
+                MessageControl messageControl = new MessageControl();
+                // связать V с VM
+                messageControl.DataContext = item;
+
+                // добавить сообщение в ListBox
+                AddToListBox(_view.TreeMessages, messageControl);
+            }
+
+            // Установить последний текст поиска
+            _lastSearchText = SearchText;
+        }
+
+        // Очищает текст поиска
+        public void ClearSearch()
+        {
+            // Если есть текст для поиска...
+            if (!string.IsNullOrEmpty(SearchText))
+            {
+                // Очистить текст
+                SearchText = string.Empty;
+            }
+            else
+            {
+                // Закрыть диалог поиска
+                //SearchIsOpen = false;
+                CloseSearch();
+            }
         }
 
         // открыть ветку с сообщениями
@@ -61,11 +170,13 @@ namespace WebChatClient
             // индекс текущего выделенного елемента
             int currentSelectedIndex = _view.ListContacts.SelectedIndex;
 
-            if (currentSelectedIndex == _indexOldSelected)
-            {
-                return;
-            }
+            // выход если кликаем на выделенный контакт
+            if (currentSelectedIndex == _indexOldSelected) { return; }
 
+            // при каждом открытии дерева сообщения обнуляем колекцию VM 
+            _messageVM.Clear();
+
+            // при первом открытии приложения выделенного контакта еще нет
             if (_indexOldSelected != -1)
             {
                 // снять выделение с предыдущего елемента
@@ -81,13 +192,13 @@ namespace WebChatClient
             // имя контакта в заголовке дерева сообщений
             NameSelectedContact = _contactsVM[currentSelectedIndex].Name;
 
+            // очистить дерево сообщений от предыдущего контакта
             _view.TreeMessages.Items.Clear();
 
             // создать модель дерева сообщений
             // передать id выделенного контакта и загрузить сообщения в модель
             TreeMessagesContactModel treeMessagesModel = new TreeMessagesContactModel(_contactsVM[currentSelectedIndex].UserID);
 
-            int i = 0;
             foreach (Message message in treeMessagesModel.TreeMessagesContact)
             {
                 // создать модель представления сообщения
@@ -110,19 +221,15 @@ namespace WebChatClient
                 messageControl.DataContext = messageVM;
 
                 // добавить сообщение в ListBox
-                ListBoxItem lbi = new ListBoxItem();
-                lbi.Content = messageControl;
-                _view.TreeMessages.Items.Add(lbi);i++;
+                AddToListBox(_view.TreeMessages, messageControl);
             }
 
             // прокрутить ListBox в конец
             _view.TreeMessages.ScrollIntoView(_view.TreeMessages.Items[_view.TreeMessages.Items.Count - 2]);
         }
 
-        /// <summary>
-        /// загрузка контактов в список контактов
-        /// </summary>
-        public void LoadingContacts()
+        // загрузка контактов в список контактов
+        private void LoadingContacts()
         {
             // связываем view-viewmodel-model
             foreach (Contact item in _contactsModel.Contacts)
@@ -146,10 +253,20 @@ namespace WebChatClient
                 contactControl.DataContext = contactVM;
 
                 // добавить представление контакта в список контактов в чате
-                ListBoxItem lbi = new ListBoxItem();
-                lbi.Content = contactControl;
-                _view.ListContacts.Items.Add(lbi);
+                AddToListBox(_view.ListContacts, contactControl);
             }
+        }
+
+        /// <summary>
+        /// добавить представление в ListBox
+        /// </summary>
+        /// <param name="listBox">список представлений</param>
+        /// <param name="view">представления</param>
+        private void AddToListBox(ListBox listBox, UserControl view)
+        {
+            ListBoxItem lbi = new ListBoxItem();
+            lbi.Content = view;
+            listBox.Items.Add(lbi);
         }
     }
 }
