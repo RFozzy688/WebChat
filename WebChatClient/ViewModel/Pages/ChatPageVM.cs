@@ -255,6 +255,7 @@ namespace WebChatClient
                 messageVM.Message = message.TextMessage;
                 messageVM.MessageSentTime = message.MessageSentTime;
                 messageVM.SentByMe = message.SentByMe;
+                messageVM.LocalFilePath = message.LocalFilePath;
                 // инициализация VM из VM контакта
                 messageVM.Initials = _contactsVM[currentSelectedIndex].Initials;
                 messageVM.ProfilePictureRGB = _contactsVM[currentSelectedIndex].ProfilePictureRGB;

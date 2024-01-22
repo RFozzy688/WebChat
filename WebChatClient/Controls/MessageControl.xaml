@@ -71,34 +71,17 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
-                    <!-- Символ загрузки изображения -->
-                    <Border HorizontalAlignment="{Binding SentByMe, Converter={local:SentByMeToAlignmentConverter}}"
-                            VerticalAlignment="Top">
-
-                        <TextBlock Style="{StaticResource SpinningText}"
-                                   Foreground="{StaticResource VeryLightBrush}"
-                                   Padding="20"
-                                   DataContext="{Binding ImageAttachment}"
-                                   Visibility="{Binding ImageLoaded, 
-                                                Converter={local:BooleanToVisiblityGoneConverter}, 
-                                                ConverterParameter=True, FallbackValue=Collapsed}"/>
-
-                    </Border>
-
                     <!-- Прикрепленное изображение -->
-                    <!--<Border CornerRadius="10"
-                            Margin="0 0 0 15">
+                    <Border CornerRadius="10"
+                            Margin="0 0 0 0">
 
-                        <Image DataContext="{Binding ImageAttachment}"
-                               local:ClipFromBorderProperty.Value="True"
+                        <Image local:ClipFromBorderProperty.Value="True"
                                Source="{Binding LocalFilePath, NotifyOnTargetUpdated=True}"
                                MaxWidth="600"/>
 
-                    </Border>-->
+                    </Border>
 
                     <Grid Grid.Row="1">
-                          <!--HorizontalAlignment="{Binding SentByMe, Converter={local:SentByMeToAlignmentConverter}}"
-                          Visibility="{Binding HasMessage, Converter={local:BooleanToVisiblityGoneConverter}}"-->
 
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />

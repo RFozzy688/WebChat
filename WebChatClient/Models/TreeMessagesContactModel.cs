@@ -47,17 +47,11 @@ namespace WebChatClient
 
     public class Message
     {
-        // Отображаемое имя отправителя сообщения
-        //public string SenderName { get; set; }
-
         // Сообщение из этого чата
         public string TextMessage { get; set; }
 
-        // Инициалы, которые будут отображаться в качестве фона изображения профиля
-        //public string Initials { get; set; }
-
-        // Значения RGB (в шестнадцатеричном формате) для цвета фона изображения профиля
-        //public string ProfilePictureRGB { get; set; }
+        // Локальный путь к загруженному миниатюре на этом компьютере.
+        public string LocalFilePath { get; set; }
 
         // True, если это сообщение было отправлено вошедшим пользователем
         public bool SentByMe { get; set; }
