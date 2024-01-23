@@ -60,7 +60,9 @@
                     <Button Grid.Column="2"
                             Style="{StaticResource IconButton}" 
                             Content="{StaticResource FA_CogIcon}"
+                            Command="{Binding OpenSettingsCommand}"
                             Margin="2"/>
+                    
                 </Grid>
 
                 <!-- Тень -->

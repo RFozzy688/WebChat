@@ -55,6 +55,9 @@ namespace WebChatClient
         // Текст для текущего сообщения
         public string PendingMessageText { get; set; }
 
+        // True, если меню настроек должно отображаться
+        public Visibility SettingsMenuVisible { get; set; } = Visibility.Collapsed;
+
         // Открывает текущую ветку сообщений
         public ICommand OpenMessageCommand { get; set; }
 
@@ -72,6 +75,9 @@ namespace WebChatClient
 
         // Команда, когда пользователь нажимает кнопку отправки
         public ICommand SendCommand { get; set; }
+
+        // Команда, когда пользователь хочет открыть окно настроек
+        public ICommand OpenSettingsCommand { get; set; }
 
         public ChatPageVM(ChatPage view)
         {
@@ -92,9 +98,15 @@ namespace WebChatClient
             SearchCommand = new Command((o) => Search());
             ClearSearchCommand = new Command((o) => ClearSearch());
             SendCommand = new Command((o) => Send());
+            OpenSettingsCommand = new Command((o) => OpenSettings());
 
             // загрузка контактов
             LoadingContacts();
+        }
+
+        private void OpenSettings()
+        {
+            ((MainWindowVM)((MainWindow)Application.Current.MainWindow).DataContext).CurrentPage = new SettingsPage(_view);
         }
 
         // Когда пользователь нажимает кнопку отправить, отправляет сообщение
