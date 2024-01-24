@@ -1,0 +1,90 @@
+﻿<Window x:Class="WebChatClient.DialogMessageBox"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WebChatClient"
+        mc:Ignorable="d"
+        Height="150" 
+        Width="250"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        WindowStartupLocation="CenterScreen"
+        x:Name="AppWindow"
+        Title="Web Chat"
+        MinWidth="{Binding WindowMinimumWidth}"
+        MinHeight="{Binding WindowMinimumHeight}">
+    
+    <Border CornerRadius="10"
+            BorderThickness="1"
+            BorderBrush="{StaticResource DarkBlueBrush}"
+            Background="{StaticResource VeryLightBrush}">
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <!--заголовок-->
+                <RowDefinition Height="50"/>
+                <!--контент-->
+                <RowDefinition Height="*"/>
+                <!--кнопка-->
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Border CornerRadius="10 10 0 0"
+                    Background="{StaticResource DarkBlueBrush}">
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!--иконка-->
+                    <Image Source="/Images/Logo/logo-icon.png"
+                           Width="32"
+                           Height="32"
+                           Margin="10 0 0 0"
+                           Grid.Column="0"/>
+                    
+                    <!--текст заголовка-->
+                    <TextBlock Text="{Binding Title}"
+                               FontSize="{StaticResource FontSizeXXLarge}"
+                               Foreground="{StaticResource LightBlueBrush}"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Center"
+                               Grid.Column="1"/>
+
+                    <!--кнопка закрытия-->
+                    <Button x:Name="btnClose"
+                            Template="{StaticResource ButtonCloseWindow}"
+                            Grid.Column="2"/>
+                </Grid>
+
+            </Border>
+
+            <!--область контента-->
+            <TextBlock Text="{Binding MessageText}"
+                       TextWrapping="Wrap"
+                       Grid.Row="1"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"/>
+
+            <!--кнопка подтверждения-->
+            <Button Content="Ok"
+                    Grid.Row="2"
+                    Style="{StaticResource OrangeButton}"
+                    FontSize="{StaticResource FontSizeRegular}"
+                    Width="150"
+                    Height="35"/>
+
+        </Grid>
+        
+    </Border>
+
+    <WindowChrome.WindowChrome >
+        <WindowChrome CaptionHeight="{Binding TitleHeight}"/>
+    </WindowChrome.WindowChrome>
+    
+</Window>

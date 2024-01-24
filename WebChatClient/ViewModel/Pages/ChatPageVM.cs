@@ -112,6 +112,9 @@ namespace WebChatClient
         // Когда пользователь нажимает кнопку отправить, отправляет сообщение
         public void Send()
         {
+            DialogMessageBox dialogMessageBox = new DialogMessageBox();
+            dialogMessageBox.ShowDialog();
+
             // Не отправляйте пустое сообщение
             if (string.IsNullOrEmpty(PendingMessageText))
                 return;
