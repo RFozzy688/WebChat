@@ -63,14 +63,14 @@
                      Padding="2"
                      Margin="10 10 15 8"
                      Style="{StaticResource MessageBoxStyle}"
-                     local:TextVisiblityProperty.Value="{Binding Editing, Converter={local:InvertBooleanConverter}}"/>
+                     local:ControlsVisiblityProperty.Value="{Binding Editing, Converter={local:InvertBooleanConverter}}"/>
 
             <!-- Содержание -->
             <TextBlock Text="{Binding OriginalText}" 
                        Grid.Column="1"
                        Margin="15 8"
                        VerticalAlignment="Center"
-                       local:TextVisiblityProperty.Value="{Binding Editing}"/>
+                       local:ControlsVisiblityProperty.Value="{Binding Editing}"/>
 
             <!-- Контейнер кнопки редактирования -->
             <Grid Grid.Column="2">
@@ -87,13 +87,13 @@
                         Background="{StaticResource MiddleDarkBrush}"
                         VerticalAlignment="Center" 
                         Height="30"
-                        local:TextVisiblityProperty.Value="{Binding Editing}"/>
+                        local:ControlsVisiblityProperty.Value="{Binding Editing}"/>
             </Grid>
 
             <StackPanel Grid.Column="2"
                         Orientation="Horizontal" 
                         Cursor=""
-                        local:TextVisiblityProperty.Value="{Binding Editing, Converter={local:InvertBooleanConverter}}">
+                        local:ControlsVisiblityProperty.Value="{Binding Editing, Converter={local:InvertBooleanConverter}}">
 
                 <!-- Кнопка сохранить -->
                 <Button Style="{StaticResource SettingsButtons}"

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Security;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -9,7 +10,7 @@ namespace WebChatClient
     /// <summary>
     /// Создает область отсечения из родительского элемента <see cref="Border"/> <see cref="CornerRadius"/>
     /// </summary>
-    public class TextVisiblityProperty : BaseAttachedProperty<TextVisiblityProperty, bool>
+    public class ControlsVisiblityProperty : BaseAttachedProperty<ControlsVisiblityProperty, bool>
     {
         public override void OnValueChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
@@ -66,6 +67,19 @@ namespace WebChatClient
                 else
                 {
                     button.Visibility = Visibility.Visible;
+                }
+            }
+
+            // скрываем/показываем Button
+            if (sender is PasswordBox passwordBox)
+            {
+                if ((bool)e.NewValue)
+                {
+                    passwordBox.Visibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    passwordBox.Visibility = Visibility.Visible;
                 }
             }
         }

@@ -83,17 +83,17 @@
 
                 <!-- Детали профиля -->
                 <StackPanel Grid.Column="1"
-                            x:Name="DetailsProfile">
+                            local:TextEntryWidthMatcherProperty.Value="True">
 
-                    <local:TextEntryControl x:Name="TextEntryName" />
-                    <local:TextEntryControl x:Name="TextEntryNickname" />
-                    <local:PasswordEntryControl x:Name="PasswordEntry" />
-                    <local:TextEntryControl x:Name="TextEntryEmail" />
+                    <local:TextEntryControl DataContext="{Binding Name}"/>
+                    <local:TextEntryControl DataContext="{Binding Nickname}"/>
+                    <local:PasswordEntryControl DataContext="{Binding Password}"/>
+                    <local:TextEntryControl DataContext="{Binding Email}"/>
 
                     <Button Content="{Binding LogoutButtonText}"
-                        Style="{StaticResource OrangeButton}"
-                        FontSize="{StaticResource FontSizeRegular}"
-                        Command="{Binding LogoutCommand}"/>
+                            Style="{StaticResource OrangeButton}"
+                            FontSize="{StaticResource FontSizeRegular}"
+                            Command="{Binding LogoutCommand}"/>
                 </StackPanel>
 
             </Grid>

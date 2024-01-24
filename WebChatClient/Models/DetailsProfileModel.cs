@@ -1,4 +1,6 @@
 ﻿
+using System.Security;
+
 namespace WebChatClient
 {
     public class DetailsProfileModel
@@ -10,7 +12,7 @@ namespace WebChatClient
         public string Nickname { get; set; } = "Fozzy";
 
         // пароль
-        public string Password { get; set; } = "qwerty";
+        public string Password { get; set; } = "******";
 
         // почта
         public string Email { get; set; } = "fozzy@gmail.com";

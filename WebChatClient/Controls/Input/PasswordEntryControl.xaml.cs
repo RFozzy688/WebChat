@@ -2,6 +2,7 @@
 using System.Windows;
 using System;
 using System.Windows.Controls;
+using System.Security;
 
 namespace WebChatClient
 {
