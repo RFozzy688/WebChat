@@ -9,9 +9,6 @@ namespace WebChatClient
     // Модель представления для каждого сообщения в ветке сообщений
     public class MessageVM : BaseViewModel
     {
-        // Отображаемое имя отправителя сообщения
-        public string SenderName { get; set; }
-
         // Сообщение из этого чата
         public string Message { get; set; }
 
@@ -32,5 +29,8 @@ namespace WebChatClient
 
         // Время отправки сообщения
         public DateTimeOffset MessageSentTime { get; set; }
+
+        // Локальный путь к загруженному миниатюре на этом компьютере.
+        public string LocalFilePath { get; set; }
     }
 }

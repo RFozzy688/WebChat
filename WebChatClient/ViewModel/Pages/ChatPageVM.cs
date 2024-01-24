@@ -52,6 +52,12 @@ namespace WebChatClient
         // Текст для поиска, когда мы выполняем поиск
         public string SearchText { get; set; }
 
+        // Текст для текущего сообщения
+        public string PendingMessageText { get; set; }
+
+        // True, если меню настроек должно отображаться
+        public Visibility SettingsMenuVisible { get; set; } = Visibility.Collapsed;
+
         // Открывает текущую ветку сообщений
         public ICommand OpenMessageCommand { get; set; }
 
@@ -66,6 +72,12 @@ namespace WebChatClient
 
         // Команда, когда пользователь хочет выполнить поиск
         public ICommand SearchCommand { get; set; }
+
+        // Команда, когда пользователь нажимает кнопку отправки
+        public ICommand SendCommand { get; set; }
+
+        // Команда, когда пользователь хочет открыть окно настроек
+        public ICommand OpenSettingsCommand { get; set; }
 
         public ChatPageVM(ChatPage view)
         {
@@ -85,9 +97,56 @@ namespace WebChatClient
             CloseSearchCommand = new Command((o) => CloseSearch());
             SearchCommand = new Command((o) => Search());
             ClearSearchCommand = new Command((o) => ClearSearch());
+            SendCommand = new Command((o) => Send());
+            OpenSettingsCommand = new Command((o) => OpenSettings());
 
             // загрузка контактов
             LoadingContacts();
+        }
+
+        private void OpenSettings()
+        {
+            ((MainWindowVM)((MainWindow)Application.Current.MainWindow).DataContext).CurrentPage = new SettingsPage(_view);
+        }
+
+        // Когда пользователь нажимает кнопку отправить, отправляет сообщение
+        public void Send()
+        {
+            // Не отправляйте пустое сообщение
+            if (string.IsNullOrEmpty(PendingMessageText))
+                return;
+
+            // Убедитесь, что списки не равны нулю
+            if (_messageVM == null)
+            {
+                _messageVM = new ObservableCollection<MessageVM>();
+            }
+
+            // отправить фейковое новое сообщение
+            var message = new MessageVM
+            {
+                Initials = "LM",
+                Message = PendingMessageText,
+                MessageSentTime = DateTime.UtcNow,
+                SentByMe = true,
+                ProfilePictureRGB = "000000"
+            };
+
+            // Добавить сообщение в список
+            _messageVM.Add(message);
+
+            // создание и привязка VM
+            MessageControl messageControl = new MessageControl();
+            messageControl.DataContext = message;
+
+            // добавить представление в ListBox
+            AddToListBox(_view.TreeMessages, messageControl);
+
+            // прокрутить ListBox в конец
+            _view.TreeMessages.ScrollIntoView(_view.TreeMessages.Items[_view.TreeMessages.Items.Count - 1]);
+
+            // Очистить текст ожидающего сообщения
+            PendingMessageText = string.Empty;
         }
 
         // Открывает диалог поиска
@@ -208,6 +267,7 @@ namespace WebChatClient
                 messageVM.Message = message.TextMessage;
                 messageVM.MessageSentTime = message.MessageSentTime;
                 messageVM.SentByMe = message.SentByMe;
+                messageVM.LocalFilePath = message.LocalFilePath;
                 // инициализация VM из VM контакта
                 messageVM.Initials = _contactsVM[currentSelectedIndex].Initials;
                 messageVM.ProfilePictureRGB = _contactsVM[currentSelectedIndex].ProfilePictureRGB;
@@ -254,6 +314,14 @@ namespace WebChatClient
 
                 // добавить представление контакта в список контактов в чате
                 AddToListBox(_view.ListContacts, contactControl);
+            }
+
+            // при первом открытии приложения загружаем сообщения первого контакта в списке
+            if (_contactsVM.Count > 0)
+            {
+                _contactsVM[0].IsSelected = true;
+                _view.ListContacts.SelectedIndex = 0;
+                OpenMessage();
             }
         }
 
