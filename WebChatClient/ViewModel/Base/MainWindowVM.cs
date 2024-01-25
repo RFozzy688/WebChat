@@ -39,6 +39,16 @@ namespace WebChatClient
                 _view.MaxHeight = activeScreen.WorkingArea.Height;
                 _view.MaxWidth = activeScreen.WorkingArea.Width;
             });
+            ListenToPortCommand = new Command(async (o) =>
+            {
+                // создать сокеты
+                WorkWithServer.ConnectTo();
+                // слушать входящий порт
+                await WorkWithServer.ReceiveMessageAsync();
+            });
+
+            // автоматически запустить команду при старте приложения
+            ListenToPortCommand.Execute(null);
 
             // Fix window resize issue
             _windowResizer = new WindowResizer(_view);
@@ -66,9 +76,12 @@ namespace WebChatClient
 
         // Команда показа системного меню окна
         public ICommand MenuCommand { get; set; }
- 
+
+        // Команда для прослушивания входящего порта
+        public ICommand ListenToPortCommand { get; set; }
+
         // Текущая страница приложения
-        public Page CurrentPage { get; set; } = new ChatPage();
+        public Page CurrentPage { get; set; } = new LoginPage();
         //Получает текущую позицию мыши на экране
         private Point GetMousePosition()
         {

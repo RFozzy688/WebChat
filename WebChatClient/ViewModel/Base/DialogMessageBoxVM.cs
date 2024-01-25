@@ -17,10 +17,10 @@ namespace WebChatClient
         public double WindowMinimumHeight { get; set; } = 180;
 
         // заголовок окна сообщений
-        public string Title { get; set; } = "Message";
+        public string Title { get; set; }
 
         // текст сообщения
-        public string MessageText { get; set; } = "Новое сообщение в этом окне";
+        public string MessageText { get; set; }
 
         // Команда закрытия окна
         public ICommand CloseCommand { get; set; }
@@ -34,6 +34,11 @@ namespace WebChatClient
 
             // Создание команд
             CloseCommand = new Command((o) => _view.Close());
+
+            // заголовок окна сообщений
+            Title = MessageBoxModel.Title;
+            // текст сообщения
+            MessageText = MessageBoxModel.Message;
         }
     }
 }
