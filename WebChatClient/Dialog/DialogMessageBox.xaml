@@ -50,7 +50,7 @@
                     
                     <!--текст заголовка-->
                     <TextBlock Text="{Binding Title}"
-                               FontSize="{StaticResource FontSizeXXLarge}"
+                               FontSize="{StaticResource FontSizeLarge}"
                                Foreground="{StaticResource LightBlueBrush}"
                                VerticalAlignment="Center"
                                HorizontalAlignment="Center"
