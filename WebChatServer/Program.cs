@@ -12,7 +12,9 @@ namespace WebChatServer
         string _ipAddress = "127.0.0.1";
 
         // порт который слушает сервер
-        int _port = 8080;
+        const int _port = 8080;
+        // удаленный порт на котором принимаются сообщения
+        const int _remotePortMessage = 8081;
 
         static async Task Main(string[] args)
         {
@@ -36,7 +38,6 @@ namespace WebChatServer
 
             // удаленная точка, с которой приходят сообщения
             IPEndPoint remoteEndPoint = new IPEndPoint(IPAddress.Any, 0);
-            //IPEndPoint remoteSendEndPoint = new IPEndPoint(IPAddress.Any, 8081);
 
             while (true)
             {
@@ -50,28 +51,33 @@ namespace WebChatServer
                     // перекодируем данные
                     message = Encoding.UTF8.GetString(data, 0, result.ReceivedBytes);
 
-                    UserAuthorization userAuthorization = new UserAuthorization();
+                    DataPackage? package = new DataPackage();
+                    package = JsonSerializer.Deserialize<DataPackage>(message);
 
-                    if (userAuthorization.IsAuthorization(message))
+                    if (package == null)
                     {
-                        message = message.Remove(0);
-                        message = "good";
-                    }
-                    else
-                    {
-                        message = message.Remove(0);
-                        message = "bad";
+                        Console.WriteLine("Error deserialize!!!");
+                        continue;
                     }
 
-                    await Task.Delay(3000);
-
+                    // преобразовать к классу наследника
                     remoteEndPoint = (IPEndPoint)result.RemoteEndPoint;
-                    remoteEndPoint.Port = 8081;
 
-                    data = Encoding.UTF8.GetBytes(message);
-                    await server.SendToAsync(data, SocketFlags.None, remoteEndPoint);
+                    switch (package.Package)
+                    {
+                        case TypeData.Message:
+                            break;
+                        case TypeData.Registration:
+                            //await RegistrationAttempt(server, remoteEndPoint.Address, package.StringSerialize);
+                            break;
+                        case TypeData.Authorization:
+                            await AuthorizationAttempt(server, remoteEndPoint.Address, package.StringSerialize);
+                            break;
+                        default:
+                            break;
+                    }
 
-                    Console.WriteLine(result.RemoteEndPoint + ": " + message);
+                    Console.WriteLine(result.RemoteEndPoint);
                 }
                 catch (SocketException ex)
                 {
@@ -80,37 +86,42 @@ namespace WebChatServer
                 }
             }
         }
-    }
 
-    public class UserAuthorization
-    {
-        string _email = "rf";
-        string _password = "q";
-        User _user;
-
-        public UserAuthorization()
+        // попытка авторизации пользователя на сервере
+        async Task AuthorizationAttempt(Socket socket, IPAddress iPAddress, string stringDeserialize)
         {
-            _user = new User();
-        }
+            // десериализация данных пользователя
+            UserAuthorization? dataAuthorization = new UserAuthorization();
+            dataAuthorization = JsonSerializer.Deserialize<UserAuthorization>(stringDeserialize);
 
-        public bool IsAuthorization(string message)
-        {
-            _user = JsonSerializer.Deserialize<User>(message);
-
-            if (_email.CompareTo(_user.Email) == 0 && _password.CompareTo(_user.Password) == 0)
+            // если десериализация прошла не успешно выводим сообщение об ошибке
+            // и выходим из авторизации
+            // TODO: реализовать отправку сообщения об ошибке клиенту
+            if (dataAuthorization == null)
             {
-                return true;
+                Console.WriteLine("Error deserialize!!!");
+                return;
             }
-            else 
-            { 
-                return false;
+
+            byte[] bytes = new byte[256];
+
+            // временная проверка. Реальные данные будут сверяться с данными БД
+            if (dataAuthorization.Email.CompareTo(UserData.Email) == 0 && 
+                dataAuthorization.Password.CompareTo(UserData.Password) == 0)
+            {
+                bytes = Encoding.UTF8.GetBytes("true");
             }
+            else
+            {
+                bytes = Encoding.UTF8.GetBytes("false");
+            }
+
+            await Task.Delay(3000);
+            // удаленная точка получателя
+            IPEndPoint remoteEndPoint = new IPEndPoint(iPAddress, _remotePortMessage);
+            // отправка данных о авторизации
+            await socket.SendToAsync(bytes, SocketFlags.None, remoteEndPoint);
         }
     }
 
-    public class User
-    {
-        public string Email { get; set; }
-        public string Password { get; set; }
-    }
 }
