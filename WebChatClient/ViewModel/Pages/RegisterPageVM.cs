@@ -1,4 +1,5 @@
-﻿using System.Security;
+﻿using System.Text.Json;
+using System.Security;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -10,17 +11,13 @@ namespace WebChatClient
     /// </summary>
     public class RegisterPageVM : BaseViewModel
     {
-        RegisterPage _view;
         // email пользователя
         public string Email { get; set; }
 
         // Имя пользователя
         public string Username { get; set; }
 
-        // Телефон пользователя
-        public string Phone { get; set; }
-
-        /// Флаг, указывающий, выполняется ли команда входа в систему.
+        // Флаг, указывающий, выполняется ли команда входа в систему.
         public bool RegisterIsRunning { get; set; } = false;
 
         // команда регистрации
@@ -28,16 +25,17 @@ namespace WebChatClient
         // команда входа
         public ICommand LoginCommand { get; set; }
 
-        public RegisterPageVM(/*RegisterPage view*/)
+        public RegisterPageVM()
         {
-            //_view = view;
             // Создать команду
             RegisterCommand = new Command(async (parameter) => await RegisterAsync(parameter));
             LoginCommand = new Command(async (parameter) => await LoginAsync(parameter));
         }
 
+        // перейти на страницу входа
         private async Task LoginAsync(object parameter)
         {
+            // отобразить страницу входа
             ((MainWindowVM)((MainWindow)Application.Current.MainWindow).DataContext).CurrentPage = new LoginPage();
 
             await Task.Delay(1);
@@ -56,11 +54,43 @@ namespace WebChatClient
 
             RegisterIsRunning = true;
 
-            await Task.Delay(5000);
-            var pass = (parameter as IHavePassword).SecurePassword.Unsecure();
-            var name = Username;
-            var phone = Phone;
-            var email = Email;
+            UserRegistration user = new UserRegistration();
+            user.Password = (parameter as IHavePassword).SecurePassword.Unsecure();
+            user.Nickname = Username;
+            user.Email = Email;
+
+            // сформировать данные для отправки на сервер
+            DataPackage package = new DataPackage();
+            // тип пакета
+            package.Package = TypeData.Registration;
+            // основные данные пакета
+            package.StringSerialize = JsonSerializer.Serialize(user);
+
+            // подписаться на событие о приходе ответа с сервера
+            WorkWithServer.ResponceEvent += UserRegistration;
+            // отправить данные на сервер
+            await WorkWithServer.SendMessageAsync(JsonSerializer.Serialize(package));
+        }
+
+        // метод вызывается по событию от сервера
+        private void UserRegistration(string str)
+        {
+            if (str.CompareTo("true") == 0)
+            {
+                // если истина, то входим на страницу настроек для верификации почты
+                ((MainWindowVM)((MainWindow)Application.Current.MainWindow).DataContext).CurrentPage = new SettingsPage(null);
+
+                // отписаться
+                WorkWithServer.ResponceEvent -= UserRegistration;
+            }
+            else
+            {
+                MessageBoxModel.Title = "Ошибка регистрации";
+                MessageBoxModel.Message = str;
+
+                DialogMessageBox dialog = new DialogMessageBox();
+                dialog.ShowDialog();
+            }
 
             RegisterIsRunning = false;
         }

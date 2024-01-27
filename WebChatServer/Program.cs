@@ -68,7 +68,7 @@ namespace WebChatServer
                         case TypeData.Message:
                             break;
                         case TypeData.Registration:
-                            //await RegistrationAttempt(server, remoteEndPoint.Address, package.StringSerialize);
+                            await RegistrationAttempt(server, remoteEndPoint.Address, package.StringSerialize);
                             break;
                         case TypeData.Authorization:
                             await AuthorizationAttempt(server, remoteEndPoint.Address, package.StringSerialize);
@@ -85,6 +85,45 @@ namespace WebChatServer
                     Console.WriteLine(ex.Message);
                 }
             }
+        }
+
+        // попытка регистрации пользователя на сервере
+        async Task RegistrationAttempt(Socket socket, IPAddress iPAddress, string stringSerialize)
+        {
+            // десериализация данных пользователя
+            UserRegistration? dataRegistration = new UserRegistration();
+            dataRegistration = JsonSerializer.Deserialize<UserRegistration>(stringSerialize);
+
+            // если десериализация прошла не успешно выводим сообщение об ошибке
+            // и выходим из авторизации
+            // TODO: реализовать отправку сообщения об ошибке клиенту
+            if (dataRegistration == null)
+            {
+                Console.WriteLine("Error deserialize!!!");
+                return;
+            }
+
+            byte[] bytes = new byte[256];
+
+            // временная проверка. Реальные данные будут сверяться с данными БД
+            if (dataRegistration.Email.CompareTo("test email") == 0)
+            {
+                bytes = Encoding.UTF8.GetBytes("Пользователь с такой почтой уже зарегистрирован");
+            }
+            else
+            {
+                // отправка письма на почту для верификации
+                VerificationEmail verification = new VerificationEmail();
+                verification.SendVerificationCode(dataRegistration.Email, GenerationVerificationCode());
+
+                bytes = Encoding.UTF8.GetBytes("true");
+            }
+
+            await Task.Delay(3000);
+            // удаленная точка получателя
+            IPEndPoint remoteEndPoint = new IPEndPoint(iPAddress, _remotePortMessage);
+            // отправка данных о авторизации
+            await socket.SendToAsync(bytes, SocketFlags.None, remoteEndPoint);
         }
 
         // попытка авторизации пользователя на сервере
@@ -121,6 +160,12 @@ namespace WebChatServer
             IPEndPoint remoteEndPoint = new IPEndPoint(iPAddress, _remotePortMessage);
             // отправка данных о авторизации
             await socket.SendToAsync(bytes, SocketFlags.None, remoteEndPoint);
+        }
+
+        // сгенирировать ключ верификации
+        string GenerationVerificationCode()
+        {
+            return Guid.NewGuid().ToString().Remove(8);
         }
     }
 
