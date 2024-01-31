@@ -89,9 +89,6 @@ namespace WebChatClient
             {
                 // если истина, то входим на страницу настроек для верификации почты
                 ((MainWindowVM)((MainWindow)Application.Current.MainWindow).DataContext).CurrentPage = new SettingsPage(null);
-
-                // отписаться
-                WorkWithServer.ResponceEvent -= UserRegistration;
             }
             else
             {
@@ -103,6 +100,9 @@ namespace WebChatClient
             }
 
             RegisterIsRunning = false;
+
+            // отписаться
+            WorkWithServer.ResponceEvent -= UserRegistration;
         }
 
         // валидность почты

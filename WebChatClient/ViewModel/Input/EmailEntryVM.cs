@@ -86,9 +86,6 @@ namespace WebChatClient
             {
                 // если истина, то входим на страницу настроек для верификации почты
                 str = "Почта верифицированна!!!";
-
-                // отписаться
-                WorkWithServer.ResponceEvent -= UserVerificationEmail;
             }
 
             MessageBoxModel.Title = "Верификация почты";
@@ -96,6 +93,9 @@ namespace WebChatClient
 
             DialogMessageBox dialog = new DialogMessageBox();
             dialog.ShowDialog();
+
+            // отписаться
+            WorkWithServer.ResponceEvent -= UserVerificationEmail;
         }
     }
 }
