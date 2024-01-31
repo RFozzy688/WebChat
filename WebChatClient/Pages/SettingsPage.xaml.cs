@@ -14,7 +14,7 @@ namespace WebChatClient
 
             _chatPage = chatPage;
 
-            DataContext = new SettingsPageVM(chatPage, this);
+            DataContext = new SettingsPageVM(chatPage/*, this*/);
         }
     }
 }

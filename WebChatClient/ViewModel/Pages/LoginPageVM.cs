@@ -54,24 +54,27 @@ namespace WebChatClient
             LoginIsRunning = true;
 
             // получить данные с TextBox-в
-            User user = new User();
+            UserAuthorization user = new UserAuthorization();
             user.Password = (parameter as IHavePassword).SecurePassword.Unsecure();
             user.Email = Email;
+
+            // сформировать данные для отправки на сервер
+            DataPackage package = new DataPackage();
+            // тип пакета
+            package.Package = TypeData.Authorization;
+            // основные данные пакета
+            package.StringSerialize = JsonSerializer.Serialize(user);
 
             // подписаться на событие о приходе ответа с сервера
             WorkWithServer.ResponceEvent += UserAuthorization;
             // отправить данные на сервер
-            await WorkWithServer.SendMessageAsync(JsonSerializer.Serialize(user));
-
-            
-
-            
+            await WorkWithServer.SendMessageAsync(JsonSerializer.Serialize(package));
         }
 
         // метод вызывается по событию от сервера
         private void UserAuthorization(string str)
         {
-            if (str.CompareTo("good") == 0)
+            if (str.CompareTo("true") == 0)
             {
                 // если истина, то входим в чат
                 ((MainWindowVM)((MainWindow)Application.Current.MainWindow).DataContext).CurrentPage = new ChatPage();
@@ -81,7 +84,7 @@ namespace WebChatClient
             }
             else
             {
-                MessageBoxModel.Title = "Ошибка подключения";
+                MessageBoxModel.Title = "Ошибка авторизации";
                 MessageBoxModel.Message = "Неверный логин или пароль";
 
                 DialogMessageBox dialog = new DialogMessageBox();

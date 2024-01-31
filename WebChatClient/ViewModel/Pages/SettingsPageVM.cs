@@ -9,7 +9,7 @@ namespace WebChatClient
         ChatPage _chatPage;
 
         // пердставление страницы настроек
-        SettingsPage _settingsPage;
+        //SettingsPage _settingsPage;
 
         // модель данных пользователя
         DetailsProfileModel _detailsProfile;
@@ -38,7 +38,7 @@ namespace WebChatClient
         // Команда для очистки данных пользователей из модели представления
         public ICommand ClearUserDataCommand { get; set; }
 
-        public SettingsPageVM(ChatPage chatPage, SettingsPage settingsPage)
+        public SettingsPageVM(ChatPage chatPage/*, SettingsPage settingsPage*/)
         {
             // Создание команд
             CloseCommand = new Command((o) => Close());
@@ -46,12 +46,13 @@ namespace WebChatClient
             ClearUserDataCommand = new Command((o) => ClearUserData());
 
             _chatPage = chatPage;
-            _settingsPage = settingsPage;
+            //_settingsPage = settingsPage;
 
             // загрузка профиля пользователя для редактирования
             LoadingUserProfile();
         }
 
+        // загрузка профиля пользователя для редактирования
         private void LoadingUserProfile()
         {
             _detailsProfile = new DetailsProfileModel();
@@ -77,9 +78,23 @@ namespace WebChatClient
             Email.OriginalText = _detailsProfile.Email;
         }
 
+        // закрыть страницу настроек
         private void Close()
         {
-            ((MainWindowVM)((MainWindow)Application.Current.MainWindow).DataContext).CurrentPage = _chatPage;
+            ChatPage chatPage;
+
+            if (_chatPage != null)
+            {
+                // при выходе из страницы настроек возвращаемся на старую страницу чата
+                 chatPage = _chatPage;
+            }
+            else
+            {
+                // если верификация почты прошла успешно создаем новую страницу чата
+                chatPage = new ChatPage();
+            }
+             // отобразить страницу чата
+            ((MainWindowVM)((MainWindow)Application.Current.MainWindow).DataContext).CurrentPage = chatPage;
         }
 
         // Выводит пользователя из системы
