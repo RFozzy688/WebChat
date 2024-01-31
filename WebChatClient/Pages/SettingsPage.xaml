@@ -88,7 +88,7 @@
                     <local:TextEntryControl DataContext="{Binding Name}"/>
                     <local:TextEntryControl DataContext="{Binding Nickname}"/>
                     <local:PasswordEntryControl DataContext="{Binding Password}"/>
-                    <local:TextEntryControl DataContext="{Binding Email}"/>
+                    <local:EmailEntryControl DataContext="{Binding Email}"/>
 
                     <Button Content="{Binding LogoutButtonText}"
                             Style="{StaticResource OrangeButton}"

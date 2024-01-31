@@ -73,6 +73,7 @@ namespace WebChatServer
         // добавить пользователя в базу
         public void AddUser(UserRegistration userData, string code)
         {
+            // создать пользователя
             User user = new User()
             {
                 Id = Guid.NewGuid().ToString(),
@@ -83,8 +84,26 @@ namespace WebChatServer
                 VerificationCode = code
             };
 
+            // отслеживать сущность
             _db.Users.Add(user);
+            // сохранить в базу
             _db.SaveChanges();
+        }
+
+        public bool IsCheckVerifyCode(string email, string code)
+        {
+            var user = _db.Users.Where(o => o.Email == email).SingleOrDefault();
+
+            if (user.VerificationCode.CompareTo(code) == 0)
+            {
+                user.IsVerifiedEmail = true;
+                _db.SaveChanges();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

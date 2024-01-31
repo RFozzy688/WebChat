@@ -107,6 +107,10 @@ namespace WebChatServer
                         case TypeData.Authorization:
                             await AuthorizationAttempt(server, remoteEndPoint.Address, package.StringSerialize);
                             break;
+                            // верификация почты
+                        case TypeData.Verification:
+                            await VerificationEmailAttempt(server, remoteEndPoint.Address, package.StringSerialize);
+                            break;
                         default:
                             break;
                     }
@@ -121,6 +125,42 @@ namespace WebChatServer
             }
         }
 
+        // попытка верифицировать почту пользователя
+        async Task VerificationEmailAttempt(Socket socket, IPAddress iPAddress, string stringSerialize)
+        {
+            // десериализация данных пользователя
+            UserVerificationEmail? verificationEmail = new UserVerificationEmail();
+            verificationEmail = JsonSerializer.Deserialize<UserVerificationEmail>(stringSerialize);
+
+            // если десериализация прошла не успешно выводим сообщение об ошибке
+            // и выходим из верификации почты
+            // TODO: реализовать отправку сообщения об ошибке клиенту
+            if (verificationEmail == null)
+            {
+                Console.WriteLine("Error deserialize!!!");
+                return;
+            }
+
+            byte[] bytes = new byte[256];
+
+            // создаем объект для работы с бд
+            WorkWithDB workWithDB = new WorkWithDB(_context);
+
+            if (workWithDB.IsCheckVerifyCode(verificationEmail.Email, verificationEmail.Code))
+            {
+                bytes = Encoding.UTF8.GetBytes("true");
+            }
+            else
+            {
+                bytes = Encoding.UTF8.GetBytes("Неверный код верификации");
+            }
+
+            // удаленная точка получателя
+            IPEndPoint remoteEndPoint = new IPEndPoint(iPAddress, _remotePortMessage);
+            // отправка данных о авторизации
+            await socket.SendToAsync(bytes, SocketFlags.None, remoteEndPoint);
+        }
+
         // попытка регистрации пользователя на сервере
         async Task RegistrationAttempt(Socket socket, IPAddress iPAddress, string stringSerialize)
         {
@@ -129,7 +169,7 @@ namespace WebChatServer
             dataRegistration = JsonSerializer.Deserialize<UserRegistration>(stringSerialize);
 
             // если десериализация прошла не успешно выводим сообщение об ошибке
-            // и выходим из авторизации
+            // и выходим из регисртрации
             // TODO: реализовать отправку сообщения об ошибке клиенту
             if (dataRegistration == null)
             {
@@ -139,20 +179,21 @@ namespace WebChatServer
 
             byte[] bytes = new byte[256];
 
+            // создаем объект для работы с бд
             WorkWithDB workWithDB = new WorkWithDB(_context);
 
             // проверяем почту в бд для регистрации
             if (workWithDB.IsCheckEmailInDB(dataRegistration.Email))
             {
                 // генирация кода верификации
-                string code = GenerationVerificationCode();
+                //string code = GenerationVerificationCode();
 
                 // добавить пользователя в бд
-                workWithDB.AddUser(dataRegistration, code);
+                //workWithDB.AddUser(dataRegistration, code);
 
                 // отправка письма на почту для верификации
-                VerificationEmail verification = new VerificationEmail();
-                verification.SendVerificationCode(dataRegistration.Email, code);
+                //VerificationEmail verification = new VerificationEmail();
+                //verification.SendVerificationCode(dataRegistration.Email, code);
 
                 bytes = Encoding.UTF8.GetBytes("true");
             }

@@ -11,7 +11,8 @@ namespace WebChatClient
     {
         Message,
         Registration,
-        Authorization
+        Authorization,
+        Verification
     }
 
     // пакет данных который непосредственно отправляется на сервер
@@ -58,5 +59,15 @@ namespace WebChatClient
 
         // пароль пользователя
         public string Password { get; set; }
+    }
+
+    // данные для верификации почты на сервере
+    public class VerificationEmail
+    {
+        // почта пользователя
+        public string Email { get; set; }
+
+        // код верификации
+        public string Code { get; set; }
     }
 }

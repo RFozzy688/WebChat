@@ -7,7 +7,8 @@ namespace WebChatServer
     {
         Message,
         Registration,
-        Authorization
+        Authorization,
+        Verification
     }
 
     // пакет с данными для десериализации

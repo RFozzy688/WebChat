@@ -28,4 +28,14 @@ namespace WebChatServer
         // пароль пользователя
         public string Password { get; set; }
     }
+
+    // данные для верификации почты на сервере
+    public class UserVerificationEmail
+    {
+        // почта пользователя
+        public string Email { get; set; }
+
+        // код верификации
+        public string Code { get; set; }
+    }
 }

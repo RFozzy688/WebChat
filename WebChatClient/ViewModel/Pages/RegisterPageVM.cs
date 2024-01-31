@@ -51,11 +51,13 @@ namespace WebChatClient
         /// <returns></returns>
         public async Task RegisterAsync(object parameter)
         {
+            // от повторного нажатия кнопки
             if (RegisterIsRunning)
                 return;
 
             RegisterIsRunning = true;
 
+            // проверка на заполнение TextBox-ов
             if (!IsValidTextBoxes(parameter))
             {
                 RegisterIsRunning = false;
