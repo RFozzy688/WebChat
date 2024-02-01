@@ -5,10 +5,10 @@ namespace WebChatServer
     public class UserMessage
     {
         // от кого
-        public string IdUser { get; set; }
+        public string UserId { get; set; }
 
         // кому
-        public string IdRecipient { get; set; }
+        public string RecipientId { get; set; }
 
         // сообщение
         public string Message { get; set; }

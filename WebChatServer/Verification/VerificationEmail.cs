@@ -14,10 +14,10 @@ namespace WebChatServer
         {
             var config = JsonSerializer.Deserialize<JsonNode>(File.ReadAllText(@"..\..\..\appconfig.json"));
 
-            string? host = config?["email"]?["ukrnet"]?["host"]?.ToString();
-            string? port = config?["email"]?["ukrnet"]?["port"]?.ToString();
-            string? mailBox = config?["email"]?["ukrnet"]?["mailbox"]?.ToString();
-            string? key = config?["email"]?["ukrnet"]?["key"]?.ToString();
+            string? host = config?["email"]?["gmail"]?["host"]?.ToString();
+            string? port = config?["email"]?["gmail"]?["port"]?.ToString();
+            string? mailBox = config?["email"]?["gmail"]?["mailbox"]?.ToString();
+            string? key = config?["email"]?["gmail"]?["key"]?.ToString();
 
             if (host == null || port == null || mailBox == null || key == null)
             {

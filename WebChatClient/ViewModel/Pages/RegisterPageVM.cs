@@ -3,6 +3,8 @@ using System.Security;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Text.RegularExpressions;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace WebChatClient
 {
@@ -12,10 +14,10 @@ namespace WebChatClient
     public class RegisterPageVM : BaseViewModel
     {
         // email пользователя
-        public string Email { get; set; }
+        public string Email { get; set; } = string.Empty;
 
         // Имя пользователя
-        public string Username { get; set; }
+        public string Username { get; set; } = string.Empty;
 
         // Флаг, указывающий, выполняется ли команда входа в систему.
         public bool RegisterIsRunning { get; set; } = false;
@@ -49,10 +51,18 @@ namespace WebChatClient
         /// <returns></returns>
         public async Task RegisterAsync(object parameter)
         {
+            // от повторного нажатия кнопки
             if (RegisterIsRunning)
                 return;
 
             RegisterIsRunning = true;
+
+            // проверка на заполнение TextBox-ов
+            if (!IsValidTextBoxes(parameter))
+            {
+                RegisterIsRunning = false;
+                return;
+            }
 
             UserRegistration user = new UserRegistration();
             user.Password = (parameter as IHavePassword).SecurePassword.Unsecure();
@@ -79,9 +89,6 @@ namespace WebChatClient
             {
                 // если истина, то входим на страницу настроек для верификации почты
                 ((MainWindowVM)((MainWindow)Application.Current.MainWindow).DataContext).CurrentPage = new SettingsPage(null);
-
-                // отписаться
-                WorkWithServer.ResponceEvent -= UserRegistration;
             }
             else
             {
@@ -93,6 +100,53 @@ namespace WebChatClient
             }
 
             RegisterIsRunning = false;
+
+            // отписаться
+            WorkWithServer.ResponceEvent -= UserRegistration;
+        }
+
+        // валидность почты
+        private bool IsValidEmail(string email)
+        {
+            string pattern = @"^[a-zA-Z0-9_.+-]+@[a-zA-Z]+\.[a-zA-Z]";
+            Match match = Regex.Match(email, pattern);
+
+            return match.Success;
+        }
+
+        // Правильно ли заполнены TextBox-сы. Пока все поля не будут заполнены правильно
+        // будет выводится сообщение
+        private bool IsValidTextBoxes(object parameter)
+        {
+            string errorMessage;
+
+            // никнейм
+            if (Username.Length <= 3)
+            {
+                errorMessage = "Имя должно быть не меньше 4-х символов";
+            }
+            // почта
+            else if (!IsValidEmail(Email))
+            {
+                errorMessage = "Неверный формат почты";
+            }
+            // пароль
+            else if ((parameter as IHavePassword).SecurePassword.Unsecure().Length <= 5)
+            {
+                errorMessage = "Пароль должен быть не меньше 6-и символов";
+            }
+            else
+            {
+                return true;
+            }
+
+            MessageBoxModel.Title = "Ошибка регистрации";
+            MessageBoxModel.Message = errorMessage;
+
+            DialogMessageBox dialog = new DialogMessageBox();
+            dialog.ShowDialog();
+
+            return false;
         }
     }
 }

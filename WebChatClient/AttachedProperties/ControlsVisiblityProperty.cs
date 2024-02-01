@@ -19,7 +19,7 @@ namespace WebChatClient
             {
                 if ((bool)e.NewValue)
                 {
-                    textBox.Visibility = Visibility.Hidden;
+                    textBox.Visibility = Visibility.Collapsed;
                 }
                 else
                 {
@@ -70,7 +70,7 @@ namespace WebChatClient
                 }
             }
 
-            // скрываем/показываем Button
+            // скрываем/показываем PasswordBox
             if (sender is PasswordBox passwordBox)
             {
                 if ((bool)e.NewValue)

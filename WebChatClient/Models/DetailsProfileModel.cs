@@ -15,6 +15,6 @@ namespace WebChatClient
         public string Password { get; set; } = "******";
 
         // почта
-        public string Email { get; set; } = "fozzy@gmail.com";
+        public string Email { get; set; } = "pokerfozzy@gmail.com";
     }
 }

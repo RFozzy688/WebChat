@@ -78,9 +78,6 @@ namespace WebChatClient
             {
                 // если истина, то входим в чат
                 ((MainWindowVM)((MainWindow)Application.Current.MainWindow).DataContext).CurrentPage = new ChatPage();
-
-                // отписаться
-                WorkWithServer.ResponceEvent -= UserAuthorization;
             }
             else
             {
@@ -92,6 +89,9 @@ namespace WebChatClient
             }
 
             LoginIsRunning = false;
+
+            // отписаться
+            WorkWithServer.ResponceEvent -= UserAuthorization;
         }
     }
 }

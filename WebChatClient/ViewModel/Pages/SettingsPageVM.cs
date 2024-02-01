@@ -24,7 +24,7 @@ namespace WebChatClient
         public PasswordEntryVM Password { get; set; }
 
         // Электронная почта текущего пользователя
-        public TextEntryVM Email { get; set; }
+        public EmailEntryVM Email { get; set; }
 
         // Текст для кнопки выхода из системы
         public string LogoutButtonText { get; set; } = "Выход из системы";
@@ -72,10 +72,10 @@ namespace WebChatClient
             Password.Label = "Password";
             Password.FakePassword = _detailsProfile.Password;
 
-            // ник в сети
-            Email = new TextEntryVM();
+            // email
+            Email = new EmailEntryVM();
             Email.Label = "Email";
-            Email.OriginalText = _detailsProfile.Email;
+            Email.Email = _detailsProfile.Email;
         }
 
         // закрыть страницу настроек
