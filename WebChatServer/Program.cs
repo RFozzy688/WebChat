@@ -186,14 +186,14 @@ namespace WebChatServer
             if (workWithDB.IsCheckEmailInDB(dataRegistration.Email))
             {
                 // генирация кода верификации
-                //string code = GenerationVerificationCode();
+                string code = GenerationVerificationCode();
 
                 // добавить пользователя в бд
-                //workWithDB.AddUser(dataRegistration, code);
+                workWithDB.AddUser(dataRegistration, code);
 
                 // отправка письма на почту для верификации
-                //VerificationEmail verification = new VerificationEmail();
-                //verification.SendVerificationCode(dataRegistration.Email, code);
+                VerificationEmail verification = new VerificationEmail();
+                verification.SendVerificationCode(dataRegistration.Email, code);
 
                 bytes = Encoding.UTF8.GetBytes("true");
             }
@@ -227,9 +227,11 @@ namespace WebChatServer
 
             byte[] bytes = new byte[256];
 
-            // временная проверка. Реальные данные будут сверяться с данными БД
-            if (dataAuthorization.Email.CompareTo(UserData.Email) == 0 && 
-                dataAuthorization.Password.CompareTo(UserData.Password) == 0)
+            // создаем объект для работы с бд
+            WorkWithDB workWithDB = new WorkWithDB(_context);
+
+            // проверяем пользователя в БД
+            if (workWithDB.IsCheckUserInDB(dataAuthorization.Email, dataAuthorization.Password))
             {
                 bytes = Encoding.UTF8.GetBytes("true");
             }

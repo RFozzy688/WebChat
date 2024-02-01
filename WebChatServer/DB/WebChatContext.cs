@@ -90,14 +90,35 @@ namespace WebChatServer
             _db.SaveChanges();
         }
 
+        // сверяем присланный код с бд
         public bool IsCheckVerifyCode(string email, string code)
         {
+            // находим пользователя в бд
             var user = _db.Users.Where(o => o.Email == email).SingleOrDefault();
 
+            // если истина
             if (user.VerificationCode.CompareTo(code) == 0)
             {
+                // отмачаем в бд
                 user.IsVerifiedEmail = true;
                 _db.SaveChanges();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        // ищем пользователя в бд
+        public bool IsCheckUserInDB(string email, string password)
+        {
+            // находим пользователя в бд
+            var user = _db.Users.Where(o => o.Email == email).SingleOrDefault();
+
+            // если истино, то авторизируем пользователя
+            if (user.Email.CompareTo(email) == 0 && user.Password.CompareTo(password) == 0)
+            {
                 return true;
             }
             else
