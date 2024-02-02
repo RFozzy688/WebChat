@@ -398,3 +398,4 @@ FodyWeavers.xsd
 *.sln.iml
 /WebChatClient/UsersStories
 /WebChatServer/appconfig.json
+/WebChatClient/db
