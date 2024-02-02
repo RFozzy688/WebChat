@@ -143,7 +143,7 @@ namespace WebChatClient
             AddUserIsRunning = true;
 
             // получить данные с TextBox
-            AddUserToContactList addUser = new AddUserToContactList();
+            FindUser addUser = new FindUser();
             addUser.Email = EmailUserText;
 
             // сформировать данные для отправки на сервер
@@ -162,10 +162,12 @@ namespace WebChatClient
         // метод вызывается по событию от сервера
         private void AddUserResponce(string str)
         {
-            AddUserToContactList? addUser = JsonSerializer.Deserialize<AddUserToContactList>(str);
+            FindUser? addUser = JsonSerializer.Deserialize<FindUser>(str);
 
+            // истина если пользователь для добавления существует
             if (addUser != null)
             {
+                // истина если пользователь уже находится в списке контактов
                 if (_contactsVM.FirstOrDefault(o => o.UserID.CompareTo(addUser.UserID) == 0) == null)
                 {
 

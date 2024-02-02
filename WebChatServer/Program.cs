@@ -133,8 +133,8 @@ namespace WebChatServer
         async Task FindUserAttempt(Socket socket, IPAddress iPAddress, string stringSerialize)
         {
             // десериализация данных пользователя
-            AddUserToContactList? addUser = new AddUserToContactList();
-            addUser = JsonSerializer.Deserialize<AddUserToContactList>(stringSerialize);
+            FindUser? addUser = new FindUser();
+            addUser = JsonSerializer.Deserialize<FindUser>(stringSerialize);
 
             // если десериализация прошла не успешно выводим сообщение об ошибке
             // и выходим из регисртрации
@@ -276,11 +276,13 @@ namespace WebChatServer
             // проверяем пользователя в БД
             if (workWithDB.IsCheckUserInDB(dataAuthorization.Email, dataAuthorization.Password))
             {
-                bytes = Encoding.UTF8.GetBytes("true");
+                // получаем данные пользователя
+                var userData = workWithDB.GetDataUser(dataAuthorization.Email);
+                bytes = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(userData));
             }
             else
             {
-                bytes = Encoding.UTF8.GetBytes("false");
+                bytes = Encoding.UTF8.GetBytes("null");
             }
 
             await Task.Delay(3000);

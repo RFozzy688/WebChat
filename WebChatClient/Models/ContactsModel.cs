@@ -105,7 +105,7 @@ namespace WebChatClient
         }
 
         // сохраняет новый контакт в файл
-        public void SaveContact(AddUserToContactList addUser)
+        public void SaveContact(FindUser addUser)
         {
             // создать контакт
             Contact contact = new Contact();
@@ -121,7 +121,7 @@ namespace WebChatClient
             using (FileStream fs = new FileStream(_path, FileMode.Open))
             {
                 // если файл не пуст
-                if (fs.Seek(0, SeekOrigin.End) != 0)
+                if (fs.Length != 0)
                 {
                     // то дописываем новый контакт в коллекцию
                     fs.Seek(-1, SeekOrigin.End);
@@ -157,11 +157,15 @@ namespace WebChatClient
             Contacts.Add(contact);
         }
 
+        // загрузка контактов из файла
         private void LoadingContacts()
         {
             using (FileStream fs = new FileStream(_path, FileMode.Open))
             {
-                Contacts = JsonSerializer.Deserialize<List<Contact>>(fs);
+                if(fs.Length != 0)
+                {
+                    Contacts = JsonSerializer.Deserialize<List<Contact>>(fs);
+                }
             }
         }
     }

@@ -3,18 +3,20 @@ using System.Security;
 
 namespace WebChatClient
 {
-    public class DetailsProfileModel
+    public static class DetailsProfileModel
     {
+        // уникальный идентификатор
+        public static string UserID { get; set; }
         // имя и фамилия
-        public string Name { get; set; } = "Ярослав Полежай";
+        public static string Name { get; set; }
 
         // ник пользователя
-        public string Nickname { get; set; } = "Fozzy";
+        public static string Nickname { get; set; }
 
         // пароль
-        public string Password { get; set; } = "******";
+        public static string Password { get; set; }
 
         // почта
-        public string Email { get; set; } = "pokerfozzy@gmail.com";
+        public static string Email { get; set; }
     }
 }

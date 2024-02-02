@@ -129,7 +129,7 @@ namespace WebChatServer
         }
 
         // получить данные пользователя для добавления в контакты
-        public AddUserToContactList GetDataUser(string email)
+        public FindUser GetDataUser(string email)
         {
             // находим пользователя в бд
             var user = _db.Users.Where(o => o.Email == email).SingleOrDefault();
@@ -140,7 +140,8 @@ namespace WebChatServer
                 return new()
                 {
                     UserID = user.Id,
-                    Name = user.Nickname
+                    Name = user.Nickname,
+                    Email = user.Email
                 };
             }
 
