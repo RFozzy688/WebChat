@@ -16,7 +16,7 @@ namespace WebChatClient
         string _userID;
         string _path;
 
-        public List<Message> TreeMessagesContact;
+        public List<Message>? TreeMessagesContact;
 
         public TreeMessagesContactModel(string userID)
         {
@@ -33,14 +33,17 @@ namespace WebChatClient
             _path = Environment.CurrentDirectory;
             int index = _path.LastIndexOf("WebChatClient");
             _path = _path.Remove(index + "WebChatClient".Length);
-            _path += $"\\UsersStories\\{_userID}.json";
+            _path += $"\\db\\UsersStories\\{_userID}.json";
         }
 
         void LoadingTreeMessagesContact()
         {
-            using (FileStream fs = new FileStream(_path, FileMode.Open))
+            using (FileStream fs = new FileStream(_path, FileMode.OpenOrCreate))
             {
-                TreeMessagesContact = JsonSerializer.Deserialize<List<Message>>(fs);
+                if (fs.Length != 0)
+                {
+                    TreeMessagesContact = JsonSerializer.Deserialize<List<Message>>(fs);
+                }
             }
         }
     }

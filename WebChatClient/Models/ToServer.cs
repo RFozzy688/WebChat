@@ -12,7 +12,8 @@ namespace WebChatClient
         Message,
         Registration,
         Authorization,
-        Verification
+        Verification,
+        FindUser
     }
 
     // пакет данных который непосредственно отправляется на сервер
@@ -69,5 +70,18 @@ namespace WebChatClient
 
         // код верификации
         public string Code { get; set; }
+    }
+
+    // данные для поиска пользователя в бд
+    public class FindUser
+    {
+        // email user
+        public string Email { get; set; }
+
+        // уникальный идентификатор пользователя в этом приложении
+        public string UserID { get; set; }
+
+        // Отображаемое имя в списке чатов
+        public string Name { get; set; }
     }
 }

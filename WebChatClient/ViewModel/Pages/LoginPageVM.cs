@@ -74,8 +74,17 @@ namespace WebChatClient
         // метод вызывается по событию от сервера
         private void UserAuthorization(string str)
         {
-            if (str.CompareTo("true") == 0)
+            FindUser? addUser = JsonSerializer.Deserialize<FindUser>(str);
+
+            // если истина, то пользователь авторизировался
+            if (addUser != null)
             {
+                // сохраняем данные авторизированного пользователя
+                DetailsProfileModel.UserID = addUser.UserID;
+                DetailsProfileModel.Nickname = addUser.Name;
+                DetailsProfileModel.Email = addUser.Email;
+                DetailsProfileModel.Password = "******";
+
                 // если истина, то входим в чат
                 ((MainWindowVM)((MainWindow)Application.Current.MainWindow).DataContext).CurrentPage = new ChatPage();
             }

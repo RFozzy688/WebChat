@@ -59,8 +59,8 @@ namespace WebChatServer
         // проверка наличия почты в бд
         public bool IsCheckEmailInDB(string email)
         {
-            // если истина то зарегистрированной почты в базе нет
-            if (_db.Users.Where(o => o.Email == email).SingleOrDefault() == null)
+            // если истина, то почта зарегистрированна в базе
+            if (_db.Users.Where(o => o.Email == email).SingleOrDefault() != null)
             {
                 return true;
             }
@@ -71,7 +71,7 @@ namespace WebChatServer
         }
 
         // добавить пользователя в базу
-        public void AddUser(UserRegistration userData, string code)
+        public void AddUserToDB(UserRegistration userData, string code)
         {
             // создать пользователя
             User user = new User()
@@ -117,7 +117,8 @@ namespace WebChatServer
             var user = _db.Users.Where(o => o.Email == email).SingleOrDefault();
 
             // если истино, то авторизируем пользователя
-            if (user.Email.CompareTo(email) == 0 && user.Password.CompareTo(password) == 0)
+            if (user != null && user.Email.CompareTo(email) == 0 && 
+                user.Password.CompareTo(password) == 0)
             {
                 return true;
             }
@@ -125,6 +126,26 @@ namespace WebChatServer
             {
                 return false;
             }
+        }
+
+        // получить данные пользователя для добавления в контакты
+        public FindUser GetDataUser(string email)
+        {
+            // находим пользователя в бд
+            var user = _db.Users.Where(o => o.Email == email).SingleOrDefault();
+
+            // истина если пользователь существует
+            if (user != null)
+            {
+                return new()
+                {
+                    UserID = user.Id,
+                    Name = user.Nickname,
+                    Email = user.Email
+                };
+            }
+
+            return null;
         }
     }
 }

@@ -49,5 +49,6 @@
     <system:String x:Key="FA_KeyIcon">&#xf084;</system:String>
     <system:String x:Key="FA_EmailIcon">&#xf0e0;</system:String>
     <system:String x:Key="FA_CheckIcon">&#xf00c;</system:String>
+    <system:String x:Key="FA_AddUserIcon">&#xf234;</system:String>
 
 </ResourceDictionary>

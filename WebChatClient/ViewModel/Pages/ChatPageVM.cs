@@ -5,11 +5,13 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 using System;
 using System.Linq;
+using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace WebChatClient
 {
     /// <summary>
-    /// Модель представления для экрана входа в систему
+    /// Модель представления страницы чата
     /// </summary>
     public class ChatPageVM : BaseViewModel
     {
@@ -55,6 +57,15 @@ namespace WebChatClient
         // Текст для текущего сообщения
         public string PendingMessageText { get; set; }
 
+        // Флаг, указывающий, открыт ли диалог добавления пользователя
+        public bool AddUserIsOpen { get; set; }
+
+        // Email пользователя для поиска в бд и добавления в контакты
+        public string EmailUserText { get; set; }
+
+        // флаг указывающий выполнение добавления пользователя в контакты 
+        public bool AddUserIsRunning { get; set; }
+
         // True, если меню настроек должно отображаться
         public Visibility SettingsMenuVisible { get; set; } = Visibility.Collapsed;
 
@@ -79,6 +90,18 @@ namespace WebChatClient
         // Команда, когда пользователь хочет открыть окно настроек
         public ICommand OpenSettingsCommand { get; set; }
 
+        // Команда открывающая строку для поиска и добавления пользователя в контакты
+        public ICommand OpenAddUserCommand { get; set; }
+
+        // Команда закрывающая диалог для добавления пользователя в контакты
+        public ICommand CloseAddUserCommand { get; set; }
+
+        // Команда, когда пользователь хочет очистить текст поиска
+        public ICommand ClearAddUserCommand { get; set; }
+
+        // Команда, отправить email на сервер для поиска пользователя в бд
+        public ICommand SendEmailUserCommand { get; set; }
+
         public ChatPageVM(ChatPage view)
         {
             _view = view;
@@ -99,11 +122,109 @@ namespace WebChatClient
             ClearSearchCommand = new Command((o) => ClearSearch());
             SendCommand = new Command((o) => Send());
             OpenSettingsCommand = new Command((o) => OpenSettings());
+            OpenAddUserCommand = new Command((o) => OpenAddUser());
+            CloseAddUserCommand = new Command((o) => CloseAddUser());
+            ClearAddUserCommand = new Command((o) => ClearAddUser());
+            SendEmailUserCommand = new Command(async (o) => await SendEmailUserAsync());
 
             // загрузка контактов
             LoadingContacts();
         }
 
+        // отправить email на сервер для поиска пользователя в бд
+        private async Task SendEmailUserAsync()
+        {
+            if (AddUserIsRunning)
+            {
+                return;
+            }
+
+            // флаг указывающий выполнение добавления пользователя в контакты 
+            AddUserIsRunning = true;
+
+            // получить данные с TextBox
+            FindUser addUser = new FindUser();
+            addUser.Email = EmailUserText;
+
+            // сформировать данные для отправки на сервер
+            DataPackage package = new DataPackage();
+            // тип пакета
+            package.Package = TypeData.FindUser;
+            // основные данные пакета
+            package.StringSerialize = JsonSerializer.Serialize(addUser);
+
+            // подписаться на событие о приходе ответа с сервера
+            WorkWithServer.ResponceEvent += AddUserResponce;
+            // отправить данные на сервер
+            await WorkWithServer.SendMessageAsync(JsonSerializer.Serialize(package));
+        }
+
+        // метод вызывается по событию от сервера
+        private void AddUserResponce(string str)
+        {
+            FindUser? addUser = JsonSerializer.Deserialize<FindUser>(str);
+
+            // истина если пользователь для добавления существует
+            if (addUser != null)
+            {
+                // истина если пользователь уже находится в списке контактов
+                if (_contactsVM.FirstOrDefault(o => o.UserID.CompareTo(addUser.UserID) == 0) == null)
+                {
+
+                    // сохраняем новый контакт в моделе контактов
+                    _contactsModel.SaveContact(addUser);
+
+                    // обновляе коллекцию контактов
+                    CreateContactVM(_contactsModel.Contacts.Last());
+
+                    MessageBoxModel.Message = $"Пользователь {addUser.Name} добавлен в список контактов";
+                }
+                else
+                {
+                    MessageBoxModel.Message = $"Пользователь {addUser.Name} уже добавлен";
+                }
+            }
+            else
+            {
+                MessageBoxModel.Message = "Пользователь не найден";
+            }
+
+            MessageBoxModel.Title = "Сообщение";
+
+            DialogMessageBox dialog = new DialogMessageBox();
+            dialog.ShowDialog();
+
+            // отписаться
+            WorkWithServer.ResponceEvent -= AddUserResponce;
+
+            // метод SendEmailUserAsync() завершил работу
+            AddUserIsRunning = false;
+        }
+
+        // очистить/закрыть строку поиска пользователя
+        private void ClearAddUser()
+        {
+            if (!string.IsNullOrEmpty(EmailUserText))
+            {
+                EmailUserText = string.Empty;
+            }
+            else
+            {
+                CloseAddUser();
+            }
+        }
+
+        // Команда закрывающая диалог для добавления пользователя в контакты
+        private void CloseAddUser()
+        {
+            AddUserIsOpen = false;
+            EmailUserText = string.Empty;
+        }
+
+        // Откравает строку для поиска пользователя в бд и добавления в контакты
+        private void OpenAddUser() => AddUserIsOpen = true;
+
+        // открыть страницу с настройками
         private void OpenSettings()
         {
             ((MainWindowVM)((MainWindow)Application.Current.MainWindow).DataContext).CurrentPage = new SettingsPage(_view);
@@ -221,7 +342,6 @@ namespace WebChatClient
             else
             {
                 // Закрыть диалог поиска
-                //SearchIsOpen = false;
                 CloseSearch();
             }
         }
@@ -287,8 +407,11 @@ namespace WebChatClient
                 AddToListBox(_view.TreeMessages, messageControl);
             }
 
-            // прокрутить ListBox в конец
-            _view.TreeMessages.ScrollIntoView(_view.TreeMessages.Items[_view.TreeMessages.Items.Count - 2]);
+            if (_view.TreeMessages.Items.Count >= 2)
+            {
+                // прокрутить ListBox в конец
+                _view.TreeMessages.ScrollIntoView(_view.TreeMessages.Items[_view.TreeMessages.Items.Count - 2]);
+            }
         }
 
         // загрузка контактов в список контактов
@@ -297,26 +420,8 @@ namespace WebChatClient
             // связываем view-viewmodel-model
             foreach (Contact item in _contactsModel.Contacts)
             {
-                // создать модель представления контакта
-                ContactVM contactVM = new ContactVM();
-
-                // связать VM c M
-                contactVM.UserID = item.UserID;
-                contactVM.Name = item.Name;
-                contactVM.Message = item.Message;
-                contactVM.Initials = item.Initials;
-                contactVM.ProfilePictureRGB = item.ProfilePictureRGB;
-
-                // добавить в коллекцию
-                _contactsVM.Add(contactVM);
-
-                // создать представление контакта
-                ContactControl contactControl = new ContactControl();
-                // связать пердставление с модель представления 
-                contactControl.DataContext = contactVM;
-
-                // добавить представление контакта в список контактов в чате
-                AddToListBox(_view.ListContacts, contactControl);
+                // создаем модель-представления для каждого контакта
+                CreateContactVM(item);
             }
 
             // при первом открытии приложения загружаем сообщения первого контакта в списке
@@ -338,6 +443,31 @@ namespace WebChatClient
             ListBoxItem lbi = new ListBoxItem();
             lbi.Content = view;
             listBox.Items.Add(lbi);
+        }
+
+        // создать модель-представления контакта
+        private void CreateContactVM(Contact contact)
+        {
+            // создать модель представления контакта
+            ContactVM contactVM = new ContactVM();
+
+            // связать VM c M
+            contactVM.UserID = contact.UserID;
+            contactVM.Name = contact.Name;
+            contactVM.Message = contact.Message;
+            contactVM.Initials = contact.Initials;
+            contactVM.ProfilePictureRGB = contact.ProfilePictureRGB;
+
+            // добавить в коллекцию
+            _contactsVM.Add(contactVM);
+
+            // создать представление контакта
+            ContactControl contactControl = new ContactControl();
+            // связать пердставление с модель представления 
+            contactControl.DataContext = contactVM;
+
+            // добавить представление контакта в список контактов в чате
+            AddToListBox(_view.ListContacts, contactControl);
         }
     }
 }

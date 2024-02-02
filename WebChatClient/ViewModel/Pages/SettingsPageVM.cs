@@ -12,7 +12,7 @@ namespace WebChatClient
         //SettingsPage _settingsPage;
 
         // модель данных пользователя
-        DetailsProfileModel _detailsProfile;
+        //DetailsProfileModel _detailsProfile;
 
         // Имя текущего пользователя
         public TextEntryVM Name { get; set; }
@@ -55,27 +55,25 @@ namespace WebChatClient
         // загрузка профиля пользователя для редактирования
         private void LoadingUserProfile()
         {
-            _detailsProfile = new DetailsProfileModel();
-
             // полное имя
             Name = new TextEntryVM();
             Name.Label = "Name";
-            Name.OriginalText = _detailsProfile.Name;
+            Name.OriginalText = DetailsProfileModel.Name;
 
             // ник в сети
             Nickname = new TextEntryVM();
             Nickname.Label = "Nickname";
-            Nickname.OriginalText = _detailsProfile.Nickname;
+            Nickname.OriginalText = DetailsProfileModel.Nickname;
 
             // пароль
             Password = new PasswordEntryVM();
             Password.Label = "Password";
-            Password.FakePassword = _detailsProfile.Password;
+            Password.FakePassword = DetailsProfileModel.Password;
 
             // email
             Email = new EmailEntryVM();
             Email.Label = "Email";
-            Email.Email = _detailsProfile.Email;
+            Email.Email = DetailsProfileModel.Email;
         }
 
         // закрыть страницу настроек
