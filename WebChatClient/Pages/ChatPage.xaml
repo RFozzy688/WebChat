@@ -49,11 +49,8 @@
                     <StackPanel Grid.Column="0"
                                 Orientation="Horizontal">
                         <Button Style="{StaticResource IconButton}" 
-                                Content="{StaticResource FA_ChatIcon}"/>
-                        <Button Style="{StaticResource IconButton}" 
-                                Content="{StaticResource FA_UserIcon}"/>
-                        <Button Style="{StaticResource IconButton}" 
-                                Content="{StaticResource FA_PictureIcon}"/>
+                                Content="{StaticResource FA_AddUserIcon}"
+                                Command="{Binding OpenAddUserCommand}"/>
                     </StackPanel>
 
                     <!--setting button-->
@@ -62,7 +59,47 @@
                             Content="{StaticResource FA_CogIcon}"
                             Command="{Binding OpenSettingsCommand}"
                             Margin="2"/>
-                    
+
+                    <!-- Строка поиска пользователя в бд-->
+                    <Grid Grid.ColumnSpan="3"
+                          Visibility="{Binding AddUserIsOpen, 
+                          Converter={local:BooleanToVisiblityConverter},
+                          ConverterParameter=false}">
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Кнопка закрытия строки поиска пользователя-->
+                        <Button Style="{StaticResource IconButton}" 
+                                Content="{StaticResource FA_CloseIcon}"
+                                Command="{Binding CloseAddUserCommand}"
+                                Foreground="{StaticResource VeryLightBrush}"
+                                Margin="2"/>
+
+                        <!-- Search box -->
+                        <TextBox Grid.Column="1" 
+                                 Style="{StaticResource MessageBoxStyle}"
+                                 Tag="Email пользователя..."
+                                 local:FocusProperty.Value="{Binding AddUserIsOpen}"
+                                 Text="{Binding EmailUserText, UpdateSourceTrigger=PropertyChanged}"
+                                 Margin="0 2 2 2"
+                                 FontSize="{StaticResource FontSizeRegular}"
+                                 BorderThickness="0"
+                                 VerticalContentAlignment="Center">
+
+                            <TextBox.InputBindings>
+                                <!-- Clear text on Esc -->
+                                <KeyBinding Command="{Binding ClearAddUserCommand}" Key="Esc" />
+                                <!-- Search on enter -->
+                                <KeyBinding Command="{Binding SendEmailUserCommand}" Key="Return" />
+                            </TextBox.InputBindings>
+                        </TextBox>
+
+
+                    </Grid>
+
                 </Grid>
 
                 <!-- Тень -->
