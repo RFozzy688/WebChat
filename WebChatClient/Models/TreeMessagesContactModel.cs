@@ -33,7 +33,16 @@ namespace WebChatClient
             _path = Environment.CurrentDirectory;
             int index = _path.LastIndexOf("WebChatClient");
             _path = _path.Remove(index + "WebChatClient".Length);
-            _path += $"\\db\\UsersStories\\{_userID}.json";
+            _path += @"\db\UsersStories";
+
+            // если каталога "UsersStories" не существует
+            if (!Directory.Exists(_path))
+            {
+                // создаем каталог
+                Directory.CreateDirectory(_path);
+            }
+
+            _path = $"\\{_userID}.json";
         }
 
         void LoadingTreeMessagesContact()

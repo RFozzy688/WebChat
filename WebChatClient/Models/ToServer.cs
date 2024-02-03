@@ -73,7 +73,7 @@ namespace WebChatClient
     }
 
     // данные для поиска пользователя в бд
-    public class FindUser
+    public class GeneralUserData
     {
         // email user
         public string Email { get; set; }

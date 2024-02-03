@@ -112,7 +112,7 @@ namespace WebChatServer
                         case TypeData.Verification:
                             await VerificationEmailAttempt(server, remoteEndPoint.Address, package.StringSerialize);
                             break;
-                        // верификация почты
+                        // поиск контакта в бд по почте
                         case TypeData.FindUser:
                             await FindUserAttempt(server, remoteEndPoint.Address, package.StringSerialize);
                             break;
@@ -130,11 +130,12 @@ namespace WebChatServer
             }
         }
 
+        // попытка найти контакт в бд для добавления в список контактов
         async Task FindUserAttempt(Socket socket, IPAddress iPAddress, string stringSerialize)
         {
             // десериализация данных пользователя
-            FindUser? addUser = new FindUser();
-            addUser = JsonSerializer.Deserialize<FindUser>(stringSerialize);
+            GeneralUserData? addUser = new GeneralUserData();
+            addUser = JsonSerializer.Deserialize<GeneralUserData>(stringSerialize);
 
             // если десериализация прошла не успешно выводим сообщение об ошибке
             // и выходим из регисртрации
@@ -232,13 +233,15 @@ namespace WebChatServer
                 string code = GenerationVerificationCode();
 
                 // добавить пользователя в бд
-                workWithDB.AddUserToDB(dataRegistration, code);
+                workWithDB.AddUserToDB(dataRegistration, code, iPAddress);
 
                 // отправка письма на почту для верификации
-                VerificationEmail verification = new VerificationEmail();
-                verification.SendVerificationCode(dataRegistration.Email, code);
+                //VerificationEmail verification = new VerificationEmail();
+                //verification.SendVerificationCode(dataRegistration.Email, code);
 
-                bytes = Encoding.UTF8.GetBytes("true");
+                // получаем данные пользователя
+                var userData = workWithDB.GetDataUser(dataRegistration.Email);
+                bytes = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(userData));
             }
             else
             {
@@ -248,7 +251,7 @@ namespace WebChatServer
             await Task.Delay(3000);
             // удаленная точка получателя
             IPEndPoint remoteEndPoint = new IPEndPoint(iPAddress, _remotePortMessage);
-            // отправка данных о авторизации
+            // отправка данных о регистрации
             await socket.SendToAsync(bytes, SocketFlags.None, remoteEndPoint);
         }
 
@@ -279,6 +282,10 @@ namespace WebChatServer
                 // получаем данные пользователя
                 var userData = workWithDB.GetDataUser(dataAuthorization.Email);
                 bytes = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(userData));
+
+                // сверяем ip-адрес с которого прошла авторизация и ip-адрес в бд
+                // если не совпадают, то обновляем ip-адрес
+                workWithDB.UpdateIPAddress(dataAuthorization.Email, iPAddress);
             }
             else
             {

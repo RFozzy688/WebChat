@@ -74,7 +74,7 @@ namespace WebChatClient
         // метод вызывается по событию от сервера
         private void UserAuthorization(string str)
         {
-            FindUser? addUser = JsonSerializer.Deserialize<FindUser>(str);
+            GeneralUserData? addUser = JsonSerializer.Deserialize<GeneralUserData>(str);
 
             // если истина, то пользователь авторизировался
             if (addUser != null)

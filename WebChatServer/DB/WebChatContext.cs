@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Nodes;
 using System.Text.Json;
+using System.Net;
 
 namespace WebChatServer
 {
@@ -44,6 +45,12 @@ namespace WebChatServer
 
         // код верификации
         public string VerificationCode { get; set; } = null!;
+
+        // ip-адрес пользователя
+        public string? IpAddress { get; set; } = null;
+
+        // находится ли пользователь в сети
+        public bool IsOnline { get; set;} = false;
     }
 
     public class WorkWithDB
@@ -71,7 +78,7 @@ namespace WebChatServer
         }
 
         // добавить пользователя в базу
-        public void AddUserToDB(UserRegistration userData, string code)
+        public void AddUserToDB(UserRegistration userData, string code, IPAddress iPAddress)
         {
             // создать пользователя
             User user = new User()
@@ -81,7 +88,8 @@ namespace WebChatServer
                 Email = userData.Email,
                 Password = userData.Password,
                 IsVerifiedEmail = false,
-                VerificationCode = code
+                VerificationCode = code,
+                IpAddress = iPAddress.ToString(),
             };
 
             // отслеживать сущность
@@ -129,7 +137,7 @@ namespace WebChatServer
         }
 
         // получить данные пользователя для добавления в контакты
-        public FindUser GetDataUser(string email)
+        public GeneralUserData GetDataUser(string email)
         {
             // находим пользователя в бд
             var user = _db.Users.Where(o => o.Email == email).SingleOrDefault();
@@ -146,6 +154,20 @@ namespace WebChatServer
             }
 
             return null;
+        }
+
+        public void UpdateIPAddress(string email, IPAddress iPAddress)
+        {
+            // находим пользователя в бд
+            var user = _db.Users.Where(o => o.Email == email).SingleOrDefault();
+
+            // если ip-адреса не совпадают
+            if (user != null && user.IpAddress?.CompareTo(iPAddress.ToString()) != 0)
+            {
+                // то обновляем ip-адрес
+                user.IpAddress = iPAddress.ToString();
+                _db.SaveChanges();
+            }
         }
     }
 }

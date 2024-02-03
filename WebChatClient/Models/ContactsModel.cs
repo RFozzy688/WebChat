@@ -105,7 +105,7 @@ namespace WebChatClient
         }
 
         // сохраняет новый контакт в файл
-        public void SaveContact(FindUser addUser)
+        public void SaveContact(GeneralUserData addUser)
         {
             // создать контакт
             Contact contact = new Contact();
@@ -148,7 +148,16 @@ namespace WebChatClient
             _path = Environment.CurrentDirectory;
             int index = _path.LastIndexOf("WebChatClient");
             _path = _path.Remove(index + "WebChatClient".Length);
-            _path += $"\\db\\contacts.json";
+            _path += @"\db";
+
+            // если каталога "db" не существует
+            if (!Directory.Exists(_path))
+            {
+                // создаем каталог
+                Directory.CreateDirectory(_path);
+            }
+
+            _path += @"\contacts.json";
         }
 
         // добавим контакт в коллекцию
@@ -160,7 +169,7 @@ namespace WebChatClient
         // загрузка контактов из файла
         private void LoadingContacts()
         {
-            using (FileStream fs = new FileStream(_path, FileMode.Open))
+            using (FileStream fs = new FileStream(_path, FileMode.OpenOrCreate))
             {
                 if(fs.Length != 0)
                 {

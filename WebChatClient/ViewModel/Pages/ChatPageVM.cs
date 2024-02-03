@@ -143,7 +143,7 @@ namespace WebChatClient
             AddUserIsRunning = true;
 
             // получить данные с TextBox
-            FindUser addUser = new FindUser();
+            GeneralUserData addUser = new GeneralUserData();
             addUser.Email = EmailUserText;
 
             // сформировать данные для отправки на сервер
@@ -162,7 +162,7 @@ namespace WebChatClient
         // метод вызывается по событию от сервера
         private void AddUserResponce(string str)
         {
-            FindUser? addUser = JsonSerializer.Deserialize<FindUser>(str);
+            GeneralUserData? addUser = JsonSerializer.Deserialize<GeneralUserData>(str);
 
             // истина если пользователь для добавления существует
             if (addUser != null)

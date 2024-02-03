@@ -39,8 +39,8 @@ namespace WebChatServer
         public string Code { get; set; }
     }
 
-    // данные для поиска пользователя в бд
-    public class FindUser
+    // данные пользователя для обработки
+    public class GeneralUserData
     {
         // email user
         public string Email { get; set; }
