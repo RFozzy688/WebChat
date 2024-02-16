@@ -82,20 +82,39 @@ namespace WebChatClient
         // метод вызывается по событию от сервера
         private void UserVerificationEmail(string str)
         {
-            if (str.CompareTo("true") == 0)
+            string buffer;
+
+            try
             {
-                // если истина, то входим на страницу настроек для верификации почты
-                str = "Почта верифицированна!!!";
+                string[]? responce = JsonSerializer.Deserialize<string[]>(str);
+
+                if (responce != null && responce[0].CompareTo("verification") == 0)
+                {
+                    if (responce[1].CompareTo("true") == 0)
+                    {
+                        // если истина, то входим на страницу настроек для верификации почты
+                        buffer = "Почта верифицированна!!!";
+                    }
+                    else
+                    {
+                        buffer = responce[1];
+                    }
+
+                    MessageBoxModel.Title = "Верификация почты";
+                    MessageBoxModel.Message = buffer;
+
+                    DialogMessageBox dialog = new DialogMessageBox();
+                    dialog.ShowDialog();
+                }
             }
-
-            MessageBoxModel.Title = "Верификация почты";
-            MessageBoxModel.Message = str;
-
-            DialogMessageBox dialog = new DialogMessageBox();
-            dialog.ShowDialog();
-
-            // отписаться
-            WorkWithServer.ResponceEvent -= UserVerificationEmail;
+            catch (Exception)
+            {
+            }
+            finally
+            {
+                // отписаться
+                WorkWithServer.ResponceEvent -= UserVerificationEmail;
+            }
         }
     }
 }

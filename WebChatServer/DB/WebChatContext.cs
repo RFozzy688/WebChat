@@ -156,6 +156,7 @@ namespace WebChatServer
             return null;
         }
 
+        // обновление ip-адреса, если пользователь зашел с другого
         public void UpdateIPAddress(string email, IPAddress iPAddress)
         {
             // находим пользователя в бд
@@ -168,6 +169,13 @@ namespace WebChatServer
                 user.IpAddress = iPAddress.ToString();
                 _db.SaveChanges();
             }
+        }
+
+        public string GetIPAddress(string userId)
+        {
+            string? ipAddress = _db.Users.Where(o => o.Id == userId).Select(o => o.IpAddress).FirstOrDefault();
+
+            return ipAddress != null ? ipAddress : string.Empty;
         }
     }
 }

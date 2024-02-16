@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
 namespace WebChatClient
@@ -31,7 +34,7 @@ namespace WebChatClient
         static EndPoint _localEndPoint;
 
         // IP адрес сервера
-        static string _ipRemoteAddress = "127.0.0.1";
+        static string? _ipRemoteAddress/* = "127.0.0.1"*/;
         static string _ipLocalAddress = "127.0.0.1";
 
         // порт на который отправляются сообщения
@@ -39,6 +42,18 @@ namespace WebChatClient
 
         // порт на котором принимаются сообщения
         static int _localPort = 8081;
+
+        // размер буфера
+        const int _bufSize = 65536;
+
+        static WorkWithServer()
+        {
+            // получить данные с файла конфигурации
+            var config = JsonSerializer.Deserialize<JsonNode>(File.ReadAllText(@"..\..\..\appconfig.json"));
+
+            // ip-адрес сервера
+            _ipRemoteAddress = config?["server"]?["ipaddress"]?.ToString();
+        }
 
         // создать сокеты
         public static void ConnectTo()
@@ -51,7 +66,7 @@ namespace WebChatClient
                 _socketReceiveMessage = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
 
                 // удаленная точка сервера
-                _remoteEndPoint = new IPEndPoint(IPAddress.Parse(_ipRemoteAddress), _remotePort);
+                _remoteEndPoint = new IPEndPoint(IPAddress.Parse(_ipRemoteAddress!), _remotePort);
                 // локальная точка клиента
                 _localEndPoint = new IPEndPoint(IPAddress.Any, _localPort);
 
@@ -70,7 +85,7 @@ namespace WebChatClient
         {
             while (true)
             {
-                byte[] data = new byte[256];
+                byte[] data = new byte[_bufSize];
                 // получить сообщение
                 var result = await _socketReceiveMessage.ReceiveFromAsync(data, SocketFlags.None, _localEndPoint);
                 // перевести в строку
@@ -85,7 +100,7 @@ namespace WebChatClient
         public static async Task SendMessageAsync(string str)
         {
             string message = str;
-            byte[] data = new byte[256];
+            byte[] data = new byte[_bufSize];
             // перевести в байты
             data = Encoding.UTF8.GetBytes(message);
             // отправить

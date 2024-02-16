@@ -76,7 +76,8 @@
 
                         <Image local:ClipFromBorderProperty.Value="True"
                                Source="{Binding LocalFilePath, NotifyOnTargetUpdated=True}"
-                               MaxWidth="600"/>
+                               MaxWidth="300"
+                               HorizontalAlignment="{Binding SentByMe, Converter={local:SentByMeToAlignmentConverter}}"/>
 
                     </Border>
 

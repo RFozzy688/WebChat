@@ -42,7 +42,7 @@ namespace WebChatClient
                 Directory.CreateDirectory(_path);
             }
 
-            _path = $"\\{_userID}.json";
+            _path += $"\\{_userID}.json";
         }
 
         void LoadingTreeMessagesContact()

@@ -5,15 +5,17 @@ using System.Net.Sockets;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Text.Json;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Text.Json.Nodes;
+using System.Threading.Tasks.Dataflow;
 
 namespace WebChatServer
 {
     public class Program
     {
         // адрес сервера в сети
-        string _ipAddress = "127.0.0.1";
-
+        string? _ipAddress /*= "127.0.0.1"*/;
+        // размер буфера
+        const int _bufSize = 65536;
         // порт который слушает сервер
         const int _port = 8080;
         // удаленный порт на котором принимаются сообщения
@@ -33,6 +35,10 @@ namespace WebChatServer
             // создаем подключении к бд
             _context = new WebChatContext();
 
+            // получить ip-адрес с файла конфигурации
+            GetIPAddress();
+
+            #region MyRegion
             //User user1 = new User()
             //{
             //    Id = "qwerty",
@@ -53,7 +59,8 @@ namespace WebChatServer
             //};
 
             //_context.Users.AddRange(new[] { user1, user2 });
-            //_context.SaveChanges();
+            //_context.SaveChanges(); 
+            #endregion
         }
 
         // метод запускающий сервер
@@ -63,7 +70,7 @@ namespace WebChatServer
             using Socket server = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
 
             // создать локальную точку подключения
-            EndPoint localEndPoint = new IPEndPoint(IPAddress.Parse(_ipAddress), _port);
+            EndPoint localEndPoint = new IPEndPoint(IPAddress.Parse(_ipAddress!), _port);
             // связать создать локальную точку с сокетом
             server.Bind(localEndPoint);
 
@@ -77,7 +84,7 @@ namespace WebChatServer
                 try
                 {
                     string message;
-                    byte[] data = new byte[256];
+                    byte[] data = new byte[_bufSize];
 
                     // начинаем слушать входящий порт
                     var result = await server.ReceiveFromAsync(data, SocketFlags.None, remoteEndPoint);
@@ -99,6 +106,7 @@ namespace WebChatServer
                     switch (package.Package)
                     {
                         case TypeData.Message:
+                            await SendMessageToUser(server, package.StringSerialize);
                             break;
                             // регистрация пользователя
                         case TypeData.Registration:
@@ -146,7 +154,7 @@ namespace WebChatServer
                 return;
             }
 
-            byte[] bytes = new byte[256];
+            byte[] bytes = new byte[_bufSize];
 
             // создаем объект для работы с бд
             WorkWithDB workWithDB = new WorkWithDB(_context);
@@ -185,19 +193,24 @@ namespace WebChatServer
                 return;
             }
 
-            byte[] bytes = new byte[256];
+            byte[] bytes = new byte[_bufSize];
+            // массив строк в который записывается ответ о верификации
+            string[] strings = new string[2];
+            strings[0] = "verification";
 
             // создаем объект для работы с бд
             WorkWithDB workWithDB = new WorkWithDB(_context);
 
             if (workWithDB.IsCheckVerifyCode(verificationEmail.Email, verificationEmail.Code))
             {
-                bytes = Encoding.UTF8.GetBytes("true");
+                strings[1] = "true";
             }
             else
             {
-                bytes = Encoding.UTF8.GetBytes("Неверный код верификации");
+                strings[1] = "Неверный код верификации";
             }
+
+            bytes = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(strings));
 
             // удаленная точка получателя
             IPEndPoint remoteEndPoint = new IPEndPoint(iPAddress, _remotePortMessage);
@@ -221,7 +234,7 @@ namespace WebChatServer
                 return;
             }
 
-            byte[] bytes = new byte[256];
+            byte[] bytes = new byte[_bufSize];
 
             // создаем объект для работы с бд
             WorkWithDB workWithDB = new WorkWithDB(_context);
@@ -271,7 +284,7 @@ namespace WebChatServer
                 return;
             }
 
-            byte[] bytes = new byte[256];
+            byte[] bytes = new byte[_bufSize];
 
             // создаем объект для работы с бд
             WorkWithDB workWithDB = new WorkWithDB(_context);
@@ -303,6 +316,46 @@ namespace WebChatServer
         string GenerationVerificationCode()
         {
             return Guid.NewGuid().ToString().Remove(8);
+        }
+
+        // получить ip-адрес с файла конфигурации
+        void GetIPAddress()
+        {
+            // получить данные с файла конфигурации
+            var config = JsonSerializer.Deserialize<JsonNode>(File.ReadAllText(@"..\..\..\appconfig.json"));
+
+            // ip-адрес сервера
+            _ipAddress = config?["server"]?["ipaddress"]?.ToString();
+        }
+
+        async Task SendMessageToUser(Socket socket, string stringDeserialize)
+        {
+            OutgoingMessage? messageOut = new();
+            messageOut = JsonSerializer.Deserialize<OutgoingMessage>(stringDeserialize);
+
+            byte[] bytes = new byte[_bufSize];
+
+            WorkWithDB workWithDB = new WorkWithDB(_context);
+
+            if (messageOut != null)
+            {
+                // находим ip-адрес получателя в бд
+                string ipAddress = workWithDB.GetIPAddress(messageOut.RecipientId);
+
+                // создать сообщение для получателя
+                IncomingMessage messageIn = new();
+                messageIn.UserId = messageOut.UserId;
+                messageIn.MessageId = messageOut.MessageId;
+                messageIn.Message = messageOut.Message;
+                messageIn.MessageSentTime = messageOut.MessageSentTime;
+
+                bytes = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(messageIn));
+
+                // удаленная точка получателя
+                //IPEndPoint remoteEndPoint = new IPEndPoint(IPAddress.Parse(ipAddress), _remotePortMessage);
+                // отправка сообщения получателю
+                //await socket.SendToAsync(bytes, SocketFlags.None, remoteEndPoint);
+            }
         }
     }
 

@@ -26,8 +26,8 @@ namespace WebChatClient
         public string StringSerialize { get; set; }
     }
 
-    // сообщение отправляемое своему контакту
-    public class UserMessage
+    // сообщение отправляемое пользователем
+    public class OutgoingMessage
     {
         // от кого
         public string UserId { get; set; }
@@ -37,6 +37,28 @@ namespace WebChatClient
 
         // сообщение
         public string Message { get; set; }
+
+        // уникальный идентификатор сообщения
+        public string MessageId { get; set; }
+
+        // Время отправки сообщения
+        public DateTimeOffset MessageSentTime { get; set; }
+    }
+
+    // входящее сообщение от пользователя
+    public class IncomingMessage
+    {
+        // от кого
+        public string UserId { get; set; }
+
+        // сообщение
+        public string Message { get; set; }
+
+        // уникальный идентификатор сообщения
+        public string MessageId { get; set; }
+
+        // Время отправки сообщения
+        public DateTimeOffset MessageSentTime { get; set; }
     }
 
     // данные пользователя для регистрации на сервере

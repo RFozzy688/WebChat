@@ -140,6 +140,8 @@ namespace WebChatClient
 
             // добавить контакт в коллекцию
             AddContactToList(contact);
+            // создать файл истории для нового пользователя
+            CreateUserStory(contact.UserID);
         }
 
         // создать путь к файлу с контактами
@@ -157,7 +159,7 @@ namespace WebChatClient
                 Directory.CreateDirectory(_path);
             }
 
-            _path += @"\contacts.json";
+            _path += @$"\{DetailsProfileModel.UserID}.json";
         }
 
         // добавим контакт в коллекцию
@@ -176,6 +178,27 @@ namespace WebChatClient
                     Contacts = JsonSerializer.Deserialize<List<Contact>>(fs);
                 }
             }
+        }
+
+        // создать файл истории для нового пользователя
+        private void CreateUserStory(string userID)
+        {
+            string path = Environment.CurrentDirectory;
+            int index = path.LastIndexOf("WebChatClient");
+            path = path.Remove(index + "WebChatClient".Length);
+            path += @"\db\UsersStories";
+
+            // если каталога "UsersStories" не существует
+            if (!Directory.Exists(path))
+            {
+                // создаем каталог
+                Directory.CreateDirectory(path);
+            }
+
+            path += $"\\{userID}.json";
+
+            // создать файл истории
+            File.Create(path);
         }
     }
 

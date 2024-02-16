@@ -7,6 +7,8 @@ using System;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.IO;
+using System.Text;
 
 namespace WebChatClient
 {
@@ -33,14 +35,20 @@ namespace WebChatClient
         // индекс предыдущего выбора контакта
         int _indexOldSelected;
 
+        // индекс текущего выделенного елемента
+        int _currentSelectedIndex;
+
         // Флаг, указывающий, открыт ли диалог поиска
-        bool _searchIsOpen;
+        //bool _searchIsOpen;
 
         // Последний искомый текст в этом списке
         string _lastSearchText;
 
         // Текст для поиска в команде поиска
-        string _searchText;
+        //string _searchText;
+
+        // Время отправки сообщения
+        DateTimeOffset _messageSentTime;
 
         // имя выбранного контакта
         public string NameSelectedContact { get; set; }
@@ -139,6 +147,18 @@ namespace WebChatClient
                 return;
             }
 
+            // добавить себя в список контактов не возможно
+            if (EmailUserText.CompareTo(DetailsProfileModel.Email) == 0)
+            {
+                MessageBoxModel.Title = "Ошибка";
+                MessageBoxModel.Message = "Добавить себя в контакты не возможно!";
+
+                DialogMessageBox dialog = new DialogMessageBox();
+                dialog.ShowDialog();
+
+                return;
+            }
+
             // флаг указывающий выполнение добавления пользователя в контакты 
             AddUserIsRunning = true;
 
@@ -231,11 +251,8 @@ namespace WebChatClient
         }
 
         // Когда пользователь нажимает кнопку отправить, отправляет сообщение
-        public void Send()
+        public async void Send()
         {
-            DialogMessageBox dialogMessageBox = new DialogMessageBox();
-            dialogMessageBox.ShowDialog();
-
             // Не отправляйте пустое сообщение
             if (string.IsNullOrEmpty(PendingMessageText))
                 return;
@@ -246,12 +263,19 @@ namespace WebChatClient
                 _messageVM = new ObservableCollection<MessageVM>();
             }
 
-            // отправить фейковое новое сообщение
+            // Время отправки сообщения
+            _messageSentTime = DateTime.Now;
+
+            // отправка сообщения на сервер
+            await SendMessageToServerAsync();
+            // сохранить сообщение в истории
+            await AddMessageToStory();
+
+            // создать VM сообщения для добавления в дерево сообщений
             var message = new MessageVM
             {
-                Initials = "LM",
                 Message = PendingMessageText,
-                MessageSentTime = DateTime.UtcNow,
+                MessageSentTime = _messageSentTime,
                 SentByMe = true,
                 ProfilePictureRGB = "000000"
             };
@@ -350,10 +374,10 @@ namespace WebChatClient
         private void OpenMessage()
         {
             // индекс текущего выделенного елемента
-            int currentSelectedIndex = _view.ListContacts.SelectedIndex;
+            _currentSelectedIndex = _view.ListContacts.SelectedIndex;
 
             // выход если кликаем на выделенный контакт
-            if (currentSelectedIndex == _indexOldSelected) { return; }
+            if (_currentSelectedIndex == _indexOldSelected) { return; }
 
             // при каждом открытии дерева сообщения обнуляем колекцию VM 
             _messageVM.Clear();
@@ -366,20 +390,20 @@ namespace WebChatClient
             }
            
             // выделить текущий
-            _contactsVM[currentSelectedIndex].IsSelected = true;
+            _contactsVM[_currentSelectedIndex].IsSelected = true;
 
             // сохраняем индекс текущего выделенного елемента
             _indexOldSelected = _view.ListContacts.SelectedIndex;
 
             // имя контакта в заголовке дерева сообщений
-            NameSelectedContact = _contactsVM[currentSelectedIndex].Name;
+            NameSelectedContact = _contactsVM[_currentSelectedIndex].Name;
 
             // очистить дерево сообщений от предыдущего контакта
             _view.TreeMessages.Items.Clear();
 
             // создать модель дерева сообщений
             // передать id выделенного контакта и загрузить сообщения в модель
-            TreeMessagesContactModel treeMessagesModel = new TreeMessagesContactModel(_contactsVM[currentSelectedIndex].UserID);
+            TreeMessagesContactModel treeMessagesModel = new TreeMessagesContactModel(_contactsVM[_currentSelectedIndex].UserID);
 
             foreach (Message message in treeMessagesModel.TreeMessagesContact)
             {
@@ -392,8 +416,8 @@ namespace WebChatClient
                 messageVM.SentByMe = message.SentByMe;
                 messageVM.LocalFilePath = message.LocalFilePath;
                 // инициализация VM из VM контакта
-                messageVM.Initials = _contactsVM[currentSelectedIndex].Initials;
-                messageVM.ProfilePictureRGB = _contactsVM[currentSelectedIndex].ProfilePictureRGB;
+                messageVM.Initials = _contactsVM[_currentSelectedIndex].Initials;
+                messageVM.ProfilePictureRGB = _contactsVM[_currentSelectedIndex].ProfilePictureRGB;
 
                 // добавить в коллекцию VM
                 _messageVM.Add(messageVM);
@@ -468,6 +492,74 @@ namespace WebChatClient
 
             // добавить представление контакта в список контактов в чате
             AddToListBox(_view.ListContacts, contactControl);
+        }
+
+        // отправка сообщения на сервер
+        private async Task SendMessageToServerAsync()
+        {
+            OutgoingMessage message = new OutgoingMessage();
+            // отправляемое сообщение
+            message.Message = PendingMessageText;
+            // id сообщения
+            message.MessageId = Guid.NewGuid().ToString();
+            // id отправителя
+            message.UserId = DetailsProfileModel.UserID;
+            // id получателя. Находится в списке контактов
+            message.RecipientId = _contactsVM[_currentSelectedIndex].UserID;
+            // время отправки сообщения
+            message.MessageSentTime = _messageSentTime;
+
+            // сформировать данные для отправки на сервер
+            DataPackage package = new DataPackage();
+            // тип пакета
+            package.Package = TypeData.Message;
+            // основные данные пакета
+            package.StringSerialize = JsonSerializer.Serialize(message);
+
+            // отправить данные на сервер
+            await WorkWithServer.SendMessageAsync(JsonSerializer.Serialize(package));
+        }
+
+        // сохранить сообщение в истории
+        private async Task AddMessageToStory()
+        {
+            // id контакта которому отправляется сообщение
+            string userID = _contactsVM[_currentSelectedIndex].UserID;
+
+            // путь к истории переписки
+            string path = Environment.CurrentDirectory;
+            int index = path.LastIndexOf("WebChatClient");
+            path = path.Remove(index + "WebChatClient".Length);
+            path += $@"\db\UsersStories\{userID}.json";
+
+            // сообщение добавляемое в историю
+            Message message = new Message()
+            {
+                TextMessage = PendingMessageText,
+                MessageSentTime = _messageSentTime,
+                SentByMe = true,
+                LocalFilePath = string.Empty
+            };
+
+            using (FileStream fs = new FileStream(path, FileMode.Open))
+            {
+                // если файл не пуст
+                if (fs.Length != 0)
+                {
+                    // то дописываем новый контакт в коллекцию
+                    fs.Seek(-1, SeekOrigin.End);
+                    fs.Write(Encoding.Default.GetBytes(","));
+                    JsonSerializer.Serialize(fs, message);
+                    fs.Write(Encoding.Default.GetBytes("]"));
+                }
+                else
+                {
+                    // создаем коллекцию
+                    fs.Write(Encoding.Default.GetBytes("["));
+                    JsonSerializer.Serialize(fs, message);
+                    fs.Write(Encoding.Default.GetBytes("]"));
+                }
+            }
         }
     }
 }
