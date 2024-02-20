@@ -9,15 +9,15 @@ namespace WebChatClient
     /// <summary>
     /// контакты, модель
     /// </summary>
-    public class ContactsModel
+    public static class ContactsModel
     {
         // путь к файлу с контактами
-        string _path;
+        static string _path;
 
         // коллекция контактов
-        public List<Contact>? Contacts;
+        static public List<Contact>? Contacts;
 
-        public ContactsModel() 
+        static ContactsModel() 
         {
             Contacts = new List<Contact>();
 
@@ -28,7 +28,7 @@ namespace WebChatClient
         }
 
         // сохраняет новый контакт в файл
-        public void SaveContact(GeneralUserData addUser)
+        static public void SaveContact(GeneralUserData addUser)
         {
             // создать контакт
             Contact contact = new Contact();
@@ -69,7 +69,7 @@ namespace WebChatClient
         }
 
         // создать путь к файлу с контактами
-        private void CreatePath()
+        static private void CreatePath()
         {
             _path = Environment.CurrentDirectory;
             int index = _path.LastIndexOf("WebChatClient");
@@ -87,13 +87,13 @@ namespace WebChatClient
         }
 
         // добавим контакт в коллекцию
-        private void AddContactToList(Contact contact)
+        static private void AddContactToList(Contact contact)
         {
             Contacts.Add(contact);
         }
 
         // загрузка контактов из файла
-        private void LoadingContacts()
+        static private void LoadingContacts()
         {
             using (FileStream fs = new FileStream(_path, FileMode.OpenOrCreate))
             {
@@ -104,8 +104,21 @@ namespace WebChatClient
             }
         }
 
+        // сохранить все контакты в файл
+        static public void SaveAllContacts()
+        {
+            // путь к файлу с контактами
+            CreatePath();
+
+            using (FileStream fs = new FileStream(_path, FileMode.Create))
+            {
+                // сохранение контактов
+                JsonSerializer.Serialize(fs, Contacts);
+            }
+        }
+
         // создать файл истории для нового пользователя
-        private void CreateUserStory(string userID)
+        static private void CreateUserStory(string userID)
         {
             string path = Environment.CurrentDirectory;
             int index = path.LastIndexOf("WebChatClient");
@@ -148,10 +161,5 @@ namespace WebChatClient
 
         // Верно, если в этом чате есть непрочитанные сообщения.
         public bool NewContentAvailable { get; set; }
-
-        #region MyRegion
-        // Истинно, если этот элемент выбран в данный момент
-        //public bool IsSelected { get; set; } 
-        #endregion
     }
 }

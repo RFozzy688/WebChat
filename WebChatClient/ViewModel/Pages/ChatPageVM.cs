@@ -24,7 +24,7 @@ namespace WebChatClient
         ObservableCollection<ContactVM> _contactsVM;
 
         // ссылка на модель контактов
-        ContactsModel _contactsModel;
+        //ContactsModel _contactsModel;
 
         // ссылка на коллекцию моделей представления дерева сообщений
         ObservableCollection<MessageVM> _messageVM;
@@ -122,7 +122,7 @@ namespace WebChatClient
 
             // инициализация
             _contactsVM = new ObservableCollection<ContactVM>();
-            _contactsModel = new ContactsModel();
+            //_contactsModel = new ContactsModel();
             _messageVM = new ObservableCollection<MessageVM>();
 
             // Создание команд
@@ -197,10 +197,10 @@ namespace WebChatClient
                 {
 
                     // сохраняем новый контакт в моделе контактов
-                    _contactsModel.SaveContact(addUser);
+                    ContactsModel.SaveContact(addUser);
 
                     // обновляе коллекцию контактов
-                    CreateContactVM(_contactsModel.Contacts.Last());
+                    CreateContactVM(ContactsModel.Contacts.Last());
 
                     MessageBoxModel.Message = $"Пользователь {addUser.Name} добавлен в список контактов";
                 }
@@ -301,7 +301,7 @@ namespace WebChatClient
             AddMessageToStory(_idSelectedUser, message);
 
             _contactsVM[_currentSelectedIndex].Message = PendingMessageText;
-            _contactsModel.Contacts![_currentSelectedIndex].Message = PendingMessageText;
+            ContactsModel.Contacts![_currentSelectedIndex].Message = PendingMessageText;
 
             // Очистить текст ожидающего сообщения
             PendingMessageText = string.Empty;
@@ -414,11 +414,15 @@ namespace WebChatClient
             // идентификатор выбранного пользователя
             _idSelectedUser = _contactsVM[_currentSelectedIndex].UserID;
 
+            // новое сообщение прочитано
+            _contactsVM[_currentSelectedIndex].NewContentAvailable = false;
+            ContactsModel.Contacts![_currentSelectedIndex].NewContentAvailable = false;
+
             // создать модель дерева сообщений
             // передать id выделенного контакта и загрузить сообщения в модель
             TreeMessagesContactModel treeMessagesModel = new TreeMessagesContactModel(_idSelectedUser);
 
-            foreach (Message message in treeMessagesModel.TreeMessagesContact)
+            foreach (Message message in treeMessagesModel.TreeMessagesContact!)
             {
                 // создать модель представления сообщения
                 MessageVM messageVM = new MessageVM();
@@ -455,7 +459,7 @@ namespace WebChatClient
         private void LoadingContacts()
         {
             // связываем view-viewmodel-model
-            foreach (Contact item in _contactsModel.Contacts)
+            foreach (Contact item in ContactsModel.Contacts)
             {
                 // создаем модель-представления для каждого контакта
                 CreateContactVM(item);
@@ -570,6 +574,7 @@ namespace WebChatClient
             return path;
         }
 
+        // вызывается по событию прихода нового сообщения
         private void WaitingIncomingMessage(string str)
         {
             try
@@ -592,11 +597,15 @@ namespace WebChatClient
                     // сохраняем сообщение в историю
                     AddMessageToStory(incomingMessage.UserId, messageVM);
 
-                    var findContact = _contactsModel.Contacts?.FirstOrDefault(o => o.UserID.CompareTo(incomingMessage.UserId) == 0);
+                    // найти контакт в моделе контактов который отправил пользователю сообщение
+                    var findContact = ContactsModel.Contacts?.FirstOrDefault(o => o.UserID.CompareTo(incomingMessage.UserId) == 0);
+                    // найти контакт в VM который отправил пользователю сообщение
                     var findContactVM = _contactsVM.FirstOrDefault(o => o.UserID.CompareTo(incomingMessage.UserId) == 0);
 
+                    // истина, если контакт отправивший сообщение выделенный в списке контактов
                     if (_idSelectedUser.CompareTo(incomingMessage.UserId) == 0)
                     {
+                        // инициалы контакта отправившего сообщение
                         messageVM.Initials = _contactsVM[_currentSelectedIndex].Initials;
 
                         // Добавить сообщение в список
@@ -612,18 +621,21 @@ namespace WebChatClient
                         // прокрутить ListBox в конец
                         _view.TreeMessages.ScrollIntoView(_view.TreeMessages.Items[_view.TreeMessages.Items.Count - 1]);
                     }
-                    else
+                    else 
                     {
                         if (findContact != null && findContactVM != null)
                         {
-                            _contactsModel.Contacts![_contactsModel.Contacts!.IndexOf(findContact)].NewContentAvailable = true;
+                            // если контакт отправивший сообщение, в данный момент не выделенный в списке контактов,
+                            // то отмечаем это как новое сообщение от контакта
+                            ContactsModel.Contacts![ContactsModel.Contacts!.IndexOf(findContact)].NewContentAvailable = true;
                             _contactsVM[_contactsVM.IndexOf(findContactVM)].NewContentAvailable = true;
                         }
                     }
 
                     if (findContact != null && findContactVM != null)
                     {
-                        _contactsModel.Contacts![_contactsModel.Contacts!.IndexOf(findContact)].Message = incomingMessage.Message;
+                        // последние сообщение контакта
+                        ContactsModel.Contacts![ContactsModel.Contacts!.IndexOf(findContact)].Message = incomingMessage.Message;
                         _contactsVM[_contactsVM.IndexOf(findContactVM)].Message = incomingMessage.Message;
                     }
                 }

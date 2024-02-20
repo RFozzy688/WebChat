@@ -16,7 +16,6 @@ namespace WebChatClient
         private Window _view;
 
         // Помощник по изменению размера окна, который поддерживает правильный размер окна в различных состояниях.
-
         private WindowResizer _windowResizer;
 
         public MainWindowVM(Window view)
@@ -30,7 +29,13 @@ namespace WebChatClient
             // Создание команд
             MinimizeCommand = new Command((o) => _view.WindowState = WindowState.Minimized);
             MaximizeCommand = new Command((o) => _view.WindowState ^= WindowState.Maximized);
-            CloseCommand = new Command((o) => _view.Close());
+            CloseCommand = new Command((o) =>
+            {
+                // сохранить изменения в списке контактов при выходе
+                ContactsModel.SaveAllContacts();
+
+                _view.Close();
+            });
             MenuCommand = new Command((o) => SystemCommands.ShowSystemMenu(_view, GetMousePosition()));
             WorkingAreaCommand = new Command((o) => 
             {
