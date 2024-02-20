@@ -574,10 +574,12 @@ namespace WebChatClient
         {
             try
             {
+                // десериализация входящего сообщения
                 IncomingMessage? incomingMessage = JsonSerializer.Deserialize<IncomingMessage>(str);
 
                 if (incomingMessage != null)
                 {
+                    // создание модели-представления сообщения
                     MessageVM messageVM = new MessageVM()
                     {
                         TextMessage = incomingMessage.Message,
@@ -587,6 +589,7 @@ namespace WebChatClient
                         ProfilePictureRGB = _contactsVM[_currentSelectedIndex].ProfilePictureRGB
                     };
 
+                    // сохраняем сообщение в историю
                     AddMessageToStory(incomingMessage.UserId, messageVM);
 
                     var findContact = _contactsModel.Contacts?.FirstOrDefault(o => o.UserID.CompareTo(incomingMessage.UserId) == 0);
