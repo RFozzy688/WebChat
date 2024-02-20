@@ -170,7 +170,6 @@ namespace WebChatServer
                 bytes = Encoding.UTF8.GetBytes("null");
             }
 
-            await Task.Delay(3000);
             // удаленная точка получателя
             IPEndPoint remoteEndPoint = new IPEndPoint(iPAddress, _remotePortMessage);
             // отправка данных о авторизации
@@ -261,7 +260,7 @@ namespace WebChatServer
                 bytes = Encoding.UTF8.GetBytes("Пользователь с такой почтой уже зарегистрирован");
             }
 
-            await Task.Delay(3000);
+            await Task.Delay(1000);
             // удаленная точка получателя
             IPEndPoint remoteEndPoint = new IPEndPoint(iPAddress, _remotePortMessage);
             // отправка данных о регистрации
@@ -305,7 +304,7 @@ namespace WebChatServer
                 bytes = Encoding.UTF8.GetBytes("null");
             }
 
-            await Task.Delay(3000);
+            await Task.Delay(1000);
             // удаленная точка получателя
             IPEndPoint remoteEndPoint = new IPEndPoint(iPAddress, _remotePortMessage);
             // отправка данных о авторизации
@@ -352,9 +351,9 @@ namespace WebChatServer
                 bytes = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(messageIn));
 
                 // удаленная точка получателя
-                //IPEndPoint remoteEndPoint = new IPEndPoint(IPAddress.Parse(ipAddress), _remotePortMessage);
+                IPEndPoint remoteEndPoint = new IPEndPoint(IPAddress.Parse(ipAddress), _remotePortMessage);
                 // отправка сообщения получателю
-                //await socket.SendToAsync(bytes, SocketFlags.None, remoteEndPoint);
+                await socket.SendToAsync(bytes, SocketFlags.None, remoteEndPoint);
             }
         }
     }

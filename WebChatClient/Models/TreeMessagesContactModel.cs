@@ -62,6 +62,9 @@ namespace WebChatClient
         // Сообщение из этого чата
         public string TextMessage { get; set; }
 
+        // Инициалы, которые будут отображаться в качестве фона изображения профиля
+        public string Initials { get; set; }
+
         // Локальный путь к загруженному миниатюре на этом компьютере.
         public string LocalFilePath { get; set; }
 
@@ -70,5 +73,11 @@ namespace WebChatClient
 
         // Время отправки сообщения
         public DateTimeOffset MessageSentTime { get; set; }
+
+        // Значения RGB (в шестнадцатеричном формате) для цвета фона изображения профиля
+        public string ProfilePictureRGB { get; set; }
+
+        // Истинно, если этот элемент выбран в данный момент
+        public bool IsSelected { get; set; }
     }
 }

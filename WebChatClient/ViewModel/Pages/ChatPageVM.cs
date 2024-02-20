@@ -38,6 +38,9 @@ namespace WebChatClient
         // индекс текущего выделенного елемента
         int _currentSelectedIndex;
 
+        // идентификатор выбранного пользователя
+        string _idSelectedUser;
+
         // Флаг, указывающий, открыт ли диалог поиска
         //bool _searchIsOpen;
 
@@ -137,6 +140,8 @@ namespace WebChatClient
 
             // загрузка контактов
             LoadingContacts();
+
+            WorkWithServer.ResponceEvent += WaitingIncomingMessage;
         }
 
         // отправить email на сервер для поиска пользователя в бд
@@ -187,7 +192,7 @@ namespace WebChatClient
             // истина если пользователь для добавления существует
             if (addUser != null)
             {
-                // истина если пользователь уже находится в списке контактов
+                // истина если пользователь не находится в списке контактов
                 if (_contactsVM.FirstOrDefault(o => o.UserID.CompareTo(addUser.UserID) == 0) == null)
                 {
 
@@ -268,15 +273,14 @@ namespace WebChatClient
 
             // отправка сообщения на сервер
             await SendMessageToServerAsync();
-            // сохранить сообщение в истории
-            await AddMessageToStory();
 
             // создать VM сообщения для добавления в дерево сообщений
             var message = new MessageVM
             {
-                Message = PendingMessageText,
+                TextMessage = PendingMessageText,
                 MessageSentTime = _messageSentTime,
                 SentByMe = true,
+                LocalFilePath = string.Empty,
                 ProfilePictureRGB = "000000"
             };
 
@@ -292,6 +296,12 @@ namespace WebChatClient
 
             // прокрутить ListBox в конец
             _view.TreeMessages.ScrollIntoView(_view.TreeMessages.Items[_view.TreeMessages.Items.Count - 1]);
+
+            // сохранить сообщение в истории
+            AddMessageToStory(_idSelectedUser, message);
+
+            _contactsVM[_currentSelectedIndex].Message = PendingMessageText;
+            _contactsModel.Contacts![_currentSelectedIndex].Message = PendingMessageText;
 
             // Очистить текст ожидающего сообщения
             PendingMessageText = string.Empty;
@@ -334,7 +344,7 @@ namespace WebChatClient
 
             // Найти все элементы, содержащие заданный текст
             _filteredMessages = new ObservableCollection<MessageVM>(
-                _messageVM.Where(item => item.Message.ToLower().Contains(SearchText)));
+                _messageVM.Where(item => item.TextMessage.ToLower().Contains(SearchText)));
 
             // очистить дерево от предыдущих сообщений
             _view.TreeMessages.Items.Clear();
@@ -401,9 +411,12 @@ namespace WebChatClient
             // очистить дерево сообщений от предыдущего контакта
             _view.TreeMessages.Items.Clear();
 
+            // идентификатор выбранного пользователя
+            _idSelectedUser = _contactsVM[_currentSelectedIndex].UserID;
+
             // создать модель дерева сообщений
             // передать id выделенного контакта и загрузить сообщения в модель
-            TreeMessagesContactModel treeMessagesModel = new TreeMessagesContactModel(_contactsVM[_currentSelectedIndex].UserID);
+            TreeMessagesContactModel treeMessagesModel = new TreeMessagesContactModel(_idSelectedUser);
 
             foreach (Message message in treeMessagesModel.TreeMessagesContact)
             {
@@ -411,7 +424,7 @@ namespace WebChatClient
                 MessageVM messageVM = new MessageVM();
 
                 // проинициализировать VM из M
-                messageVM.Message = message.TextMessage;
+                messageVM.TextMessage = message.TextMessage;
                 messageVM.MessageSentTime = message.MessageSentTime;
                 messageVM.SentByMe = message.SentByMe;
                 messageVM.LocalFilePath = message.LocalFilePath;
@@ -481,6 +494,7 @@ namespace WebChatClient
             contactVM.Message = contact.Message;
             contactVM.Initials = contact.Initials;
             contactVM.ProfilePictureRGB = contact.ProfilePictureRGB;
+            contactVM.NewContentAvailable = contact.NewContentAvailable;
 
             // добавить в коллекцию
             _contactsVM.Add(contactVM);
@@ -521,44 +535,98 @@ namespace WebChatClient
         }
 
         // сохранить сообщение в истории
-        private async Task AddMessageToStory()
+        private void AddMessageToStory(string userID, MessageVM message)
         {
-            // id контакта которому отправляется сообщение
-            string userID = _contactsVM[_currentSelectedIndex].UserID;
-
-            // путь к истории переписки
-            string path = Environment.CurrentDirectory;
-            int index = path.LastIndexOf("WebChatClient");
-            path = path.Remove(index + "WebChatClient".Length);
-            path += $@"\db\UsersStories\{userID}.json";
-
-            // сообщение добавляемое в историю
-            Message message = new Message()
-            {
-                TextMessage = PendingMessageText,
-                MessageSentTime = _messageSentTime,
-                SentByMe = true,
-                LocalFilePath = string.Empty
-            };
-
-            using (FileStream fs = new FileStream(path, FileMode.Open))
+            using (FileStream fs = new FileStream(CreatePath(userID), FileMode.Open))
             {
                 // если файл не пуст
                 if (fs.Length != 0)
                 {
                     // то дописываем новый контакт в коллекцию
                     fs.Seek(-1, SeekOrigin.End);
-                    fs.Write(Encoding.Default.GetBytes(","));
+                    fs.Write(Encoding.UTF8.GetBytes(","));
                     JsonSerializer.Serialize(fs, message);
-                    fs.Write(Encoding.Default.GetBytes("]"));
+                    fs.Write(Encoding.UTF8.GetBytes("]"));
                 }
                 else
                 {
                     // создаем коллекцию
-                    fs.Write(Encoding.Default.GetBytes("["));
+                    fs.Write(Encoding.UTF8.GetBytes("["));
                     JsonSerializer.Serialize(fs, message);
-                    fs.Write(Encoding.Default.GetBytes("]"));
+                    fs.Write(Encoding.UTF8.GetBytes("]"));
                 }
+            }
+        }
+
+        // создать путь к истории переписки
+        private string CreatePath(string userID)
+        {
+            // путь к истории переписки
+            string path = Environment.CurrentDirectory;
+            int index = path.LastIndexOf("WebChatClient");
+            path = path.Remove(index + "WebChatClient".Length);
+            path += $@"\db\UsersStories\{userID}.json";
+
+            return path;
+        }
+
+        private void WaitingIncomingMessage(string str)
+        {
+            try
+            {
+                IncomingMessage? incomingMessage = JsonSerializer.Deserialize<IncomingMessage>(str);
+
+                if (incomingMessage != null)
+                {
+                    MessageVM messageVM = new MessageVM()
+                    {
+                        TextMessage = incomingMessage.Message,
+                        SentByMe = false,
+                        MessageSentTime = incomingMessage.MessageSentTime,
+                        LocalFilePath = string.Empty,
+                        ProfilePictureRGB = _contactsVM[_currentSelectedIndex].ProfilePictureRGB
+                    };
+
+                    AddMessageToStory(incomingMessage.UserId, messageVM);
+
+                    var findContact = _contactsModel.Contacts?.FirstOrDefault(o => o.UserID.CompareTo(incomingMessage.UserId) == 0);
+                    var findContactVM = _contactsVM.FirstOrDefault(o => o.UserID.CompareTo(incomingMessage.UserId) == 0);
+
+                    if (_idSelectedUser.CompareTo(incomingMessage.UserId) == 0)
+                    {
+                        messageVM.Initials = _contactsVM[_currentSelectedIndex].Initials;
+
+                        // Добавить сообщение в список
+                        _messageVM.Add(messageVM);
+
+                        // создание и привязка VM
+                        MessageControl messageControl = new MessageControl();
+                        messageControl.DataContext = messageVM;
+
+                        // добавить представление в ListBox
+                        AddToListBox(_view.TreeMessages, messageControl);
+
+                        // прокрутить ListBox в конец
+                        _view.TreeMessages.ScrollIntoView(_view.TreeMessages.Items[_view.TreeMessages.Items.Count - 1]);
+                    }
+                    else
+                    {
+                        if (findContact != null && findContactVM != null)
+                        {
+                            _contactsModel.Contacts![_contactsModel.Contacts!.IndexOf(findContact)].NewContentAvailable = true;
+                            _contactsVM[_contactsVM.IndexOf(findContactVM)].NewContentAvailable = true;
+                        }
+                    }
+
+                    if (findContact != null && findContactVM != null)
+                    {
+                        _contactsModel.Contacts![_contactsModel.Contacts!.IndexOf(findContact)].Message = incomingMessage.Message;
+                        _contactsVM[_contactsVM.IndexOf(findContactVM)].Message = incomingMessage.Message;
+                    }
+                }
+            }
+            catch (Exception)
+            {
             }
         }
     }

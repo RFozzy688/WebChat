@@ -97,7 +97,7 @@
                                        TextWrapping="Wrap"
                                        FontFamily="{StaticResource RoundedRegular}"
                                        Foreground="{StaticResource DarkBlueBrush}"
-                                       Text="{Binding Message}"/>
+                                       Text="{Binding TextMessage}"/>
 
                         </Border>
 

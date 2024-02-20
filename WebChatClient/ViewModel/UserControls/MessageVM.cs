@@ -10,7 +10,7 @@ namespace WebChatClient
     public class MessageVM : BaseViewModel
     {
         // Сообщение из этого чата
-        public string Message { get; set; }
+        public string TextMessage { get; set; }
 
         // Инициалы, которые будут отображаться в качестве фона изображения профиля
         public string Initials { get; set; }
