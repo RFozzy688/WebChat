@@ -24,9 +24,6 @@ namespace WebChatClient
         // True, если это сообщение было отправлено вошедшим пользователем
         public bool SentByMe { get; set; }
 
-        // Верно, если это сообщение было прочитано
-        //public bool MessageRead {  get; set; }
-
         // Время отправки сообщения
         public DateTimeOffset MessageSentTime { get; set; }
 

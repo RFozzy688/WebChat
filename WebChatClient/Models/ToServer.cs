@@ -13,7 +13,8 @@ namespace WebChatClient
         Registration,
         Authorization,
         Verification,
-        FindUser
+        FindUser,
+        Exit
     }
 
     // пакет данных который непосредственно отправляется на сервер

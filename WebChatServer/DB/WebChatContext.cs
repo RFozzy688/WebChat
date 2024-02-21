@@ -171,11 +171,32 @@ namespace WebChatServer
             }
         }
 
+        // возращает ip-адрес
         public string GetIPAddress(string userId)
         {
             string? ipAddress = _db.Users.Where(o => o.Id == userId).Select(o => o.IpAddress).FirstOrDefault();
 
             return ipAddress != null ? ipAddress : string.Empty;
+        }
+
+        // узнать находится ли пользователь в сети
+        public bool GetIsOnline(string userId)
+        {
+            bool online = _db.Users.Where(o => o.Id == userId).Select(o => o.IsOnline).FirstOrDefault();
+
+            return online;
+        }
+
+        // снять/установить пользователь онлайн
+        public void SetIsOnline(string userId, bool flag)
+        {
+            var user = _db.Users.Where(o => o.Id == userId).FirstOrDefault();
+
+            if (user != null)
+            {
+                user.IsOnline = flag;
+                _db.SaveChanges();
+            }
         }
     }
 }

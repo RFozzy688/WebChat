@@ -9,7 +9,8 @@ namespace WebChatServer
         Registration,
         Authorization,
         Verification,
-        FindUser
+        FindUser,
+        Exit
     }
 
     // пакет с данными для десериализации

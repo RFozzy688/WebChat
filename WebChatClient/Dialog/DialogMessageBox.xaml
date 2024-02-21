@@ -77,7 +77,8 @@
                     Style="{StaticResource OrangeButton}"
                     FontSize="{StaticResource FontSizeRegular}"
                     Width="150"
-                    Height="35"/>
+                    Height="35"
+                    Command="{Binding ConfirmCommand}"/>
 
         </Grid>
         

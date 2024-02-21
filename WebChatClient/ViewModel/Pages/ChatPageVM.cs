@@ -113,6 +113,9 @@ namespace WebChatClient
         // Команда, отправить email на сервер для поиска пользователя в бд
         public ICommand SendEmailUserCommand { get; set; }
 
+        // команда для прикрепления файла
+        public ICommand AttachmentButtonCommand { get; set; }
+
         public ChatPageVM(ChatPage view)
         {
             _view = view;

@@ -124,6 +124,10 @@ namespace WebChatServer
                         case TypeData.FindUser:
                             await FindUserAttempt(server, remoteEndPoint.Address, package.StringSerialize);
                             break;
+                        // пользователь вышел из приложения
+                        case TypeData.Exit:
+                            await ExitApp(package.StringSerialize);
+                            break;
                         default:
                             break;
                     }
@@ -298,6 +302,8 @@ namespace WebChatServer
                 // сверяем ip-адрес с которого прошла авторизация и ip-адрес в бд
                 // если не совпадают, то обновляем ip-адрес
                 workWithDB.UpdateIPAddress(dataAuthorization.Email, iPAddress);
+
+                workWithDB.SetIsOnline(userData.UserID, true);
             }
             else
             {
@@ -327,8 +333,10 @@ namespace WebChatServer
             _ipAddress = config?["server"]?["ipaddress"]?.ToString();
         }
 
+        // отправить сообщение пользователю
         async Task SendMessageToUser(Socket socket, string stringDeserialize)
         {
+            // десериализация входящего сообщения
             OutgoingMessage? messageOut = new();
             messageOut = JsonSerializer.Deserialize<OutgoingMessage>(stringDeserialize);
 
@@ -355,6 +363,17 @@ namespace WebChatServer
                 // отправка сообщения получателю
                 await socket.SendToAsync(bytes, SocketFlags.None, remoteEndPoint);
             }
+        }
+
+        // пользователь выходит из приложения
+        async Task ExitApp(string stringDeserialize)
+        {
+            await Task.Delay(1);
+
+            // создаем объект для работы с бд
+            WorkWithDB workWithDB = new WorkWithDB(_context);
+
+            workWithDB.SetIsOnline(stringDeserialize, false);
         }
     }
 

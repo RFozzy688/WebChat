@@ -107,6 +107,17 @@ namespace WebChatClient
             await _socketSendMessage.SendToAsync(data, SocketFlags.None, _remoteEndPoint);
         }
 
+        // отправить данные на сервер
+        public static void SendMessage(string str)
+        {
+            string message = str;
+            byte[] data = new byte[_bufSize];
+            // перевести в байты
+            data = Encoding.UTF8.GetBytes(message);
+            // отправить
+            _socketSendMessage.SendTo(data, data.Length, SocketFlags.None, _remoteEndPoint);
+        }
+
         // оповестить всех подписчиков о событии
         static void Responce(string str)
         {

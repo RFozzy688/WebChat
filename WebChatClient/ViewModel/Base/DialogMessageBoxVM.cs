@@ -34,6 +34,7 @@ namespace WebChatClient
 
             // Создание команд
             CloseCommand = new Command((o) => _view.Close());
+            ConfirmCommand = new Command((o) => _view.Close());
 
             // заголовок окна сообщений
             Title = MessageBoxModel.Title;
