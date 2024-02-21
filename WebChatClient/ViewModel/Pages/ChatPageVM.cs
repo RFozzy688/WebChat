@@ -521,8 +521,6 @@ namespace WebChatClient
             OutgoingMessage message = new OutgoingMessage();
             // отправляемое сообщение
             message.Message = PendingMessageText;
-            // id сообщения
-            message.MessageId = Guid.NewGuid().ToString();
             // id отправителя
             message.UserId = DetailsProfileModel.UserID;
             // id получателя. Находится в списке контактов

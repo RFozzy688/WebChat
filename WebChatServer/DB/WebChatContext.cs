@@ -10,6 +10,7 @@ namespace WebChatServer
     {
         // таблица пользователей
         public DbSet<User> Users { get; set; }
+        public DbSet<WaitingMessage> WaitingMessages { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -51,6 +52,28 @@ namespace WebChatServer
 
         // находится ли пользователь в сети
         public bool IsOnline { get; set;} = false;
+
+        public List<WaitingMessage> WaitingMessages { get; set; }
+
+        public User()
+        {
+            WaitingMessages = new List<WaitingMessage>();
+        }
+    }
+
+    public class WaitingMessage
+    {
+        public int Id { get; set; }
+        // внешний ключ с User
+        public string UserId { get; set; }
+        // навигационное поле
+        public virtual User User { get; set; }
+        // кто отправил сообщение
+        public string Sender { get; set; }
+        // сообщение
+        public string Message { get; set; }
+        // дата отправки
+        public DateTimeOffset DepartureDate { get; set; }
     }
 
     public class WorkWithDB
@@ -197,6 +220,44 @@ namespace WebChatServer
                 user.IsOnline = flag;
                 _db.SaveChanges();
             }
+        }
+
+        // сохранение сообщения в дб
+        public void SaveMessageToDB(OutgoingMessage outgoingMessage)
+        {
+            WaitingMessage waitingMessage = new WaitingMessage()
+            {
+                UserId = _db.Users.Where(o => o.Id == outgoingMessage.RecipientId).First().Id,
+                Message = outgoingMessage.Message,
+                Sender = outgoingMessage.UserId,
+                DepartureDate = outgoingMessage.MessageSentTime
+            };
+
+            _db.WaitingMessages.Add(waitingMessage);
+            _db.SaveChanges();
+        }
+
+        public List<IncomingMessage> FindUnsentMessages(string userId)
+        {
+            var result = _db.WaitingMessages.Where(o => o.UserId == userId).ToList();
+
+            List<IncomingMessage> messages = new List<IncomingMessage>();
+
+            foreach (var message in result)
+            {
+                messages.Add(new IncomingMessage
+                {
+                    UserId = message.Sender,
+                    Message = message.Message,
+                    MessageSentTime = message.DepartureDate
+                });
+
+                _db.WaitingMessages.Remove(message);
+            }
+
+            _db.SaveChanges();
+
+            return messages;
         }
     }
 }

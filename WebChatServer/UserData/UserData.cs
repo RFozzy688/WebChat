@@ -64,9 +64,6 @@ namespace WebChatServer
         // сообщение
         public string Message { get; set; }
 
-        // уникальный идентификатор сообщения
-        public string MessageId { get; set; }
-
         // Время отправки сообщения
         public DateTimeOffset MessageSentTime { get; set; }
     }
@@ -79,9 +76,6 @@ namespace WebChatServer
 
         // сообщение
         public string Message { get; set; }
-
-        // уникальный идентификатор сообщения
-        public string MessageId { get; set; }
 
         // Время отправки сообщения
         public DateTimeOffset MessageSentTime { get; set; }

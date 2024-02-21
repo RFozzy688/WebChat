@@ -37,30 +37,6 @@ namespace WebChatServer
 
             // получить ip-адрес с файла конфигурации
             GetIPAddress();
-
-            #region MyRegion
-            //User user1 = new User()
-            //{
-            //    Id = "qwerty",
-            //    Nickname = "nick 1",
-            //    Email = "email1@gmail.com",
-            //    Password = "password1",
-            //    IsVerifiedEmail = true,
-            //    VerificationCode = "asdfg"
-            //};
-            //User user2 = new User()
-            //{
-            //    Id = "asdfgh",
-            //    Nickname = "nick 1",
-            //    Email = "email2@gmail.com",
-            //    Password = "password1",
-            //    IsVerifiedEmail = true,
-            //    VerificationCode = "asdfg"
-            //};
-
-            //_context.Users.AddRange(new[] { user1, user2 });
-            //_context.SaveChanges(); 
-            #endregion
         }
 
         // метод запускающий сервер
@@ -258,6 +234,8 @@ namespace WebChatServer
                 // получаем данные пользователя
                 var userData = workWithDB.GetDataUser(dataRegistration.Email);
                 bytes = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(userData));
+
+                workWithDB.SetIsOnline(userData.UserID, true);
             }
             else
             {
@@ -288,6 +266,8 @@ namespace WebChatServer
             }
 
             byte[] bytes = new byte[_bufSize];
+            bool flag = false;
+            string userId = string.Empty;
 
             // создаем объект для работы с бд
             WorkWithDB workWithDB = new WorkWithDB(_context);
@@ -304,6 +284,9 @@ namespace WebChatServer
                 workWithDB.UpdateIPAddress(dataAuthorization.Email, iPAddress);
 
                 workWithDB.SetIsOnline(userData.UserID, true);
+
+                flag = true;
+                userId = userData.UserID;
             }
             else
             {
@@ -315,6 +298,12 @@ namespace WebChatServer
             IPEndPoint remoteEndPoint = new IPEndPoint(iPAddress, _remotePortMessage);
             // отправка данных о авторизации
             await socket.SendToAsync(bytes, SocketFlags.None, remoteEndPoint);
+
+            if (flag)
+            {
+                await Task.Delay(5000);
+                await SendWaitingMessage(socket, iPAddress, workWithDB.FindUnsentMessages(userId));
+            }
         }
 
         // сгенирировать ключ верификации
@@ -340,28 +329,35 @@ namespace WebChatServer
             OutgoingMessage? messageOut = new();
             messageOut = JsonSerializer.Deserialize<OutgoingMessage>(stringDeserialize);
 
-            byte[] bytes = new byte[_bufSize];
-
             WorkWithDB workWithDB = new WorkWithDB(_context);
 
             if (messageOut != null)
             {
-                // находим ip-адрес получателя в бд
-                string ipAddress = workWithDB.GetIPAddress(messageOut.RecipientId);
+                if (workWithDB.GetIsOnline(messageOut.RecipientId))
+                {
+                    byte[] bytes = new byte[_bufSize];
 
-                // создать сообщение для получателя
-                IncomingMessage messageIn = new();
-                messageIn.UserId = messageOut.UserId;
-                messageIn.MessageId = messageOut.MessageId;
-                messageIn.Message = messageOut.Message;
-                messageIn.MessageSentTime = messageOut.MessageSentTime;
+                    // находим ip-адрес получателя в бд
+                    string ipAddress = workWithDB.GetIPAddress(messageOut.RecipientId);
 
-                bytes = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(messageIn));
+                    // создать сообщение для получателя
+                    IncomingMessage messageIn = new();
+                    messageIn.UserId = messageOut.UserId;
+                    messageIn.Message = messageOut.Message;
+                    messageIn.MessageSentTime = messageOut.MessageSentTime;
 
-                // удаленная точка получателя
-                IPEndPoint remoteEndPoint = new IPEndPoint(IPAddress.Parse(ipAddress), _remotePortMessage);
-                // отправка сообщения получателю
-                await socket.SendToAsync(bytes, SocketFlags.None, remoteEndPoint);
+                    bytes = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(messageIn));
+
+                    // удаленная точка получателя
+                    IPEndPoint remoteEndPoint = new IPEndPoint(IPAddress.Parse(ipAddress), _remotePortMessage);
+                    // отправка сообщения получателю
+                    await socket.SendToAsync(bytes, SocketFlags.None, remoteEndPoint);
+                }
+                else
+                {
+                    // если получатель не находится в сети, то временно сохраняем сообщение в бд
+                    workWithDB.SaveMessageToDB(messageOut);
+                }
             }
         }
 
@@ -374,6 +370,21 @@ namespace WebChatServer
             WorkWithDB workWithDB = new WorkWithDB(_context);
 
             workWithDB.SetIsOnline(stringDeserialize, false);
+        }
+
+        async Task SendWaitingMessage(Socket socket, IPAddress iPAddress, List<IncomingMessage> messages)
+        {
+            foreach (IncomingMessage message in messages)
+            {
+                byte[] bytes = new byte[_bufSize];
+
+                bytes = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(message));
+
+                // удаленная точка получателя
+                IPEndPoint remoteEndPoint = new IPEndPoint(iPAddress, _remotePortMessage);
+                // отправка сообщения получателю
+                await socket.SendToAsync(bytes, SocketFlags.None, remoteEndPoint);
+            }
         }
     }
 
