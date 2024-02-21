@@ -399,3 +399,4 @@ FodyWeavers.xsd
 /WebChatClient/UsersStories
 /WebChatServer/appconfig.json
 /WebChatClient/db
+/WebChatClient/appconfig.json

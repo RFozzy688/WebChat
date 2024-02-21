@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Controls;
+using System.Windows.Forms;
+using System.Text.Json;
 
 namespace WebChatClient
 {
@@ -16,7 +18,6 @@ namespace WebChatClient
         private Window _view;
 
         // Помощник по изменению размера окна, который поддерживает правильный размер окна в различных состояниях.
-
         private WindowResizer _windowResizer;
 
         public MainWindowVM(Window view)
@@ -30,7 +31,23 @@ namespace WebChatClient
             // Создание команд
             MinimizeCommand = new Command((o) => _view.WindowState = WindowState.Minimized);
             MaximizeCommand = new Command((o) => _view.WindowState ^= WindowState.Maximized);
-            CloseCommand = new Command((o) => _view.Close());
+            CloseCommand = new Command((o) => 
+            {
+                // сохранить изменения в списке контактов при выходе
+                ContactsModel.SaveAllContacts();
+
+                // сформировать данные для отправки на сервер
+                DataPackage package = new DataPackage();
+                // тип пакета
+                package.Package = TypeData.Exit;
+                // основные данные пакета
+                package.StringSerialize = DetailsProfileModel.UserID;
+
+                // отправить данные на сервер
+                WorkWithServer.SendMessage(JsonSerializer.Serialize(package));
+
+                _view.Close();
+            });
             MenuCommand = new Command((o) => SystemCommands.ShowSystemMenu(_view, GetMousePosition()));
             WorkingAreaCommand = new Command((o) => 
             {

@@ -39,8 +39,8 @@ namespace WebChatServer
         public string Code { get; set; }
     }
 
-    // данные для поиска пользователя в бд
-    public class FindUser
+    // данные пользователя для обработки
+    public class GeneralUserData
     {
         // email user
         public string Email { get; set; }
@@ -50,5 +50,34 @@ namespace WebChatServer
 
         // Отображаемое имя в списке чатов
         public string Name { get; set; }
+    }
+
+    // сообщение отправляемое пользователем
+    public class OutgoingMessage
+    {
+        // от кого
+        public string UserId { get; set; }
+
+        // кому
+        public string RecipientId { get; set; }
+
+        // сообщение
+        public string Message { get; set; }
+
+        // Время отправки сообщения
+        public DateTimeOffset MessageSentTime { get; set; }
+    }
+
+    // входящее сообщение от пользователя
+    public class IncomingMessage
+    {
+        // от кого
+        public string UserId { get; set; }
+
+        // сообщение
+        public string Message { get; set; }
+
+        // Время отправки сообщения
+        public DateTimeOffset MessageSentTime { get; set; }
     }
 }

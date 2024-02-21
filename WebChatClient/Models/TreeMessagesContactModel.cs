@@ -33,7 +33,16 @@ namespace WebChatClient
             _path = Environment.CurrentDirectory;
             int index = _path.LastIndexOf("WebChatClient");
             _path = _path.Remove(index + "WebChatClient".Length);
-            _path += $"\\db\\UsersStories\\{_userID}.json";
+            _path += @"\db\UsersStories";
+
+            // если каталога "UsersStories" не существует
+            if (!Directory.Exists(_path))
+            {
+                // создаем каталог
+                Directory.CreateDirectory(_path);
+            }
+
+            _path += $"\\{_userID}.json";
         }
 
         void LoadingTreeMessagesContact()
@@ -53,6 +62,9 @@ namespace WebChatClient
         // Сообщение из этого чата
         public string TextMessage { get; set; }
 
+        // Инициалы, которые будут отображаться в качестве фона изображения профиля
+        public string Initials { get; set; }
+
         // Локальный путь к загруженному миниатюре на этом компьютере.
         public string LocalFilePath { get; set; }
 
@@ -61,5 +73,11 @@ namespace WebChatClient
 
         // Время отправки сообщения
         public DateTimeOffset MessageSentTime { get; set; }
+
+        // Значения RGB (в шестнадцатеричном формате) для цвета фона изображения профиля
+        public string ProfilePictureRGB { get; set; }
+
+        // Истинно, если этот элемент выбран в данный момент
+        public bool IsSelected { get; set; }
     }
 }

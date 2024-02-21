@@ -79,8 +79,4 @@
     </Page>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="db\" />
-  </ItemGroup>
-
 </Project>

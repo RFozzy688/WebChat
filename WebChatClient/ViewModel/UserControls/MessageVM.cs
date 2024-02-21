@@ -10,7 +10,7 @@ namespace WebChatClient
     public class MessageVM : BaseViewModel
     {
         // Сообщение из этого чата
-        public string Message { get; set; }
+        public string TextMessage { get; set; }
 
         // Инициалы, которые будут отображаться в качестве фона изображения профиля
         public string Initials { get; set; }
@@ -23,9 +23,6 @@ namespace WebChatClient
 
         // True, если это сообщение было отправлено вошедшим пользователем
         public bool SentByMe { get; set; }
-
-        // Верно, если это сообщение было прочитано
-        //public bool MessageRead {  get; set; }
 
         // Время отправки сообщения
         public DateTimeOffset MessageSentTime { get; set; }

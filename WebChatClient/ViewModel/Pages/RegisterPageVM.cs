@@ -85,8 +85,17 @@ namespace WebChatClient
         // метод вызывается по событию от сервера
         private void UserRegistration(string str)
         {
-            if (str.CompareTo("true") == 0)
+            GeneralUserData? addUser = JsonSerializer.Deserialize<GeneralUserData>(str);
+
+            // если истина, то пользователь зарегистрировался
+            if (addUser != null)
             {
+                // сохраняем данные зарегистрированного пользователя
+                DetailsProfileModel.UserID = addUser.UserID;
+                DetailsProfileModel.Nickname = addUser.Name;
+                DetailsProfileModel.Email = addUser.Email;
+                DetailsProfileModel.Password = "******";
+
                 // если истина, то входим на страницу настроек для верификации почты
                 ((MainWindowVM)((MainWindow)Application.Current.MainWindow).DataContext).CurrentPage = new SettingsPage(null);
             }
