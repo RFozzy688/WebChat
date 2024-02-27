@@ -49,7 +49,7 @@ namespace WebChatClient
         static WorkWithServer()
         {
             // получить данные с файла конфигурации
-            var config = JsonSerializer.Deserialize<JsonNode>(File.ReadAllText(@"..\..\..\appconfig.json"));
+            var config = JsonSerializer.Deserialize<JsonNode>(File.ReadAllText("appconfig.json"));
 
             // ip-адрес сервера
             _ipRemoteAddress = config?["server"]?["ipaddress"]?.ToString();

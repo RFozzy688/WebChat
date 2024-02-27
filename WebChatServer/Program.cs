@@ -228,8 +228,8 @@ namespace WebChatServer
                 workWithDB.AddUserToDB(dataRegistration, code, iPAddress);
 
                 // отправка письма на почту для верификации
-                //VerificationEmail verification = new VerificationEmail();
-                //verification.SendVerificationCode(dataRegistration.Email, code);
+                VerificationEmail verification = new VerificationEmail();
+                verification.SendVerificationCode(dataRegistration.Email, code);
 
                 // получаем данные пользователя
                 var userData = workWithDB.GetDataUser(dataRegistration.Email);
@@ -316,7 +316,7 @@ namespace WebChatServer
         void GetIPAddress()
         {
             // получить данные с файла конфигурации
-            var config = JsonSerializer.Deserialize<JsonNode>(File.ReadAllText(@"..\..\..\appconfig.json"));
+            var config = JsonSerializer.Deserialize<JsonNode>(File.ReadAllText("appconfig.json"));
 
             // ip-адрес сервера
             _ipAddress = config?["server"]?["ipaddress"]?.ToString();
