@@ -144,6 +144,7 @@ namespace WebChatClient
             // загрузка контактов
             LoadingContacts();
 
+            // вызывается по событию прихода нового сообщения
             WorkWithServer.ResponceEvent += WaitingIncomingMessage;
         }
 

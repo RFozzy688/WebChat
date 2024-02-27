@@ -15,7 +15,7 @@ namespace WebChatServer
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             // конфигурация подключения
-            var config = JsonSerializer.Deserialize<JsonNode>(File.ReadAllText(@"..\..\..\appconfig.json"));
+            var config = JsonSerializer.Deserialize<JsonNode>(File.ReadAllText("appconfig.json"));
 
             // подключение к бд
             optionsBuilder.UseSqlServer(config?["database"]?["webchat"]?["connectionString"]?.ToString());

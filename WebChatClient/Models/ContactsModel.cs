@@ -42,7 +42,7 @@ namespace WebChatClient
             // путь к файлу с контактами
             //CreatePath();
 
-            using (FileStream fs = new FileStream(_path, FileMode.Open))
+            using (FileStream fs = new FileStream(_path, FileMode.OpenOrCreate))
             {
                 // если файл не пуст
                 if (fs.Length != 0)
@@ -95,25 +95,35 @@ namespace WebChatClient
         // загрузка контактов из файла
         static private void LoadingContacts()
         {
-            using (FileStream fs = new FileStream(_path, FileMode.OpenOrCreate))
+            try
             {
-                if(fs.Length != 0)
+                using (FileStream fs = new FileStream(_path, FileMode.Open))
                 {
-                    Contacts = JsonSerializer.Deserialize<List<Contact>>(fs);
+                    if (fs.Length != 0)
+                    {
+                        Contacts = JsonSerializer.Deserialize<List<Contact>>(fs);
+                    }
                 }
             }
+            catch (Exception)
+            {
+            }
+            
         }
 
         // сохранить все контакты в файл
         static public void SaveAllContacts()
         {
-            // путь к файлу с контактами
-            CreatePath();
-
-            using (FileStream fs = new FileStream(_path, FileMode.Create))
+            if (Contacts.Count != 0)
             {
-                // сохранение контактов
-                JsonSerializer.Serialize(fs, Contacts);
+                // путь к файлу с контактами
+                CreatePath();
+
+                using (FileStream fs = new FileStream(_path, FileMode.Create))
+                {
+                    // сохранение контактов
+                    JsonSerializer.Serialize(fs, Contacts);
+                }
             }
         }
 

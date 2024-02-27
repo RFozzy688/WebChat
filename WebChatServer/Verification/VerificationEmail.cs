@@ -12,7 +12,7 @@ namespace WebChatServer
 
         private SmtpClient GetSmtpClient()
         {
-            var config = JsonSerializer.Deserialize<JsonNode>(File.ReadAllText(@"..\..\..\appconfig.json"));
+            var config = JsonSerializer.Deserialize<JsonNode>(File.ReadAllText("appconfig.json"));
 
             string? host = config?["email"]?["gmail"]?["host"]?.ToString();
             string? port = config?["email"]?["gmail"]?["port"]?.ToString();
